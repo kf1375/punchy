@@ -1,29 +1,29 @@
 version: '3.8'
 services:
   mosquitto:
+    container_name: mosquitto
     build: 
       context: ./mosquitto
-    container_name: mosquitto
     ports:
       - "1883:1883"
     networks:
       - app_network
 
   database:
+    container_name: database
     build: 
       context: ./database
-      container_name: database
-      depends_on:
-        - mosquitto
-      volumes:
-        - db_storage:/app/data
-      networks:
+    depends_on:
+      - mosquitto
+    volumes:
+      - db_storage:/app/data
+    networks:
       - app_network
 
   telegram_bot:
+    container_name: telegram_bot
     build:
       context: ./telegram_bot
-    container_name: telegram_bot
     depends_on:
       - database
     networks:
