@@ -1,14 +1,15 @@
 -- Users Table
-CREATE TABLE Users (
+CREATE TABLE IF NOT EXISTS Users (
     UserID INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
     Email TEXT UNIQUE NOT NULL,
     PasswordHash TEXT NOT NULL,
+    Premium INTEGER NOT NULL,
     CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Devices Table
-CREATE TABLE Devices (
+CREATE TABLE IF NOT EXISTS Devices (
     DeviceID INTEGER PRIMARY KEY AUTOINCREMENT,
     DeviceName TEXT NOT NULL,
     Status TEXT DEFAULT 'Active',
@@ -18,7 +19,7 @@ CREATE TABLE Devices (
 );
 
 -- SensorData Table
-CREATE TABLE DeviceData (
+CREATE TABLE IF NOT EXISTS DeviceData (
     DataID INTEGER PRIMARY KEY AUTOINCREMENT,
     DeviceID INTEGER NOT NULL,
     ParameterName TEXT NOT NULL,
@@ -28,7 +29,7 @@ CREATE TABLE DeviceData (
 );
 
 -- UserInteractions Table
-CREATE TABLE UserInteractions (
+CREATE TABLE IF NOT EXISTS UserInteractions (
     InteractionID INTEGER PRIMARY KEY AUTOINCREMENT,
     UserID INTEGER NOT NULL,
     DeviceID INTEGER NOT NULL,
