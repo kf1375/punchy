@@ -30,6 +30,7 @@ services:
 
 volumes:
   db_storage:
+    driver: local
 
 networks:
   app_network:
