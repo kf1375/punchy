@@ -8,8 +8,17 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 conn = psycopg2.connect(DATABASE_URL)
 cursor = conn.cursor()
 
-cursor.execute("SELECT * FROM Users")
+# Insert data into the Users table
+cursor.execute("""
+    INSERT INTO Users (TelgramID, Name, Premium)
+    VALUES (%s, %s, %s);
+""", (123456789, 'John Doe', 1))
 
-records = cursor.fetchall()
+# Commit the transaction
+conn.commit()
 
-print(records.size())
+# Close the cursor and connection
+cursor.close()
+conn.close()
+
+print("Data inserted successfully")
