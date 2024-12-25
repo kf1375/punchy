@@ -25,6 +25,8 @@ services:
       context: ./telegram_bot
     depends_on:
       - postgres
+    environment:
+      DATABASE_URL: "postgresql://testiwhisk:eT1wDCKu@db:5432/database"
     networks:
       - app_network
 
