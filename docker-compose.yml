@@ -8,14 +8,14 @@ services:
     networks:
       - app_network
 
-  database:
-    container_name: database
+  postgres:
+    container_name: postgres
     build: 
-      context: ./database
-    depends_on:
-      - mosquitto
+      context: ./postgres
+    ports:
+      - "5432:5432"
     volumes:
-      - db_storage:/app/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
 
@@ -29,7 +29,7 @@ services:
       - app_network
 
 volumes:
-  db_storage:
+  postgres_data:
     driver: local
 
 networks:
