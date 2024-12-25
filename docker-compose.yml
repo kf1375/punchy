@@ -24,7 +24,7 @@ services:
     build:
       context: ./telegram_bot
     depends_on:
-      - database
+      - postgres
     networks:
       - app_network
 
