@@ -23,10 +23,13 @@ services:
     container_name: telegram_bot
     build:
       context: ./telegram_bot
+    ports:
+      - "80:80"
     depends_on:
       - postgres
     environment:
       DATABASE_URL: "postgresql://testiwhisk:eT1wDCKu@postgres:5432/database"
+      BOT_TOKEN: "6599928755:AAEVXPIrKmp3qOvmoT5x5eKXeifYZN01Ce4"
     networks:
       - app_network
 
