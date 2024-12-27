@@ -1,4 +1,5 @@
-from asyncer import syncify
+import anyio
+from asyncer import syncify, asyncify
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler
@@ -9,15 +10,15 @@ from app.callbacks import Callbacks
 from app.database import db
 from config.settings import BOT_TOKEN
 
-async def set_database():
-    await db.connect()
+# async def set_database():
+#     await db.connect()
 
-def main() -> None:
+async def main() -> None:
     """Start the bot."""
     application = Application.builder().token(BOT_TOKEN).build()
 
     # Set up the database
-    syncify(set_database)()
+    await db.connect()
 
     # Register handlers
     application.add_handler(CommandHandler("start", Commands.start))
@@ -27,7 +28,7 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(Callbacks.sign_up, pattern="SIGN_UP"))
 
     # Start the Bot
-    application.run_polling()
+    await asyncify(application.run_polling)()
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    anyio.run(main)
