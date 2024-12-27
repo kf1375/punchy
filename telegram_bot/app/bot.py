@@ -10,15 +10,9 @@ from app.callbacks import Callbacks
 from app.database import db
 from config.settings import BOT_TOKEN
 
-# async def set_database():
-#     await db.connect()
-
-async def main() -> None:
+def start_bot():
     """Start the bot."""
     application = Application.builder().token(BOT_TOKEN).build()
-
-    # Set up the database
-    await db.connect()
 
     # Register handlers
     application.add_handler(CommandHandler("start", Commands.start))
@@ -28,7 +22,13 @@ async def main() -> None:
     application.add_handler(CallbackQueryHandler(Callbacks.sign_up, pattern="SIGN_UP"))
 
     # Start the Bot
-    await asyncify(application.run_polling)()
+    application.run_polling()
+
+async def main() -> None:
+    # Set up the database
+    await db.connect()
+
+    await asyncify(start_bot)()
 
 if __name__ == "__main__":
     anyio.run(main)
