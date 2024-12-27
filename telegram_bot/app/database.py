@@ -17,26 +17,10 @@ class Database:
         async with self.pool.acquire() as connection:
             query = "SELECT EXISTS (SELECT 1 FROM Users WHERE telgramid = $1)"
             return await connection.fetchval(query, user_id)
+        
+    async def add_user(self, user_id, name):
+        async with self.pool.acquire() as connection:
+            query = "INSERT INTO Users (telegramid, name, premium) VALUES ($1, $2, $3)"
+            await connection.execute(query, user_id, name, 0)
 
 db = Database()
-
-# import asyncpg
-
-# async def user_exists(user_id: int) -> bool:
-#     """Check if a user exists in the Users table."""
-#     connection = await asyncpg.connect(**DATABASE_CONFIG)
-#     try:
-#         query = "SELECT EXISTS (SELECT 1 FROM users WHERE telgramid = $1)"
-#         exists = await connection.fetchval(query, user_id)
-#         return exists
-#     finally:
-#         await connection.close()
-
-# # Check if the user exists in the database
-#     exists = await user_exists(user.id)
-#     if not exists:
-#         await update.message.reply_text(
-#             "You are not registered in our system. Please contact support to gain access."
-#         )
-#         return
-    

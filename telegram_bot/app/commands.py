@@ -13,12 +13,10 @@ class Commands:
         chat_id = update.effective_chat.id
         user = update.effective_user
 
-        await db.connect()
-
         exists = await db.user_exists(user.id)
         if not exists:
             message = await update.message.reply_markdown_v2(
-                fr'Hi {user.mention_markdown_v2()}\! You are not registered in our system\. Use the buttons below to register\.'
+                fr'Hi {user.mention_markdown_v2()}\! You are not registered in our system\.'
             )
             await Menus.show_signup_menu(message)
             return
