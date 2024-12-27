@@ -1,4 +1,4 @@
-import asyncio
+from asyncer import asyncify
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler
@@ -17,7 +17,7 @@ def main() -> None:
     application = Application.builder().token(BOT_TOKEN).build()
 
     # Set up the database
-    asyncio.run(set_database())
+    asyncify(set_database)()
 
     # Register handlers
     application.add_handler(CommandHandler("start", Commands.start))
