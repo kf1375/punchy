@@ -13,6 +13,8 @@ class Commands:
         chat_id = update.effective_chat.id
         user = update.effective_user
 
+        await db.connect()
+
         exists = await db.user_exists(user.id)
         if not exists:
             message = await update.message.reply_markdown_v2(
