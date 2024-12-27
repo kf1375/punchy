@@ -15,7 +15,7 @@ class Database:
 
     async def user_exists(self, user_id):
         async with self.pool.acquire() as connection:
-            query = "SELECT EXISTS (SELECT 1 FROM Users WHERE telgramid = $1)"
+            query = "SELECT EXISTS (SELECT 1 FROM Users WHERE telegramid = $1)"
             return await connection.fetchval(query, user_id)
         
     async def add_user(self, user_id, name):
