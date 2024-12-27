@@ -1,9 +1,9 @@
 from telegram import Update, ChatMember
 from telegram.ext import ContextTypes
 
+from app.commands import Commands
 from app.menus import Menus
 from app.database import db
-
 class Callbacks:
     @staticmethod    
     async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -58,3 +58,35 @@ class Callbacks:
             await query.edit_message_text('You are already registered!')
         await Menus.show_main_menu(query.message)
     
+    @staticmethod
+    async def devices(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        pass
+
+    @staticmethod
+    async def profile(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        await query.answer()
+    
+        telegram_id = query.from_user.id
+        user_info = await db.get_user_info(telegram_id)
+
+        if user_info:
+            premium_status = 'Yes' if user_info['premium'] else 'No'
+            message = (
+                f"👤 *User Info:*\n"
+                f"ID: `{user_info['telegramid']}`\n"
+                f"Name: {user_info['name']}\n"
+                f"Premium: {premium_status}\n"
+                f"Joined At: {user_info['createdat']}\n"
+            )
+            await update.message.reply_text(message, parse_mode="Markdown")
+        else:
+            await update.message.reply_text("You are not registered. Use /start to register.")
+        await Menus.show_profile_menu()
+
+    @staticmethod
+    async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        pass
+
+    async def back_to_main(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        await Commands.start(update, context)

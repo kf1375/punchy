@@ -8,9 +8,9 @@ class Menus:
     async def show_main_menu(message: Message) -> None:
         """Show the main menu with motor control options."""
         keyboard = [
-            [InlineKeyboardButton("Devices", callback_data='DEVICES')],
-            [InlineKeyboardButton("Profile", callback_data='PROFILE')],
-            [InlineKeyboardButton("Help", callback_data='HELP')],
+            [InlineKeyboardButton('Devices', callback_data='DEVICES')],
+            [InlineKeyboardButton('Profile', callback_data='PROFILE')],
+            [InlineKeyboardButton('Help', callback_data='HELP')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await message.reply_text('Please choose:', reply_markup=reply_markup)
@@ -34,3 +34,25 @@ class Menus:
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await message.reply_text('Click on this button to register.', reply_markup=reply_markup)
+
+    @staticmethod
+    async def show_profile_menu(message: Message, premium_status: bool) -> None:
+        if premium_status:
+            keyboard = [
+                [InlineKeyboardButton('Get Premium', callback_data='GET_SUBSCRIPTION')],
+                [InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')],
+            ]
+        else:
+            keyboard = [
+                [InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')],
+            ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await message.reply_markup(reply_markup)
+
+
+    @staticmethod
+    async def show_devices_menu(message: Message) -> None:
+        pass
+
+    async def show_help_menu(message: Message) -> None:
+        pass

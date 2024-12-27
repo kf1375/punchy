@@ -30,4 +30,11 @@ class Database:
                 query = "DELETE FROM Users WHERE telegramid = $1"
                 await connection.execute(query, user_id)
 
+    async def get_user_info(self, user_id):
+        exist = await self.user_exists(user_id)
+        if exist:
+            async with self.pool.acquire() as connection:
+                query = "SELECT * FROM Users WHERE telegramid = $1"
+                return await connection.fetchrow(query, user_id)
+            
 db = Database()
