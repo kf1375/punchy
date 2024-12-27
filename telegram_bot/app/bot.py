@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ChatMemberHandler
 
 from app.commands import Commands
 from app.menus import Menus
@@ -17,6 +17,7 @@ def main() -> None:
     application.add_handler(CommandHandler("motor_speed", Commands.set_motor_speed))
     # application.add_handler(CallbackQueryHandler(Callbacks.button))
     application.add_handler(CallbackQueryHandler(Callbacks.sign_up, pattern="SIGN_UP"))
+    application.add_error_handler(ChatMemberHandler(Callbacks.chat_member_update, chat_member_types=['member']))
 
     # Start the Bot
     application.run_polling()

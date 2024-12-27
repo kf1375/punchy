@@ -22,5 +22,12 @@ class Database:
         async with self.pool.acquire() as connection:
             query = "INSERT INTO Users (telegramid, name, premium) VALUES ($1, $2, $3)"
             await connection.execute(query, user_id, name, 0)
+    
+    async def remove_user(self, user_id):
+        exist = await self.user_exists(user_id)
+        if exist:
+            async with self.pool.acquire() as connection:
+                query = "DELETE FROM Users WHERE telegramid = $1"
+                await connection.execute(query, user_id)
 
 db = Database()

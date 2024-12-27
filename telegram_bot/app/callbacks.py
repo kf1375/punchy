@@ -1,4 +1,4 @@
-from telegram import Update
+from telegram import Update, ChatMember
 from telegram.ext import ContextTypes
 
 from app.menus import Menus
@@ -56,4 +56,10 @@ class Callbacks:
             await query.edit_message_text('You are successfully registered!')
         else:
             await query.edit_message_text('You are already registered!')
-
+    
+    @staticmethod
+    async def chat_member_update(update: Update, context: ContextTypes.DEFAULT_TYPE):
+        chat_member = update.chat_member
+        if chat_member.new_chat_member.status in [ChatMember.LEFT, ChatMember.KICKED]:
+            telegram_id = chat_member.user.id
+            print(f"User {telegram_id} has left or blocked the bot and was removed from the database.")
