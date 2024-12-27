@@ -17,10 +17,7 @@ def main() -> None:
     application = Application.builder().token(BOT_TOKEN).build()
 
     # Set up the database
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(set_database())
-    loop.close()
+    asyncio.run(set_database())
 
     # Register handlers
     application.add_handler(CommandHandler("start", Commands.start))
