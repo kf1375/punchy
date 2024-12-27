@@ -8,11 +8,9 @@ class Menus:
     async def show_main_menu(message: Message) -> None:
         """Show the main menu with motor control options."""
         keyboard = [
-            [InlineKeyboardButton("Start Single", callback_data='START_SINGLE')],
-            [InlineKeyboardButton("Start Infinite", callback_data='START_INFINITE')],
-            [InlineKeyboardButton("Stop Infinite", callback_data='STOP_INFINITE')],
-            [InlineKeyboardButton("Set Single Speed", callback_data='SET_SINGLE_SPEED')],
-            [InlineKeyboardButton("Set Infinite Speed", callback_data='SET_INFINITE_SPEED')],
+            [InlineKeyboardButton("Devices", callback_data='DEVICES')],
+            [InlineKeyboardButton("Profile", callback_data='PROFILE')],
+            [InlineKeyboardButton("Help", callback_data='HELP')],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await message.reply_text('Please choose:', reply_markup=reply_markup)

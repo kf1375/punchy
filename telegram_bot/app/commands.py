@@ -24,7 +24,7 @@ class Commands:
             return
         
         message = await update.message.reply_markdown_v2(
-            fr'Welcome Back {user.mention_markdown_v2()}\! I am your motor control bot\. Use the buttons below to control the motor\.',
+            fr'Welcome Back {user.mention_markdown_v2()}\! I am your Testiwhisk assitant\. Use the buttons below to control me\.',
         )
         await Menus.show_main_menu(message)
 
