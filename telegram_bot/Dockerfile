@@ -1,5 +1,5 @@
 FROM python:3.12-slim
-WORKDIR /app
-COPY . /app/
+WORKDIR /usr/src
+COPY . .
 RUN pip install -r requirements.txt
-CMD ["python", "bot.py"]
+CMD ["python", "-m", "app.bot"]
