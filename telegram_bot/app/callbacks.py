@@ -79,9 +79,9 @@ class Callbacks:
                 f"Premium: {premium_status}\n"
                 f"Joined At: {user_info['createdat']}\n"
             )
-            await update.message.reply_text(message, parse_mode="Markdown")
+            await query.edit_message_text(message, parse_mode="Markdown")
         else:
-            await update.message.reply_text("You are not registered. Use /start to register.")
+            await query.edit_message_text("You are not registered. Use /start to register.")
         await Menus.show_profile_menu()
 
     @staticmethod
