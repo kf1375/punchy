@@ -3,9 +3,12 @@ FROM python:3.12-slim
 WORKDIR /usr/src
 COPY . .
 
-RUN apt-get update && \
-    apt-get install -y build-essential libzbar-dev && \
-    pip install zbar
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libzbar0 \
+    zbar-tools \
+    build-essential \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -r requirements.txt
 
