@@ -47,7 +47,7 @@ class Menus:
                 [InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')],
             ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await message.reply_markup(reply_markup)
+        await message.reply_text('', reply_markup=reply_markup)
 
 
     @staticmethod
