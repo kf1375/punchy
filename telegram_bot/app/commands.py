@@ -9,9 +9,11 @@ class Commands:
     @staticmethod
     async def start(update: Update, context: ContextTypes.DEFAULT_TYPE, is_callback: bool = False) -> None:
         """Send a message when the command /start is issued."""
-        
+
         chat_id = update.effective_chat.id
         user = update.effective_user
+
+        context.user_data['user_id'] = user
 
         await db.connect()
 
