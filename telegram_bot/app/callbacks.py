@@ -88,5 +88,9 @@ class Callbacks:
     async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         pass
 
+    @staticmethod
     async def back_to_main(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        await Commands.start(update, context)
+        query = update.callback_query
+        await query.answer()
+        
+        await Commands.start(query, context, is_callback=True)

@@ -7,7 +7,7 @@ class Commands:
     """Class to manage bot commands."""
 
     @staticmethod
-    async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    async def start(update: Update, context: ContextTypes.DEFAULT_TYPE, is_callback: bool = False) -> None:
         """Send a message when the command /start is issued."""
         
         chat_id = update.effective_chat.id
@@ -17,15 +17,28 @@ class Commands:
 
         exists = await db.user_exists(user.id)
         if not exists:
-            message = await update.message.reply_markdown_v2(
-                fr'Hi {user.mention_markdown_v2()}\! You are not registered in our system\.'
-            )
+            if is_callback:
+                message = await update.callback_query.message.edit_text(
+                    fr'Hi {user.mention_markdown_v2()}\! You are not registered in our system\.',
+                    parse_mode="MarkdownV2"
+                )
+            else:
+                message = await update.message.reply_markdown_v2(
+                    fr'Hi {user.mention_markdown_v2()}\! You are not registered in our system\.',
+                )
             await Menus.show_signup_menu(message)
             return
         
-        message = await update.message.reply_markdown_v2(
-            fr'Welcome Back {user.mention_markdown_v2()}\! I am your Testiwhisk assitant\. Use the buttons below to control me\.',
-        )
+        if is_callback:
+            message = await update.callback_query.message.edit_text(
+                fr'Welcome Back {user.mention_markdown_v2()}\! I am your Testiwhisk assistant\. Use the buttons below to control me\.',
+                parse_mode="MarkdownV2"
+            )
+        else:
+            message = await update.message.reply_markdown_v2(
+                fr'Welcome Back {user.mention_markdown_v2()}\! I am your Testiwhisk assistant\. Use the buttons below to control me\.',
+            )
+        
         await Menus.show_main_menu(message)
 
         # Set chat-specific commands

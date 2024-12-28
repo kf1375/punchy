@@ -37,7 +37,7 @@ class Menus:
 
     @staticmethod
     async def show_profile_menu(message: Message, premium_status: str) -> None:
-        if premium_status is 'Yes':
+        if premium_status == 'Yes':
             keyboard = [
                 [InlineKeyboardButton('Get Premium', callback_data='GET_SUBSCRIPTION')],
                 [InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')],
@@ -54,5 +54,6 @@ class Menus:
     async def show_devices_menu(message: Message) -> None:
         pass
 
+    @staticmethod
     async def show_help_menu(message: Message) -> None:
         pass
