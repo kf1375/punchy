@@ -63,5 +63,17 @@ class Menus:
         await message.reply_text("Please choose a device or add a new one:", reply_markup=reply_markup)
 
     @staticmethod
+    async def confirm_device_registration(message: Message, serial_number: str) -> None:
+        keyboard = [
+            [InlineKeyboardButton("Yes", callback_data="CONFIRM_ADD_DEVICE")],
+            [InlineKeyboardButton("Cancel", callback_data="CANCEL_ADD_DEVICE")],
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await message.reply_text(
+            f"Serial number detected: {serial_number}\nDo you want to add this device?",
+            reply_markup=reply_markup
+        )
+
+    @staticmethod
     async def show_help_menu(message: Message) -> None:
         pass

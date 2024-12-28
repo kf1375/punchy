@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ChatMemberHandler
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 from app.commands import Commands
 from app.menus import Menus
@@ -21,6 +21,13 @@ def main() -> None:
     application.add_handler(CallbackQueryHandler(Callbacks.profile, pattern="PROFILE"))
     application.add_handler(CallbackQueryHandler(Callbacks.help, pattern="HELP"))
     application.add_handler(CallbackQueryHandler(Callbacks.back_to_main, pattern="BACK_TO_MAIN"))
+    application.add_handler(CallbackQueryHandler(Callbacks.device_selected, pattern="DEVICE_"))
+    application.add_handler(CallbackQueryHandler(Callbacks.add_new_device, pattern="ADD_NEW_DEVICE"))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, Callbacks.handle_serial_number))
+    application.add_handler(MessageHandler(filters.PHOTO, Callbacks.handle_qr_code))
+    application.add_handler(CallbackQueryHandler(Callbacks.confirm_add_device, pattern="CONFIRM_ADD_DEVICE"))
+    application.add_handler(CallbackQueryHandler(Callbacks.cancel_add_device, pattern="CANCEL_ADD_DEVICE"))
+
 
     # Start the Bot
     application.run_polling()

@@ -44,4 +44,10 @@ class Database:
                 query = "SELECT * FROM Devices WHERE userid = $1"
                 return await connection.fetch(query, user_id)
             
+    async def add_device(self, user_id: int, serial_number: str) -> None:
+        """Add a device to the database."""
+        async with self.pool.acquire() as connection:
+            query = "INSERT INTO devices (user_id, serial_number) VALUES ($1, $2)"
+            await connection.execute(query, user_id, serial_number)
+            
 db = Database()

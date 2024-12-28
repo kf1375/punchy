@@ -1,4 +1,4 @@
 python-telegram-bot==21.9
-asyncer==0.0.8
-asyncpg==0.30.0
+pillow==11.0.0
+pyzbar==0.1.9
 paho-mqtt==1.6.1

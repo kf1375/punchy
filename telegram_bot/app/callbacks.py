@@ -1,3 +1,8 @@
+import io
+import asyncio
+from PIL import Image
+from pyzbar.pyzbar import decode
+
 from telegram import Update, ChatMember
 from telegram.ext import ContextTypes
 
@@ -99,3 +104,78 @@ class Callbacks:
         await query.answer()
 
         await Commands.start(update, context, is_callback=True)
+    
+    @staticmethod
+    async def device_selected(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        pass
+
+    @staticmethod
+    async def add_new_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        await query.answer()
+        await query.message.reply_text(
+            "Please send the device serial number as text or send a photo of the QR code."
+        )
+        context.user_data['add_device_step'] = 'waiting_for_serial_or_qr'
+
+    @staticmethod
+    async def handle_serial_number(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        if context.user_data.get('add_device_step') == 'waiting_for_serial_or_qr':
+            serial_number = update.message.text.strip()
+            context.user_data['serial_number'] = serial_number
+            await Menus.confirm_device_registration(update.message, serial_number)
+            
+    @staticmethod
+    async def handle_qr_code(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        if context.user_data.get('add_device_step') == 'waiting_for_serial_or_qr':
+            photo = await update.message.photo[-1].get_file()
+            file_stream = io.BytesIO()
+            await photo.download(out=file_stream)
+            file_stream.seek(0)
+
+            img = Image.open(file_stream)
+            decoded = decode(img)
+            if decoded:
+                serial_number = decoded[0].data.decode("utf-8")
+                context.user_data['serial_number'] = serial_number
+                await Menus.confirm_device_registration(update.message, serial_number)
+            else:
+                await update.message.reply_text("Failed to decode the QR code. Please try again.")
+                
+    @staticmethod
+    async def confirm_add_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        await query.answer()
+
+        serial_number = context.user_data.get('serial_number')
+        if not serial_number:
+            await query.message.reply_text("Serial number not found. Please try again.")
+            return
+
+        # Publish MQTT message
+        # mqtt_client.publish(f"device/{serial_number}/register", "START_REGISTRATION")
+        # await query.message.reply_text(
+        #     f"Waiting for confirmation from the device with serial number {serial_number}..."
+        # )
+
+        # Wait for confirmation with a timeout
+        event = asyncio.Event()
+        context.user_data['mqtt_event'] = event
+
+        try:
+            await asyncio.wait_for(event.wait(), timeout=30)
+            await db.add_device(context.user_data['user_id'], serial_number)
+            await query.message.reply_text("Device successfully added!")
+        except asyncio.TimeoutError:
+            await query.message.reply_text("Device registration timed out. Please try again.")
+        finally:
+            # Cleanup
+            context.user_data.pop('mqtt_event', None)
+            await Menus.show_devices_menu(query.message, await db.get_user_devices(context.user_data['user_id']))
+
+    @staticmethod
+    async def cancel_add_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        await query.answer()
+        await query.message.reply_text("Device registration cancelled.")
+        await Menus.show_devices_menu(query.message, await db.get_user_devices(context.user_data['user_id']))
