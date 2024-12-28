@@ -58,8 +58,8 @@ class Menus:
             for device in devices
         ]
         
-        keyboard.append([InlineKeyboardButton("Add New Device", callback_data="ADD_NEW_DEVICE")],
-                        [InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')])
+        keyboard.append([InlineKeyboardButton("Add New Device", callback_data="ADD_NEW_DEVICE")])
+        keyboard.append([InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')])
         
         reply_markup = InlineKeyboardMarkup(keyboard)
         await message.reply_text("Please choose a device or add a new one:", reply_markup=reply_markup)
