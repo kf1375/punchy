@@ -36,8 +36,8 @@ class Menus:
         await message.reply_text('Click on this button to register.', reply_markup=reply_markup)
 
     @staticmethod
-    async def show_profile_menu(message: Message, premium_status: bool) -> None:
-        if premium_status:
+    async def show_profile_menu(message: Message, premium_status: str) -> None:
+        if premium_status is 'Yes':
             keyboard = [
                 [InlineKeyboardButton('Get Premium', callback_data='GET_SUBSCRIPTION')],
                 [InlineKeyboardButton('Back', callback_data='BACK_TO_MAIN')],

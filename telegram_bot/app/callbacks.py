@@ -82,7 +82,7 @@ class Callbacks:
             await query.edit_message_text(message, parse_mode="Markdown")
         else:
             await query.edit_message_text("You are not registered. Use /start to register.")
-        await Menus.show_profile_menu()
+        await Menus.show_profile_menu(query.message, premium_status)
 
     @staticmethod
     async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
