@@ -13,7 +13,7 @@ class Commands:
         chat_id = update.effective_chat.id
         user = update.effective_user
 
-        context.user_data['user_id'] = user
+        context.user_data['user_id'] = user.id
 
         await db.connect()
 
