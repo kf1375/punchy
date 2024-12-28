@@ -37,4 +37,11 @@ class Database:
                 query = "SELECT * FROM Users WHERE telegramid = $1"
                 return await connection.fetchrow(query, user_id)
             
+    async def get_user_devices(self, user_id):
+        exist = await self.user_exists(user_id)
+        if exist:
+            async with self.pool.acquire() as connection:
+                query = "SELECT * FROM Devices WHERE userid = $1"
+                return await connection.fetch(query, user_id)
+            
 db = Database()

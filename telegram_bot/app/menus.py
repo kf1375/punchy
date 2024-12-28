@@ -51,8 +51,16 @@ class Menus:
 
 
     @staticmethod
-    async def show_devices_menu(message: Message) -> None:
-        pass
+    async def show_devices_menu(message: Message, devices: list) -> None:
+        """Display a menu with the user's devices and an option to add a new device."""
+        keyboard = [
+            [InlineKeyboardButton(device['device_name'], callback_data=f"DEVICE_{device['device_id']}")]
+            for device in devices
+        ]
+        
+        keyboard.append([InlineKeyboardButton("Add New Device", callback_data="ADD_NEW_DEVICE")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await message.reply_text("Please choose a device or add a new one:", reply_markup=reply_markup)
 
     @staticmethod
     async def show_help_menu(message: Message) -> None:

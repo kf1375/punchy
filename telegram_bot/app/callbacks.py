@@ -60,7 +60,12 @@ class Callbacks:
     
     @staticmethod
     async def devices(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        pass
+        query = update.callback_query
+        await query.answer()
+
+        telegram_id = query.from_user.id
+        devices = await db.get_user_devices(telegram_id)
+        await Menus.show_devices_menu(query.message, devices)
 
     @staticmethod
     async def profile(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
