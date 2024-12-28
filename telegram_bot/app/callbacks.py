@@ -92,5 +92,5 @@ class Callbacks:
     async def back_to_main(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         query = update.callback_query
         await query.answer()
-        
-        await Commands.start(query, context, is_callback=True)
+
+        await Commands.start(update, context, is_callback=True)
