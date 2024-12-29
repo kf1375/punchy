@@ -12,4 +12,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "-m", "app.bot"]
+CMD ["python", "-u", "-m", "app.bot"]

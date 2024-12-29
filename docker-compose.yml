@@ -32,7 +32,6 @@ services:
       MQTT_PORT: "1883"
       DATABASE_URL: "postgresql://testiwhisk:eT1wDCKu@postgres:5432/database"
       BOT_TOKEN: "6599928755:AAEVXPIrKmp3qOvmoT5x5eKXeifYZN01Ce4"
-      PYTHONUNBUFFERED: "1"
     networks:
       - app_network
 
