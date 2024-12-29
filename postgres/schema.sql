@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS Users (
 -- Devices Table
 CREATE TABLE IF NOT EXISTS Devices (
     DeviceID SERIAL PRIMARY KEY,
-    DeviceSerialNumber TEXT NOT NULL,
     DeviceName TEXT NOT NULL,
     Status TEXT DEFAULT 'Active',
     UserID INTEGER NOT NULL,
