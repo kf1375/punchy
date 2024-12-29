@@ -4,7 +4,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 from app.commands import Commands
 from app.menus import Menus
 from app.callbacks import Callbacks
-from app.database import db
+
 from config.settings import BOT_TOKEN
 
 def main() -> None:
@@ -27,7 +27,6 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.PHOTO, Callbacks.handle_qr_code))
     application.add_handler(CallbackQueryHandler(Callbacks.confirm_add_device, pattern="CONFIRM_ADD_DEVICE"))
     application.add_handler(CallbackQueryHandler(Callbacks.cancel_add_device, pattern="CANCEL_ADD_DEVICE"))
-
 
     # Start the Bot
     application.run_polling()

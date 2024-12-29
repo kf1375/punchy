@@ -152,6 +152,7 @@ class Callbacks:
             await query.message.reply_text("Serial number not found. Please try again.")
             return
 
+        await query.message.reply_text(f'Sending registration request for device with serial number {serial_number}...')
         # Publish MQTT message
         # mqtt_client.publish(f"device/{serial_number}/register", "START_REGISTRATION")
         # await query.message.reply_text(

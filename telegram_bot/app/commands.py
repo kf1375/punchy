@@ -2,7 +2,7 @@ from telegram import Update, BotCommand, BotCommandScopeChat
 from telegram.ext import ContextTypes
 from app.menus import Menus
 from app.database import db
-
+from app.mqtt_client import mqttClient
 class Commands:
     """Class to manage bot commands."""
 
@@ -16,6 +16,7 @@ class Commands:
         context.user_data['user_id'] = user.id
 
         await db.connect()
+        await mqttClient.connect()
 
         exists = await db.user_exists(user.id)
         if not exists:
