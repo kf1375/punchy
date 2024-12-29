@@ -86,6 +86,7 @@ class MqttClient:
                     async with client.messages() as messages:
                         await client.subscribe("#/#")
                         async for message in messages:
+                            print("Message arrived")
                             await self._handle_message(message)
             except Exception as ex:
                 # TODO: use logger instead of print
