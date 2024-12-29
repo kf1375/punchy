@@ -83,10 +83,8 @@ class MqttClient:
         while True:
             try:
                 async with self._create_mqtt_client() as client:
-                    print("Subscribing to all topics")
-                    await client.subscribe("#/#")
+                    await client.subscribe("5443B2477C14/pair")
                     async for message in client.messages:
-                        print(message.payload)
                         await self._handle_message(message)
             except Exception as ex:
                 # TODO: use logger instead of print
