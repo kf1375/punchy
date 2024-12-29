@@ -68,9 +68,9 @@ class MqttClient:
         return Client(
             hostname=self._host,
             port=self._port,
-            client_id=f"{self._mqtt_client_id}-{uuid.uuid4()}",
         )
 
+        return Clie
     async def _start_mqtt_client_task(self):
         self._mqtt_client_task = asyncio.create_task(self._mqtt_client_task_function())
     
