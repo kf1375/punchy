@@ -16,7 +16,6 @@ class Commands:
         context.user_data['user_id'] = user.id
 
         await db.connect()
-        await mqttClient.connect()
 
         exists = await db.user_exists(user.id)
         if not exists:
