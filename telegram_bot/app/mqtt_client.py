@@ -35,7 +35,7 @@ class MqttClient:
         :param topic: topic to subscribe to
         :param callback: function to call when a message is received
         """
-        if topic not in self._calblacks:
+        if topic not in self._callbacks:
             self._callbacks[topic] = []
         if callback not in self._callbacks[topic]:
             self._callbacks[topic].append(callback)
