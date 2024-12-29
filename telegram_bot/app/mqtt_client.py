@@ -84,7 +84,7 @@ class MqttClient:
             try:
                 async with self._create_mqtt_client() as client:
                     async with client.messages() as messages:
-                        await client.subscribe("hasp/#")
+                        await client.subscribe("#/#")
                         async for message in messages:
                             await self._handle_message(message)
             except Exception as ex:
