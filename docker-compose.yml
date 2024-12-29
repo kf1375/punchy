@@ -25,6 +25,7 @@ services:
       context: ./telegram_bot
     ports:
       - "80:80"
+      - "1883:1883"
     depends_on:
       - postgres
     environment:
