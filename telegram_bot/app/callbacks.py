@@ -1,5 +1,7 @@
 import io
 import asyncio
+import json
+from datetime import datetime, timedelta
 from PIL import Image
 from pyzbar.pyzbar import decode
 
@@ -9,6 +11,7 @@ from telegram.ext import ContextTypes
 from app.commands import Commands
 from app.menus import Menus
 from app.database import db
+from app.mqtt_client import mqttClient
 class Callbacks:
     @staticmethod    
     async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -147,32 +150,52 @@ class Callbacks:
         query = update.callback_query
         await query.answer()
 
+        user_id = context.user_data.get('user_id')
         serial_number = context.user_data.get('serial_number')
+
         if not serial_number:
             await query.message.reply_text("Serial number not found. Please try again.")
             return
 
         await query.message.reply_text(f'Sending registration request for device with serial number {serial_number}...')
+        
         # Publish MQTT message
-        # mqtt_client.publish(f"device/{serial_number}/register", "START_REGISTRATION")
-        # await query.message.reply_text(
-        #     f"Waiting for confirmation from the device with serial number {serial_number}..."
-        # )
+        # Callback to handle the device's response to the pairing request
+        async def handle_device_response(topic, payload):
+            try:
+                data = json.loads(payload)
+                if data.get("type") == "response" and data.get("status"):
+                    if data["status"] == "accepted":
+                        # Device confirmed, add the device to the database
+                        await db.add_device(user_id, serial_number)
+                        print("Device accepted")
+                        return True
+                    elif data["status"] == "rejected":
+                        # Handle rejection (e.g., show reason to the user)
+                        print(f"Device rejected: {data.get('message')}")
+                        return False
+            except Exception as e:
+                print(f"Error processing message: {e}")
+            return False
 
-        # Wait for confirmation with a timeout
-        event = asyncio.Event()
-        context.user_data['mqtt_event'] = event
+        request_payload = {
+            "type": "request"
+        }
 
-        try:
-            await asyncio.wait_for(event.wait(), timeout=30)
-            await db.add_device(context.user_data['user_id'], serial_number)
-            await query.message.reply_text("Device successfully added!")
-        except asyncio.TimeoutError:
-            await query.message.reply_text("Device registration timed out. Please try again.")
-        finally:
-            # Cleanup
-            context.user_data.pop('mqtt_event', None)
-            await Menus.show_devices_menu(query.message, await db.get_user_devices(context.user_data['user_id']))
+        pairing_topic = f"{serial_number}/pair"
+        await mqttClient.subscribe(pairing_topic, handle_device_response)
+        await mqttClient.publish(pairing_topic, request_payload)
+
+        # Wait for the confirmation or timeout (30 seconds)
+        start_time = datetime.now()
+        while datetime.now() - start_time < timedelta(seconds=30):
+            await asyncio.sleep(1)  # Keep the loop running to check for messages
+
+        # If no confirmation received in 30 seconds, handle the timeout
+        await mqttClient.cancel_callback(pairing_topic, handle_device_response)
+        print("Timeout waiting for device response.")
+
+        await Menus.show_devices_menu(query.message, await db.get_user_devices(context.user_data['user_id']))
 
     @staticmethod
     async def cancel_add_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
