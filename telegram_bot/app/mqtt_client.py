@@ -83,11 +83,10 @@ class MqttClient:
         while True:
             try:
                 async with self._create_mqtt_client() as client:
-                    async with client.messages() as messages:
-                        await client.subscribe("#/#")
-                        async for message in messages:
-                            print("Message arrived")
-                            await self._handle_message(message)
+                    await client.subscribe("#/#")
+                    async for message in client.messages:
+                        print(message.payload)
+                        await self._handle_message(message)
             except Exception as ex:
                 # TODO: use logger instead of print
                 print(f'Error: {ex}; Reconnecting in {self._reconnect_interval_seconds} seconds ...')
