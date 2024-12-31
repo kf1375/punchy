@@ -132,8 +132,7 @@ class Callbacks:
     async def handle_qr_code(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         if context.user_data.get('add_device_step') == 'waiting_for_serial_or_qr':
             photo = await update.message.photo[-1].get_file()
-            file_stream = io.BytesIO()
-            await photo.download(out=file_stream)
+            file_stream = io.BytesIO(await photo.download_as_bytearray())
             file_stream.seek(0)
 
             img = Image.open(file_stream)
