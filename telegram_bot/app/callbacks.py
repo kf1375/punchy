@@ -2,8 +2,10 @@ import io
 import asyncio
 import json
 from datetime import datetime, timedelta
+
+import cv2
+import numpy as np
 from PIL import Image
-from pyzbar.pyzbar import decode
 
 from telegram import Update, ChatMember
 from telegram.ext import ContextTypes
@@ -135,14 +137,16 @@ class Callbacks:
             file_stream = io.BytesIO(await photo.download_as_bytearray())
             file_stream.seek(0)
 
-            img = Image.open(file_stream)
-
-            # Log the image size or any relevant info
-            print(f"Image size: {img.size}")
+            # Convert the image to a NumPy array for OpenCV
+            img = Image.open(file_stream).convert('RGB')  # Ensure image is in RGB mode
+            img_np = np.array(img)  # Convert to NumPy array
             
-            decoded = decode(img)
-            if decoded:
-                serial_number = decoded[0].data.decode("utf-8")
+            # Decode QR code using OpenCV
+            qr_detector = cv2.QRCodeDetector()
+            data, points, _ = qr_detector.detectAndDecode(img_np)
+
+            if data:
+                serial_number = data.strip()  # Strip any extra whitespace
                 context.user_data['serial_number'] = serial_number
                 await Menus.confirm_device_registration(update.message, serial_number)
             else:
