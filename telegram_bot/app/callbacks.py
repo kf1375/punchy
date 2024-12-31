@@ -55,12 +55,12 @@ class Callbacks:
         query = update.callback_query
         await query.answer()
         
-        telegram_id = query.from_user.id
+        user_telegram_id = query.from_user.id
         name = query.from_user.full_name
 
-        exists = await db.user_exists(telegram_id)
+        exists = await db.user_exists(user_telegram_id)
         if not exists:
-            await db.add_user(telegram_id, name)
+            await db.add_user(user_telegram_id, name)
             await query.edit_message_text('You are successfully registered!')
         else:
             await query.edit_message_text('You are already registered!')
@@ -71,8 +71,8 @@ class Callbacks:
         query = update.callback_query
         await query.answer()
 
-        telegram_id = query.from_user.id
-        devices = await db.get_user_devices(telegram_id)
+        user_telegram_id = query.from_user.id
+        devices = await db.get_user_devices(user_telegram_id)
         await Menus.show_devices_menu(query.message, devices)
 
     @staticmethod
@@ -80,22 +80,22 @@ class Callbacks:
         query = update.callback_query
         await query.answer()
     
-        telegram_id = query.from_user.id
-        user_info = await db.get_user_info(telegram_id)
+        user_telegram_id = query.from_user.id
+        user = await db.get_user_by_telegram_id(user_telegram_id)
 
-        if user_info:
-            premium_status = 'Yes' if user_info['premium'] else 'No'
+        if user:
+            subscription_type = 'Yes' if user['subscription_type'] else 'No'
             message = (
                 f"👤 *User Info:*\n"
-                f"ID: `{user_info['telegramid']}`\n"
-                f"Name: {user_info['name']}\n"
-                f"Premium: {premium_status}\n"
-                f"Joined At: {user_info['createdat']}\n"
+                f"ID: `{user['telegram_id']}`\n"
+                f"Name: {user['name']}\n"
+                f"Premium: {subscription_type}\n"
+                f"Joined At: {user['created_at']}\n"
             )
             await query.edit_message_text(message, parse_mode="Markdown")
         else:
             await query.edit_message_text("You are not registered. Use /start to register.")
-        await Menus.show_profile_menu(query.message, premium_status)
+        await Menus.show_profile_menu(query.message, subscription_type)
 
     @staticmethod
     async def help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -150,14 +150,14 @@ class Callbacks:
         query = update.callback_query
         await query.answer()
 
-        user_id = context.user_data.get('user_id')
-        serial_number = context.user_data.get('serial_number')
+        user_telegram_id = context.user_data.get('user_id')
+        device_serial_number = context.user_data.get('serial_number')
 
-        if not serial_number:
+        if not device_serial_number:
             await query.message.reply_text("Serial number not found. Please try again.")
             return
 
-        await query.message.reply_text(f'Sending registration request for device with serial number {serial_number}...')
+        await query.message.reply_text(f'Sending registration request for device with serial number {device_serial_number}...')
         
         # Publish MQTT message
         # Callback to handle the device's response to the pairing request
@@ -167,7 +167,7 @@ class Callbacks:
                 if data.get("type") == "response" and data.get("status"):
                     if data["status"] == "accepted":
                         # Device confirmed, add the device to the database
-                        await db.add_device(user_id, serial_number)
+                        await db.add_device(user_telegram_id, device_serial_number, f"Device {device_serial_number}")
                         print("Device accepted")
                         return True
                     elif data["status"] == "rejected":
@@ -182,7 +182,7 @@ class Callbacks:
             "type": "request"
         }
 
-        pairing_topic = f"{serial_number}/pair"
+        pairing_topic = f"{device_serial_number}/pair"
         await mqttClient.subscribe(pairing_topic, handle_device_response)
         await mqttClient.publish(pairing_topic, request_payload)
 
@@ -195,11 +195,13 @@ class Callbacks:
         await mqttClient.cancel_callback(pairing_topic, handle_device_response)
         print("Timeout waiting for device response.")
 
-        await Menus.show_devices_menu(query.message, await db.get_user_devices(context.user_data['user_id']))
+        await Menus.show_devices_menu(query.message, await db.get_user_devices(user_telegram_id))
 
     @staticmethod
     async def cancel_add_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         query = update.callback_query
         await query.answer()
+
+        user_telegram_id = context.user_data.get('user_id')
         await query.message.reply_text("Device registration cancelled.")
-        await Menus.show_devices_menu(query.message, await db.get_user_devices(context.user_data['user_id']))
+        await Menus.show_devices_menu(query.message, await db.get_user_devices(user_telegram_id))

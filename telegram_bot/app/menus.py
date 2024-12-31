@@ -54,7 +54,7 @@ class Menus:
     async def show_devices_menu(message: Message, devices: list) -> None:
         """Display a menu with the user's devices and an option to add a new device."""
         keyboard = [
-            [InlineKeyboardButton(device['devicename'], callback_data=f'DEVICE_{device['devicename']}')]
+            [InlineKeyboardButton(device['name'], callback_data=f'DEVICE_{device['serial_number']}')]
             for device in devices
         ]
         

@@ -14,10 +14,11 @@ class Commands:
         user = update.effective_user
 
         context.user_data['user_id'] = user.id
-
+        
+        user_telegram_id = user.id
         await db.connect()
 
-        exists = await db.user_exists(user.id)
+        exists = await db.user_exists(user_telegram_id)
         if not exists:
             if is_callback:
                 message = await update.callback_query.message.edit_text(
