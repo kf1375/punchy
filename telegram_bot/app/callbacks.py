@@ -146,7 +146,7 @@ class Callbacks:
                 context.user_data['serial_number'] = serial_number
                 await Menus.confirm_device_registration(update.message, serial_number)
             else:
-                await update.message.reply_text("Failed to decode the QR code. Please try again.")
+                await update.message.reply_photo(photo=file_stream, caption="failed")
                 
     @staticmethod
     async def confirm_add_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
