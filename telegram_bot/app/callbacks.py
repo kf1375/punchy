@@ -136,6 +136,10 @@ class Callbacks:
             file_stream.seek(0)
 
             img = Image.open(file_stream)
+
+            # Log the image size or any relevant info
+            print(f"Image size: {img.size}")
+            
             decoded = decode(img)
             if decoded:
                 serial_number = decoded[0].data.decode("utf-8")
