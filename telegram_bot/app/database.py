@@ -58,6 +58,6 @@ class Database:
             user = await self.get_user_by_telegram_id(user_telegram_id)
             async with self.pool.acquire() as connection:
                 query = "INSERT INTO devices (serial_number, name, user_id) VALUES ($1, $2, $3)"
-                await connection.execute(query, device_serial_number, user['user_id'])
+                await connection.execute(query, device_serial_number, device_name, user['user_id'])
             
 db = Database()

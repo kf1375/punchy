@@ -169,6 +169,9 @@ class Callbacks:
         
         # Publish MQTT message
         # Callback to handle the device's response to the pairing request
+        # Event to signal response received
+        response_received = asyncio.Event()
+        response_result = {"status": False}
         async def handle_device_response(topic, payload):
             try:
                 data = json.loads(payload)
@@ -177,14 +180,16 @@ class Callbacks:
                         # Device confirmed, add the device to the database
                         await db.add_device(user_telegram_id, device_serial_number, f"Device {device_serial_number}")
                         print("Device accepted")
-                        return True
+                        response_result["status"] = True
                     elif data["status"] == "rejected":
                         # Handle rejection (e.g., show reason to the user)
                         print(f"Device rejected: {data.get('message')}")
                         return False
+                    response_received.set()
             except Exception as e:
                 print(f"Error processing message: {e}")
-            return False
+            finally:
+                response_received.set()
 
         request_payload = {
             "type": "request"
@@ -195,13 +200,17 @@ class Callbacks:
         await mqttClient.publish(pairing_topic, request_payload)
 
         # Wait for the confirmation or timeout (30 seconds)
-        start_time = datetime.now()
-        while datetime.now() - start_time < timedelta(seconds=30):
-            await asyncio.sleep(1)  # Keep the loop running to check for messages
+        try:
+            await asyncio.wait_for(response_received.wait(), timeout=30.0)
+        except asyncio.TimeoutError:
+            print("Timeout waiting for device response.")
 
-        # If no confirmation received in 30 seconds, handle the timeout
         await mqttClient.cancel_callback(pairing_topic, handle_device_response)
-        print("Timeout waiting for device response.")
+
+        if response_result["status"]:
+            await query.message.reply_text("Device added successfully.")
+        else:
+            await query.message.reply_text("Device registration failed.")
 
         await Menus.show_devices_menu(query.message, await db.get_user_devices(user_telegram_id))
 
