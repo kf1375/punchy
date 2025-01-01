@@ -224,8 +224,7 @@ class Callbacks:
         query = update.callback_query
         await query.answer()
 
-        callback_data = query.data
-        device_serial_number = callback_data.split('_')[-1]
+        device_serial_number = query.data.split('_')[-1]
         await Menus.show_device_control_menu(query.message, device_serial_number)
 
     @staticmethod
@@ -255,10 +254,10 @@ class Callbacks:
         await query.answer()
 
         user_telegram_id = query.from_user.id
-        device_serial_number = context.user_data.get('device_serial_number')
+        device_serial_number = query.data.split('_')[-1]
 
         await db.remove_device(device_serial_number)
         await query.message.reply_text(f"Device {device_serial_number} has been successfully removed.")
-        
+
         devices = await db.get_user_devices(user_telegram_id)
         await Menus.show_devices_menu(query.message, devices)
