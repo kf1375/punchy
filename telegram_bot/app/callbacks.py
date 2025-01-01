@@ -109,10 +109,6 @@ class Callbacks:
         await query.answer()
 
         await Commands.start(update, context, is_callback=True)
-    
-    @staticmethod
-    async def device_selected(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        pass
 
     @staticmethod
     async def add_new_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -222,3 +218,47 @@ class Callbacks:
         user_telegram_id = context.user_data.get('user_id')
         await query.message.reply_text("Device registration cancelled.")
         await Menus.show_devices_menu(query.message, await db.get_user_devices(user_telegram_id))
+
+    @staticmethod
+    async def control_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        await query.answer()
+
+        callback_data = query.data
+        device_serial_number = callback_data.split('_')[-1]
+        await Menus.show_device_control_menu(query.message, device_serial_number)
+
+    @staticmethod
+    async def get_device_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        pass
+
+    @staticmethod
+    async def set_device_state(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        pass
+
+    @staticmethod
+    async def set_device_speed(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        pass
+
+    @staticmethod
+    async def remove_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """Remove the selected device after confirmation."""
+        query = update.callback_query
+        await query.answer()
+
+        device_serial_number = query.data.split('_')[-1]
+        await Menus.confirm_device_removal(query.message, device_serial_number)
+
+    @staticmethod
+    async def confirm_remove_device(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        query = update.callback_query
+        await query.answer()
+
+        user_telegram_id = query.from_user.id
+        device_serial_number = context.user_data.get('device_serial_number')
+
+        await db.remove_device(device_serial_number)
+        await query.message.reply_text(f"Device {device_serial_number} has been successfully removed.")
+        
+        devices = await db.get_user_devices(user_telegram_id)
+        await Menus.show_devices_menu(query.message, devices)

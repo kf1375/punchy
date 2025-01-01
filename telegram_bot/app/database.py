@@ -59,5 +59,12 @@ class Database:
             async with self.pool.acquire() as connection:
                 query = "INSERT INTO devices (serial_number, name, user_id) VALUES ($1, $2, $3)"
                 await connection.execute(query, device_serial_number, device_name, user['user_id'])
+    
+    async def remove_device(self, serial_number: str):
+        exist = await self.device_exists(serial_number)
+        if exist:
+            async with self.pool.acquire() as connection:
+                query = "DELETE FROM devices WHERE serial_number = $1"
+                await connection.execute(query, serial_number)
             
 db = Database()

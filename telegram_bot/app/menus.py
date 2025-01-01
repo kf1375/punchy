@@ -54,7 +54,7 @@ class Menus:
     async def show_devices_menu(message: Message, devices: list) -> None:
         """Display a menu with the user's devices and an option to add a new device."""
         keyboard = [
-            [InlineKeyboardButton(device['name'], callback_data=f'DEVICE_{device['serial_number']}')]
+            [InlineKeyboardButton(device['name'], callback_data=f'CONTROL_DEVICE_{device['serial_number']}')]
             for device in devices
         ]
         
@@ -65,6 +65,18 @@ class Menus:
         await message.reply_text("Please choose a device or add a new one:", reply_markup=reply_markup)
 
     @staticmethod
+    async def show_device_control_menu(message: Message, device_serial_number: str) -> None:
+        keyboard = [
+            [InlineKeyboardButton('View Status', callback_data=f'GET_DEVICE_STATUS_{device_serial_number}')],
+            [InlineKeyboardButton('Set State', callback_data=f'SET_DEVICE_STATE_{device_serial_number}')],
+            [InlineKeyboardButton('Set Speed', callback_data=f'SET_DEVICE_SPEED_{device_serial_number}')],
+            [InlineKeyboardButton('Remove Device', callback_data=f'REMOVE_DEVICE_{device_serial_number}')],
+            [InlineKeyboardButton('Back to Devices', callback_data='BACK_TO_DEVICES')],
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await message.reply_text(f'Control Menu for Device {device_serial_number}:', reply_markup=reply_markup)
+        
+    @staticmethod
     async def confirm_device_registration(message: Message, serial_number: str) -> None:
         keyboard = [
             [InlineKeyboardButton('Yes', callback_data='CONFIRM_ADD_DEVICE')],
@@ -73,6 +85,18 @@ class Menus:
         reply_markup = InlineKeyboardMarkup(keyboard)
         await message.reply_text(
             f'Serial number detected: {serial_number}\nDo you want to add this device?',
+            reply_markup=reply_markup
+        )
+
+    @staticmethod
+    async def confirm_device_removal(message: Message, serial_number: str) -> None:
+        keyboard = [
+            [InlineKeyboardButton('Yes', callback_data=f'CONFIRM_REMOVE_{serial_number}')],
+            [InlineKeyboardButton('Cancel', callback_data=f'CONTROL_DEVICE_{serial_number}')],
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await message.reply_text(
+            f'Are you sure you want to remove device {serial_number}?',
             reply_markup=reply_markup
         )
 
