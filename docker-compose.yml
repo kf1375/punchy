@@ -50,6 +50,8 @@ services:
   helloworld:
         container_name: helloworld
         image: crccheck/hello-world
+        networks:
+            - app_network
         expose:
             - 8000
 
