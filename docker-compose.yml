@@ -40,7 +40,8 @@ services:
     build:
       context: ./frontend
     volumes:
-      - /etc/letsencrypt/live/myremotedevice.com:/etc/letsencrypt/live/myremotedevice.com:ro  # Mount the SSL certificates
+      - /etc/letsencrypt/live/myremotedevice.com/fullchain.pem:/etc/letsencrypt/live/myremotedevice.com/fullchain.pem
+      - /etc/letsencrypt/live/myremotedevice.com/privkey.pem:/etc/letsencrypt/live/myremotedevice.com/privkey.pem
     ports:
       - "80:80"
       - "443:443"
