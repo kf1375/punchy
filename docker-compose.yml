@@ -57,6 +57,8 @@ services:
       container_name: nginx
       restart: unless-stopped
       image: nginx
+      networks:
+          - app_network
       ports:
           - 80:80
           - 443:443
@@ -64,7 +66,7 @@ services:
           - ./nginx/nginx.conf:/etc/nginx/nginx.conf
           - ./certbot/conf:/etc/letsencrypt
           - ./certbot/www:/var/www/certbot
-          
+
   certbot:
     image: certbot/certbot
     container_name: certbot
