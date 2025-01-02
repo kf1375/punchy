@@ -72,6 +72,16 @@ services:
       - ./certbot/www:/var/www/certbot
     command: certonly --webroot -w /var/www/certbot --force-renewal --email myowniotproject2024@gmail.com -d myremotedevice.com --agree-tos
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+    tty: true
+
 volumes:
   postgres_data:
     driver: local
