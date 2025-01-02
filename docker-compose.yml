@@ -39,8 +39,12 @@ services:
     container_name: forntend
     build:
       context: ./frontend
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/live/myremotedevice.com:/etc/letsencrypt/live/myremotedevice.com:ro  # Mount the SSL certificates
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - app_network
 
