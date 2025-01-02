@@ -1,13 +1,20 @@
-FROM node:18-alpine
+FROM node:18-alpine as build
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --production
 
 COPY . .
 
-EXPOSE 3000
+RUN npm run build
 
-CMD [ "npm", "start"]
+# Stage 2
+FROM nginx:stable-alpine
+
+COPY --from=build /app/build /var/www/public
+
+EXPOSE 80 443
+
+CMD [ "nginx", "-g", "daemon off;" ]
