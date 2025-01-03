@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Container, Typography, List, ListItem, ListItemText, Button } from '@mui/material';
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -47,6 +50,10 @@ const Devices = () => {
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
+  
+  const handleAddDevice = () => {
+    navigate('/add-device'); // Navigate to AddDevice page
+  };
 
   return (
     <Container sx={{ marginTop: 4 }}>
@@ -60,7 +67,12 @@ const Devices = () => {
           </ListItem>
         ))}
       </List>
-      <Button variant="contained" color="primary" sx={{ marginTop: 2 }}>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        sx={{ marginTop: 2 }}
+        onClick={handleAddDevice}
+      >
         Add Device
       </Button>
     </Container>
