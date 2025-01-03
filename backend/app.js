@@ -95,7 +95,7 @@ app.get('/devices/exists/:serial_number', async (req, res) => {
 app.post('/devices', async (req, res) => {
     const { serial_number, name, user_id } = req.body;
 
-    if (!serial_number || !device_name || !user_id) {
+    if (!serial_number || !name || !user_id) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
