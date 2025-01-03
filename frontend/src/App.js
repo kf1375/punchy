@@ -8,6 +8,7 @@ import Devices from './pages/Devices';
 import Profile from './pages/Profile';
 import Help from './pages/Help';
 import AddDevice from './pages/AddDevice';
+import DeviceControlPanel from './pages/DeviceControlPanel';
 
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import SwipeablePage from './Components/SwipeablePage/SwipeablePage';
@@ -51,6 +52,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/add-device" element={<AddDevice />} />
+          <Route path="/device-control/:serialNumber" element={<DeviceControlPanel />} />
           {routes.map((path, index) => (
             <Route
               key={path}

@@ -50,7 +50,11 @@ const Devices = () => {
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
-  
+
+  const handleDeviceClick = (serialNumber) => {
+    navigate(`/device-control/${serialNumber}`);
+  };
+
   const handleAddDevice = () => {
     navigate('/add-device'); // Navigate to AddDevice page
   };
@@ -62,14 +66,16 @@ const Devices = () => {
       </Typography>
       <List>
         {devices.map((device) => (
-          <ListItem button key={device.id}>
-            <ListItemText primary={device.name || `Device ${device.device_id}`} />
+          <ListItem button key={device.id} onClick={() => handleDeviceClick(device.serial_number)}>
+            <Button fullWidth variant="outlined">
+              {device.name}
+            </Button>
           </ListItem>
         ))}
       </List>
-      <Button 
-        variant="contained" 
-        color="primary" 
+      <Button
+        variant="contained"
+        color="primary"
         sx={{ marginTop: 2 }}
         onClick={handleAddDevice}
       >
