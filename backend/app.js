@@ -1,9 +1,15 @@
 const express = require('express');
 const app = express();
 const db = require('./services/database');  // Import the db.js file
+const mqtt = require('mqtt');
+const { MQTT_URL } = process.env;
+const mqttClient = mqtt.connect(MQTT_URL);
 const port = 8000;
 
 app.use(express.json());
+
+// Store temporary state for pairing responses
+const pendingPairings = new Map();
 
 // Check if a user exists by Telegram ID
 app.get('/users/exists/:telegram_id', async (req, res) => {
@@ -88,13 +94,69 @@ app.get('/devices/exists/:serial_number', async (req, res) => {
 // Add a new device
 app.post('/devices', async (req, res) => {
     const { serial_number, name, user_id } = req.body;
-    try {
-        const newDevice = await db.addDevice(serial_number, name, user_id);
-        res.status(201).json(newDevice);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error adding device');
+
+    if (!serial_number || !device_name || !user_id) {
+        return res.status(400).json({ error: 'Missing required fields' });
     }
+
+    const topic = `${serial_number}/pair`;
+    const payload = JSON.stringify({
+        type: 'request',
+        device_name,
+    });
+
+    try {
+        // Publish pairing request
+        client.publish(topic, payload);
+
+        // Wait for response with a timeout of 30 seconds
+        const response = await new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+                pendingPairings.delete(serial_number);
+                reject(new Error('Device response timed out'));
+            }, 30000);
+
+            // Store callback for response handling
+            pendingPairings.set(serial_number, (data) => {
+                clearTimeout(timeout);
+                resolve(data);
+            });
+        });
+
+        if (response.status === 'accepted') {
+            // Add device to database
+            const newDevice = await db.addDevice(serial_number, device_name, user_id);
+            return res.status(201).json(newDevice);
+        } else {
+            return res.status(400).json({ error: response.message });
+        }
+    } catch (error) {
+        console.error(`Error pairing device: ${error.message}`);
+        return res.status(500).json({ error: error.message });
+    }
+});
+
+// Listen for device responses
+mqttClient.on('message', (topic, message) => {
+    const [serial_number, action] = topic.split('/');
+
+    if (action === 'pair') {
+        const response = JSON.parse(message.toString());
+
+        if (response.type === 'response') {
+            // Call the stored callback with the response data
+            const callback = pendingPairings.get(serial_number);
+            if (callback) {
+                callback(response);
+                pendingPairings.delete(serial_number);
+            }
+        }
+    }
+});
+
+// Subscribe to all pairing topics
+mqttClient.on('connect', () => {
+    mqttClient.subscribe('#/pair'); // Listen to all pairing topics
 });
 
 // Remove a device
