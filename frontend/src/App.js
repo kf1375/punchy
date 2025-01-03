@@ -1,8 +1,11 @@
 import './App.css';
-
+import Button from './Components/Button/Button';
 function App() {
   return (
-    <h1>Hello, World!</h1>
+    <>
+      Im here!
+      <Button title={"Test"} disabled={false} onClick={() => console.log("Button clicked!")}/>
+    </>      
   );
 }
 
