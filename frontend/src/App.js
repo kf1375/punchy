@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Devices from './pages/Devices';
 import Profile from './pages/Profile';
 import Help from './pages/Help';
+import AddDevice from './pages/AddDevice';
 
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import SwipeablePage from './Components/SwipeablePage/SwipeablePage';
@@ -49,6 +50,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/add-device" element={<AddDevice />} />
           {routes.map((path, index) => (
             <Route
               key={path}
