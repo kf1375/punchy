@@ -107,7 +107,7 @@ app.post('/devices', async (req, res) => {
 
     try {
         // Publish pairing request
-        client.publish(topic, payload);
+        mqttClient.publish(topic, payload);
 
         // Wait for response with a timeout of 30 seconds
         const response = await new Promise((resolve, reject) => {
