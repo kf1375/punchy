@@ -13,7 +13,7 @@ import SwipeablePage from './Components/SwipeablePage/SwipeablePage';
 import BottomNavBar from './Components/BottomNavBar/BottomNavBar';
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState(0); // 0: Devices, 1: Profile, 2: Help
+  const [activeTab, setActiveTab] = useState(1); // 0: Devices, 1: Profile, 2: Help
   const [themeMode, setThemeMode] = useState('light'); // 'light' or 'dark'
 
   const handleSwipe = (direction) => {
