@@ -45,7 +45,7 @@ const App = () => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
+    // <ThemeProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -71,7 +71,7 @@ const App = () => {
           ))}
         </Routes>
       </Router>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 };
 

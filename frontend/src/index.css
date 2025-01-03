@@ -5,6 +5,7 @@ body, html, #root {
   height: 100%;
   overflow: hidden; /* Prevent unwanted scrolling */
   font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #63b0e4, #a976ec);
 }
 
 /* Utility classes (optional) */
