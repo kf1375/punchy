@@ -156,7 +156,7 @@ mqttClient.on('message', (topic, message) => {
 
 // Subscribe to all pairing topics
 mqttClient.on('connect', () => {
-    mqttClient.subscribe('#/pair'); // Listen to all pairing topics
+    mqttClient.subscribe('5443B2477C14/pair'); // Listen to all pairing topics
 });
 
 // Remove a device
