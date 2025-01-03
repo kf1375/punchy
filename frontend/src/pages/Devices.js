@@ -19,7 +19,7 @@ const Devices = () => {
             const userId = userData?.user_id;
 
             if (userId) {
-              const devicesResponse = await fetch(`/api/devices/${userId}`);
+              const devicesResponse = await fetch(`/api/users/${userId}/devices/`);
               if (devicesResponse.ok) {
                 const devicesData = await devicesResponse.json();
                 setDevices(devicesData);
