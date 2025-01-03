@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
@@ -72,7 +71,7 @@ const App = () => {
           ))}
         </Routes>
       </Router>
-      </ThemeProvider>
+    </ThemeProvider>
   );
 };
 
