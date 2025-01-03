@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, TextField, Button, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const AddDevice = () => {
   const [serialNumber, setSerialNumber] = useState('');
@@ -8,6 +9,8 @@ const AddDevice = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch user info from Telegram
@@ -82,6 +85,10 @@ const AddDevice = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate('/devices'); // Navigate back to the Devices page
+  };
+
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
@@ -116,9 +123,14 @@ const AddDevice = () => {
           onChange={(e) => setSerialNumber(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
-        <Button variant="contained" color="primary" onClick={handleAddDevice}>
-          Add Device
-        </Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+          <Button variant="contained" color="primary" onClick={handleAddDevice}>
+            Add Device
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </Box>
         {message && <Typography color="success.main" sx={{ marginTop: 2 }}>{message}</Typography>}
         {error && <Typography color="error" sx={{ marginTop: 2 }}>{error}</Typography>}
       </Container>
