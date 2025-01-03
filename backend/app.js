@@ -102,7 +102,7 @@ app.post('/devices', async (req, res) => {
     const topic = `${serial_number}/pair`;
     const payload = JSON.stringify({
         type: 'request',
-        device_name,
+        name,
     });
 
     try {
@@ -125,7 +125,7 @@ app.post('/devices', async (req, res) => {
 
         if (response.status === 'accepted') {
             // Add device to database
-            const newDevice = await db.addDevice(serial_number, device_name, user_id);
+            const newDevice = await db.addDevice(serial_number, name, user_id);
             return res.status(201).json(newDevice);
         } else {
             return res.status(400).json({ error: response.message });
