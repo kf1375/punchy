@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Container, Typography } from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Container, Typography, Button } from '@mui/material';
 
 const DeviceControlPanel = () => {
     const { serialNumber } = useParams();
     const [device, setDevice] = useState(null);
     const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDevice = async () => {
