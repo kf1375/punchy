@@ -37,7 +37,7 @@ const App = () => {
         const telegramId = user.id;
 
         try {
-          const response = await fetch(`/users/exists/${telegramId}`);
+          const response = await fetch(`/api/users/${telegramId}`);
           const { exists } = await response.json();
           setUserExists(exists);
         } catch (error) {
