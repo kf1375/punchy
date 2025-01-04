@@ -1,36 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const SignUp = () => {
+  const [telegramUser, setTelegramUser] = useState(null);
+  const [isUserExists, setIsUserExists] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    if (username && password) {
-      localStorage.setItem('authenticated', 'true');
-      navigate('/devices');
+  useEffect(() => {
+    // Fetch Telegram user info from WebApp
+    const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    setTelegramUser(user);
+
+    if (user?.id) {
+      // Check if the user exists in the backend
+      fetch(`/users/exists/${user.id}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to check user existence.');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.exists) {
+            setIsUserExists(true);
+            navigate('/profile'); // Redirect existing users to the home page
+          }
+        })
+        .catch((err) => {
+          console.error('Error checking user existence:', err);
+          setError('Failed to check user existence. Please try again later.');
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+      setError('Could not retrieve Telegram user information.');
     }
+  }, [navigate]);
+
+  const handleSignUp = () => {
+    if (!telegramUser) return;
+
+    const userData = {
+      telegram_id: telegramUser.id,
+      name: `${telegramUser.first_name} ${telegramUser.last_name || ''}`.trim(),
+      subscription_type: 0, // Default subscription type
+    };
+
+    fetch('/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to register user.');
+        }
+        return response.json();
+      })
+      .then(() => {
+        alert('User registered successfully!');
+        navigate('/profile'); // Redirect new users to the home page
+      })
+      .catch((err) => {
+        console.error('Error registering user:', err);
+        setError('Failed to register. Please try again later.');
+      });
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isUserExists) {
+    return <div>You are already registered. Redirecting...</div>;
+  }
 
   return (
     <div>
-      <h1>Login</h1>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
+      <h1>Sign Up</h1>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {telegramUser ? (
+        <div>
+          <p>
+            Welcome, {telegramUser.first_name} {telegramUser.last_name || ''}!
+          </p>
+          <button onClick={handleSignUp}>Sign Up</button>
+        </div>
+      ) : (
+        <p>Telegram user information is not available.</p>
+      )}
     </div>
   );
 };
 
-export default Login;
+export default SignUp;

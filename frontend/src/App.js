@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routesm, useNavigate } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
@@ -17,6 +17,7 @@ import BottomNavBar from './Components/BottomNavBar/BottomNavBar';
 const App = () => {
   const [activeTab, setActiveTab] = useState(1); // 0: Devices, 1: Profile, 2: Help
   const [themeMode, setThemeMode] = useState('light'); // 'light' or 'dark'
+  const [userExists, setUserExists] = useState(null);
 
   const handleSwipe = (direction) => {
     if (direction === 'left') {
@@ -27,6 +28,29 @@ const App = () => {
   };
 
   const routes = ['/devices', '/', '/help'];
+
+  useEffect(() => {
+    // Ensure the Telegram WebApp object is available
+    const checkUserExistence = async () => {
+      if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+        const user = window.Telegram.WebApp.initDataUnsafe.user;
+        const telegramId = user.id;
+
+        try {
+          const response = await fetch(`/users/exists/${telegramId}`);
+          const { exists } = await response.json();
+          setUserExists(exists);
+        } catch (error) {
+          console.error('Error checking user existence:', error);
+          setUserExists(false); // Default to requiring sign-up on error
+        }
+      } else {
+        setUserExists(false); // If Telegram user info is unavailable
+      }
+    };
+
+    checkUserExistence();
+  }, []);
 
   useEffect(() => {
     // Ensure the Telegram WebApp object is available
@@ -46,19 +70,24 @@ const App = () => {
     },
   });
 
+  if (userExists === null) {
+    // Show a loading state while checking user existence
+    return <div>Loading...</div>;
+  }
+
   return (
     // <ThemeProvider theme={theme}>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/add-device" element={<AddDevice />} />
-          <Route path="/device-control/:serialNumber" element={<DeviceControlPanel />} />
+          <ProtectedRoute  userState={userExists} path="/add-device" element={<AddDevice />} />
+          <ProtectedRoute  userState={userExists} path="/device-control/:serialNumber" element={<DeviceControlPanel />} />
           {routes.map((path, index) => (
             <Route
               key={path}
               path={path}
               element={
-                <ProtectedRoute>
+                <ProtectedRoute userState={userExists}>
                   <SwipeablePage
                     leftTarget={routes[(index + 1) % routes.length]}
                     rightTarget={routes[(index - 1 + routes.length) % routes.length]}
