@@ -72,10 +72,10 @@ const App = () => {
     },
   });
 
-  // if (userExists === null) {
-  //   // Show a loading state while checking user existence
-  //   return <div>Loading...</div>;
-  // }
+  if (userExists === null) {
+    // Show a loading state while checking user existence
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>

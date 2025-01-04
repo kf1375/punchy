@@ -10,36 +10,33 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch Telegram user info from WebApp
-    const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    setTelegramUser(user);
+    const checkUserExistence = async () => {
+      const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      setTelegramUser(user);
 
-    const telegramId = user?.id;
-    if (telegramId) {
-      // Check if the user exists in the backend
-      fetch(`/api/users/${telegramId}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to check user existence.');
-          }
-          return response.json();
-        })
-        .then((data) => {
+      if (user && user.id) {
+        try {
+          const response = await fetch(`/api/users/${user.id}`);
+          const data = await response.json();
+          
           if (data && data.user_id) {
-            setIsUserExists(true); // User exists if user_id is present
-            navigate('/'); // Redirect existing users to the home page
+            setIsUserExists(true);
+            navigate('/'); // Redirect to the home page for existing users
           }
-        })
-        .catch((err) => {
+        } catch (err) {
           console.error('Error checking user existence:', err);
           setError('Failed to check user existence. Please try again later.');
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-      setError('Could not retrieve Telegram user information.');
-    }
-  }, [navigate]);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+        setError('Could not retrieve Telegram user information.');
+      }
+    };
+
+    checkUserExistence();
+  }, [navigate]); // Only run when the component mounts
 
   const handleSignUp = () => {
     if (!telegramUser) return;
