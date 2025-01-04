@@ -15,9 +15,9 @@ const Login = () => {
     setTelegramUser(user);
 
     const telegramId = user?.user?.id;
-    if (telegramId {
+    if (telegramId) {
       // Check if the user exists in the backend
-      fetch(`/api/users/${telegramId}`)
+      fetch(`/api/users/${user.id}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to check user existence.');
