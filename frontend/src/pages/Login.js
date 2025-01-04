@@ -16,7 +16,7 @@ const Login = () => {
 
     if (user?.id) {
       // Check if the user exists in the backend
-      fetch(`/users/exists/${user.id}`)
+      fetch(`/api/users/${user.id}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to check user existence.');
@@ -49,7 +49,7 @@ const Login = () => {
       subscription_type: 0, // Default subscription type
     };
 
-    fetch('/users', {
+    fetch('/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
