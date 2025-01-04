@@ -26,7 +26,7 @@ const Login = () => {
         })
         .then((data) => {
           if (data && data.user_id) {
-            setUserExists(true); // User exists if user_id is present
+            setIsUserExists(true); // User exists if user_id is present
             navigate('/'); // Redirect existing users to the home page
           }
         })
