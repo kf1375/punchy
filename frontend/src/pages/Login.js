@@ -14,9 +14,10 @@ const Login = () => {
     const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
     setTelegramUser(user);
 
-    if (user?.id) {
+    const telegramId = user?.user?.id;
+    if (telegramId {
       // Check if the user exists in the backend
-      fetch(`/api/users/${user.id}`)
+      fetch(`/api/users/${telegramId}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to check user existence.');
@@ -49,7 +50,7 @@ const Login = () => {
       subscription_type: 0, // Default subscription type
     };
 
-    fetch('/api/users', {
+    fetch(`/api/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
