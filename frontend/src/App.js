@@ -28,14 +28,14 @@ const App = () => {
   };
 
   const routes = ['/devices', '/', '/help'];
-
+  
   useEffect(() => {
     // Ensure the Telegram WebApp object is available
     const checkUserExistence = async () => {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
         const user = window.Telegram.WebApp.initDataUnsafe.user;
         const telegramId = user.id;
-
+        telegramId = 94500506
         try {
           const response = await fetch(`/api/users/${telegramId}`);
           const { data } = await response.json();
