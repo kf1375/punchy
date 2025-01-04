@@ -39,7 +39,11 @@ const App = () => {
         try {
           const response = await fetch(`/api/users/${telegramId}`);
           const { data } = await response.json();
-          setUserExists(data.exists); // Set userExists based on API response
+          if (data && data.user_id) {
+            setUserExists(true); // User exists if user_id is present
+          } else {
+            setUserExists(false); // No valid user found
+          }
         } catch (error) {
           console.error('Error checking user existence:', error);
           setUserExists(false); // Default to requiring sign-up on error
