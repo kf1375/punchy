@@ -6,11 +6,14 @@ const Login = () => {
   const [isUserExists, setIsUserExists] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [redirected, setRedirected] = useState(false);  // Track if redirection occurred
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkUserExistence = async () => {
+      if (redirected) return;  // Skip if already redirected
+
       const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
       setTelegramUser(user);
 
@@ -18,9 +21,10 @@ const Login = () => {
         try {
           const response = await fetch(`/api/users/${user.id}`);
           const data = await response.json();
-          
+
           if (data && data.user_id) {
             setIsUserExists(true);
+            setRedirected(true);  // Mark as redirected to prevent further API calls
             navigate('/'); // Redirect to the home page for existing users
           }
         } catch (err) {
@@ -36,7 +40,7 @@ const Login = () => {
     };
 
     checkUserExistence();
-  }, [navigate]); // Only run when the component mounts
+  }, [navigate, redirected]);  // Added 'redirected' to dependencies to ensure it's considered
 
   const handleSignUp = () => {
     if (!telegramUser) return;
@@ -60,6 +64,7 @@ const Login = () => {
       })
       .then(() => {
         alert('User registered successfully!');
+        setRedirected(true);  // Mark as redirected
         navigate('/'); // Redirect new users to the home page
       })
       .catch((err) => {
