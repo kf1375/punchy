@@ -80,8 +80,22 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <ProtectedRoute  userState={userExists} path="/add-device" element={<AddDevice />} />
-          <ProtectedRoute  userState={userExists} path="/device-control/:serialNumber" element={<DeviceControlPanel />} />
+          <Route 
+            path='/add-device'
+            element={
+              <ProtectedRoute userState={userExists}>
+                <AddDevice />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={`/device-control/:serialNumber`}
+            element={
+              <ProtectedRoute userState={userExists}>
+                <DeviceControlPanel />
+              </ProtectedRoute>
+            }
+          />
           {routes.map((path, index) => (
             <Route
               key={path}
