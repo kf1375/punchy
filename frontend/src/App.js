@@ -32,25 +32,26 @@ const App = () => {
   useEffect(() => {
     // Ensure the Telegram WebApp object is available
     const checkUserExistence = async () => {
-      if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-        const user = window.Telegram.WebApp.initDataUnsafe.user;
-        const telegramId = user.id;
-        telegramId = 94500506
-        try {
-          const response = await fetch(`/api/users/${telegramId}`);
-          const { data } = await response.json();
-          if (data.exists) {
-            setUserExists(true);}
-          else {
-            setUserExists(false);
-          }
-        } catch (error) {
-          console.error('Error checking user existence:', error);
-          setUserExists(false); // Default to requiring sign-up on error
-        }
-      } else {
-        setUserExists(false); // If Telegram user info is unavailable
-      }
+      setUserExists(true)
+      // if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+      //   const user = window.Telegram.WebApp.initDataUnsafe.user;
+      //   const telegramId = user.id;
+        
+      //   try {
+      //     const response = await fetch(`/api/users/${telegramId}`);
+      //     const { data } = await response.json();
+      //     if (data.exists) {
+      //       setUserExists(true);}
+      //     else {
+      //       setUserExists(false);
+      //     }
+      //   } catch (error) {
+      //     console.error('Error checking user existence:', error);
+      //     setUserExists(false); // Default to requiring sign-up on error
+      //   }
+      // } else {
+      //   setUserExists(false); // If Telegram user info is unavailable
+      // }
     };
 
     checkUserExistence();
