@@ -26,7 +26,7 @@ const SignUp = () => {
         .then((data) => {
           if (data.exists) {
             setIsUserExists(true);
-            navigate('/profile'); // Redirect existing users to the home page
+            navigate('/'); // Redirect existing users to the home page
           }
         })
         .catch((err) => {
@@ -62,7 +62,7 @@ const SignUp = () => {
       })
       .then(() => {
         alert('User registered successfully!');
-        navigate('/profile'); // Redirect new users to the home page
+        navigate('/'); // Redirect new users to the home page
       })
       .catch((err) => {
         console.error('Error registering user:', err);
