@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const Login = () => {
   const [telegramUser, setTelegramUser] = useState(null);
   const [isUserExists, setIsUserExists] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -96,4 +96,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
