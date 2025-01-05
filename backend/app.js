@@ -76,12 +76,12 @@ app.post('/devices/:device_id/start/:type', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = db.getDeviceById(device_id);
+    const device = await db.getDeviceById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
 
-    const serial_number = device["serial_number"];
+    const { serial_number } = device;
     const topic = `${serial_number}/start/${type}`;
     const payload = JSON.stringify({
         speed: speed
@@ -103,14 +103,12 @@ app.post('/devices/:device_id/stop', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = db.getDeviceById(device_id)
+    const device = await db.getDeviceById(device_id)
     if (!device) {
         return res.status(404).send("Device not found");
     }
     
-    console.log(device);
-    
-    const serial_number = device["serial_number"];
+    const { serial_number } = device;
     const topic = `${serial_number}/stop`;
     const payload = JSON.stringify({
         speed: 0
@@ -133,12 +131,12 @@ app.post('/devices/:device_id/settings/:setting_name', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = db.getDeviceById(device_id);
+    const device = await db.getDeviceById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
 
-    const serial_number = device["serial_number"];
+    const { serial_number } = device;
     const topic = `${serial_number}/settings/${setting_name}`;
     const payload = JSON.stringify({
         value: value
@@ -161,12 +159,12 @@ app.post('/devices/:device_id/commands/:direction', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = db.getDeviceById(device_id);
+    const device = await db.getDeviceById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
 
-    const serial_number = device["serial_number"];
+    const { serial_number } = device;
     const topic = `${serial_number}/commands/${direction}`;
     const payload = JSON.stringify({
         value: value
