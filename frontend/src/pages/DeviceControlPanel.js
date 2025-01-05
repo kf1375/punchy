@@ -164,7 +164,7 @@ const DeviceControlPanel = () => {
                         </Button>
                         <Slider
                             value={singleSpeed}
-                            onChangeCommitted={(e, newValue) => setSingleSpeed(newValue)}
+                            onChange={(e, newValue) => setSingleSpeed(newValue)}
                             aria-label="Single Speed"
                             valueLabelDisplay="auto"
                             max={maxHalfSpeed}
@@ -176,7 +176,7 @@ const DeviceControlPanel = () => {
                         </Button>
                         <Slider
                             value={infiniteSpeed}
-                            onChangeCommitted={(e, newValue) => setInfiniteSpeed(newValue)}
+                            onChange={(e, newValue) => setInfiniteSpeed(newValue)}
                             aria-label="Infinite Speed"
                             valueLabelDisplay="auto"
                             max={maxFullSpeed}
@@ -234,10 +234,8 @@ const DeviceControlPanel = () => {
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
-                            onChangeCommitted={(e, newValue) => {
-                                setMaxHalfSpeed(newValue);
-                                handleSettingChange('max_half_speed', newValue);
-                            }}
+                            onChange={(e, newValue) => setMaxHalfSpeed(newValue)}
+                            onChangeCommitted={handleSettingChange('max_half_speed', newValue)}
                             aria-label="Max Half Turn Speed"
                             valueLabelDisplay="auto"
                             max={1000}
@@ -247,10 +245,8 @@ const DeviceControlPanel = () => {
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
-                            onChange={(e, newValue) => {
-                                setMaxFullSpeed(newValue);
-                                handleSettingChange('max_full_speed', newValue);
-                            }}
+                            onChange={(e, newValue) => setMaxFullSpeed(newValue)}
+                            onChangeCommitted={(e, newValue) => handleSettingChange('max_full_speed', newValue)}
                             aria-label="Max Full Turn Speed"
                             valueLabelDisplay="auto"
                             max={1000}
