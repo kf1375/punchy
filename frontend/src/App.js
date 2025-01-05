@@ -92,9 +92,9 @@ const App = () => {
         <Route
           path={`/device-control/:serialNumber`}
           element={
-            // <ProtectedRoute userExists={userExists}>
+            <ProtectedRoute userExists={userExists}>
               <DeviceControlPanel />
-            // </ProtectedRoute>
+            </ProtectedRoute>
           }
         />
         {routes.map((path, index) => (
