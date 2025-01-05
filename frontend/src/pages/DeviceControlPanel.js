@@ -127,7 +127,7 @@ const DeviceControlPanel = () => {
 
     const handleCommandChange = async (commandName, value) => {
         const { device_id } = device
-        const response = await fetch(`/api/devices/${device_id}/settings/${commandName}`, {
+        const response = await fetch(`/api/devices/${device_id}/commands/${commandName}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -223,10 +223,10 @@ const DeviceControlPanel = () => {
                         </Button>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 2, marginBottom: 2 }}>
-                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('front', null)}>
+                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('set_front', 1)}>
                             Set Front
                         </Button>
-                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('rear', null)}>
+                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('set_rear', 1)}>
                             Set Rear
                         </Button>
                     </Box>
@@ -236,7 +236,7 @@ const DeviceControlPanel = () => {
                             value={maxHalfSpeed}
                             onChangeCommitted={(e, newValue) => {
                                 setMaxHalfSpeed(newValue);
-                                handleSettingChange('max_half_speed', e.target.value);
+                                handleSettingChange('max_half_speed', newValue);
                             }}
                             aria-label="Max Half Turn Speed"
                             valueLabelDisplay="auto"
@@ -249,7 +249,7 @@ const DeviceControlPanel = () => {
                             value={maxFullSpeed}
                             onChange={(e, newValue) => {
                                 setMaxFullSpeed(newValue);
-                                handleSettingChange('max_full_speed', e.target.value);
+                                handleSettingChange('max_full_speed', newValue);
                             }}
                             aria-label="Max Full Turn Speed"
                             valueLabelDisplay="auto"
