@@ -235,7 +235,7 @@ const DeviceControlPanel = () => {
                         <Slider
                             value={maxHalfSpeed}
                             onChange={(e, newValue) => setMaxHalfSpeed(newValue)}
-                            onChangeCommitted={handleSettingChange('max_half_speed', newValue)}
+                            onChangeCommitted={(e, newValue) =>handleSettingChange('max_half_speed', newValue)}
                             aria-label="Max Half Turn Speed"
                             valueLabelDisplay="auto"
                             max={1000}
