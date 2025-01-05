@@ -3,7 +3,7 @@ body, html, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* Prevent unwanted scrolling */
+  overflow: auto; /* Prevent unwanted scrolling */
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(135deg, #63b0e4, #a976ec);
 }
