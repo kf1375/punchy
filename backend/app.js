@@ -107,7 +107,9 @@ app.post('/devices/:device_id/stop', async (req, res) => {
     if (!device) {
         return res.status(404).send("Device not found");
     }
-
+    
+    console.log(device);
+    
     const serial_number = device["serial_number"];
     const topic = `${serial_number}/stop`;
     const payload = JSON.stringify({
