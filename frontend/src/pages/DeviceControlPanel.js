@@ -60,6 +60,87 @@ const DeviceControlPanel = () => {
         navigate('/devices'); // Navigate back to the Devices page
     };
 
+    // Callbacks for actions
+    const startSingleTurn = async () => {
+        const { device_id } = device
+        const response = await fetch(`/api/devices/${device_id}/start/single`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                speed: singleSpeed,
+            }),
+        });
+        if (!response.ok) {
+            setError('Failed to send Start Single');
+        }
+    };
+
+    const startInfiniteTurn = async () => {
+        const { device_id } = device
+        const response = await fetch(`/api/devices/${device_id}/start/infinite`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                speed: infiniteSpeed,
+            }),
+        });
+        if (!response.ok) {
+            setError('Failed to send Start Single');
+        }
+    };
+
+    const stop = async () => {
+        const { device_id } = device
+        const response = await fetch(`/api/devices/${device_id}/stop`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                speed: 0,
+            }),
+        });
+        if (!response.ok) {
+            setError('Failed to send Stop');
+        }
+    };
+
+    const handleSettingChange = async (settingName, value) => {
+        const { device_id } = device
+        const response = await fetch(`/api/devices/${device_id}/settings/${settingName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                value: value,
+            }),
+        });
+        if (!response.ok) {
+            setError(`Failed to send ${settingName}`);
+        }
+    };
+
+    const handleCommandChange = async (commandName, value) => {
+        const { device_id } = device
+        const response = await fetch(`/api/devices/${device_id}/settings/${commandName}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                value: value,
+            }),
+        });
+        if (!response.ok) {
+            setError(`Failed to send ${commandName}`);
+        }
+    };
+
     if (error) return <Typography color="error">{error}</Typography>;
     if (!device) return <Typography>Loading...</Typography>;
 
@@ -78,28 +159,33 @@ const DeviceControlPanel = () => {
                         Command Controls
                     </Typography>
                     <Box sx={{ marginBottom: 2 }}>
-                        <Button variant="contained" color="primary" sx={{ marginRight: 2 }}>
+                        <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={startSingleTurn}>
                             Start Single Turn
                         </Button>
                         <Slider
                             value={singleSpeed}
-                            onChange={(e, newValue) => setSingleSpeed(newValue)}
+                            onChangeCommitted={(e, newValue) => setSingleSpeed(newValue)}
                             aria-label="Single Speed"
                             valueLabelDisplay="auto"
-                            max={100}
+                            max={maxHalfSpeed}
                         />
                     </Box>
                     <Box sx={{ marginBottom: 2 }}>
-                        <Button variant="contained" color="primary" sx={{ marginRight: 2 }}>
+                        <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={startInfiniteTurn}>
                             Start Infinite Turn
                         </Button>
                         <Slider
                             value={infiniteSpeed}
-                            onChange={(e, newValue) => setInfiniteSpeed(newValue)}
+                            onChangeCommitted={(e, newValue) => setInfiniteSpeed(newValue)}
                             aria-label="Infinite Speed"
                             valueLabelDisplay="auto"
-                            max={100}
+                            max={maxFullSpeed}
                         />
+                    </Box>
+                    <Box sx={{ marginBottom: 2 }}>
+                        <Button variant="contained" color="secondary" sx={{ marginRight: 2 }} onClick={stop}>
+                            Stop
+                        </Button>
                     </Box>
                 </Box>
             )}
@@ -117,7 +203,10 @@ const DeviceControlPanel = () => {
                     <Box sx={{ marginBottom: 2 }}>
                         <Select
                             value={turnType}
-                            onChange={(e) => setTurnType(e.target.value)}
+                            onChange={(e) => {
+                                setTurnType(e.target.value);
+                                handleSettingChange('turn_type', e.target.value)
+                            }}    
                             displayEmpty
                             fullWidth
                         >
@@ -126,18 +215,18 @@ const DeviceControlPanel = () => {
                         </Select>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 2, marginBottom: 2 }}>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => handleCommandChange('up', 1)}>
                             Up
                         </Button>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => handleCommandChange('down', 1)}>
                             Down
                         </Button>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 2, marginBottom: 2 }}>
-                        <Button variant="contained" color="secondary">
+                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('front', null)}>
                             Set Front
                         </Button>
-                        <Button variant="contained" color="secondary">
+                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('rear', null)}>
                             Set Rear
                         </Button>
                     </Box>
@@ -145,20 +234,26 @@ const DeviceControlPanel = () => {
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
-                            onChange={(e, newValue) => setMaxHalfSpeed(newValue)}
+                            onChangeCommitted={(e, newValue) => {
+                                setMaxHalfSpeed(newValue);
+                                handleSettingChange('max_half_speed', e.target.value);
+                            }}
                             aria-label="Max Half Turn Speed"
                             valueLabelDisplay="auto"
-                            max={200}
+                            max={1000}
                         />
                     </Box>
                     <Box sx={{ marginBottom: 2 }}>
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
-                            onChange={(e, newValue) => setMaxFullSpeed(newValue)}
+                            onChange={(e, newValue) => {
+                                setMaxFullSpeed(newValue);
+                                handleSettingChange('max_full_speed', e.target.value);
+                            }}
                             aria-label="Max Full Turn Speed"
                             valueLabelDisplay="auto"
-                            max={200}
+                            max={1000}
                         />
                     </Box>
                 </Box>

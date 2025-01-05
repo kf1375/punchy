@@ -83,6 +83,15 @@ const addDevice = async (serial_number, name, user_id) => {
     }
 };
 
+// Get a device by device_id
+const getDeviceById = async (device_id) => {
+    try {
+        return await db.oneOrNone('SELECT * FROM devices WHERE device_id = $1', device_id);
+    } catch (error) {
+        throw new Error('Error fetching user: ' + error.message);
+    }
+}
+
 // Remove a device by serial_number
 const removeDevice = async (serial_number) => {
     try {
@@ -101,5 +110,6 @@ module.exports = {
     getUserDevices,
     deviceExists,
     addDevice,
-    removeDevice
+    removeDevice,
+    getDeviceById
 };
