@@ -1,5 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Button, Box, CircularProgress } from '@mui/material';
+import { Container, Typography, Button, Box, CircularProgress, Avatar, Paper } from '@mui/material';
+import { styled } from '@mui/system';
+
+// Custom Styled Components
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  marginTop: theme.spacing(4),
+  borderRadius: theme.shape.borderRadius,
+  background: theme.palette.background.paper,
+  boxShadow: theme.shadows[3],
+}));
+
+const ProfileHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(4),
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(3),
+  padding: theme.spacing(1.5, 3),
+  fontSize: '1rem',
+  fontWeight: 'bold',
+}));
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -7,11 +31,8 @@ const Profile = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if Telegram Web App SDK is loaded
     if (window.Telegram && window.Telegram.WebApp) {
       const user = window.Telegram.WebApp.initDataUnsafe;
-
-      // Extract the Telegram user ID from initDataUnsafe
       const telegramId = user?.user?.id;
 
       if (telegramId) {
@@ -44,7 +65,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <Container sx={{ marginTop: 4 }}>
+      <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'center' }}>
         <CircularProgress />
       </Container>
     );
@@ -53,7 +74,7 @@ const Profile = () => {
   if (error) {
     return (
       <Container sx={{ marginTop: 4 }}>
-        <Typography variant="h6" color="error">
+        <Typography variant="h6" color="error" align="center">
           {error}
         </Typography>
       </Container>
@@ -61,24 +82,32 @@ const Profile = () => {
   }
 
   return (
-    <Container sx={{ marginTop: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Profile Page
-      </Typography>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h6" gutterBottom>
-          Welcome, {userData.name}!
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Subscription Type: {userData.subscription_type}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Telegram ID: {userData.telegram_id}
-        </Typography>
-        <Button variant="contained" color="primary" sx={{ marginTop: 2 }}>
-          Edit Profile
-        </Button>
-      </Box>
+    <Container maxWidth="sm">
+      <StyledPaper>
+        <ProfileHeader>
+          <Avatar
+            src={userData.avatar || '/default-avatar.png'}
+            alt={userData.name}
+            sx={{ width: 64, height: 64 }}
+          />
+          <Box>
+            <Typography variant="h5" fontWeight="bold">
+              Welcome, {userData.name}!
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Telegram ID: {userData.telegram_id}
+            </Typography>
+          </Box>
+        </ProfileHeader>
+        <Box>
+          <Typography variant="body1" gutterBottom>
+            <strong>Subscription Type:</strong> {userData.subscription_type}
+          </Typography>
+        </Box>
+        <StyledButton variant="contained" color="primary" fullWidth>
+          Get Premium
+        </StyledButton>
+      </StyledPaper>
     </Container>
   );
 };
