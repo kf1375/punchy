@@ -115,9 +115,8 @@ const AddDevice = () => {
                     padding: 4,
                     maxWidth: 400,
                     width: '100%',
-                    borderRadius: theme.shape.borderRadius,
-                    boxShadow: theme.shadows[3],
-                    backgroundColor: theme.palette.background.default,
+                    borderRadius: 3,
+                    boxShadow: 3,
                     textAlign: 'center',
                 }}
             >
