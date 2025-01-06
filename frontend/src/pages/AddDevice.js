@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, TextField, Button, Typography } from '@mui/material';
+import { Box, Container, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const AddDevice = () => {
@@ -14,7 +14,6 @@ const AddDevice = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch user info from Telegram
         const fetchUserId = async () => {
             try {
                 if (window.Telegram && window.Telegram.WebApp) {
@@ -49,11 +48,11 @@ const AddDevice = () => {
         try {
             setError('');
             setMessage('');
-            setPairingInProgress(true); // Start pairing process
+            setPairingInProgress(true);
 
             if (!serialNumber.trim() || !deviceName.trim()) {
                 setError('Both serial number and device name are required');
-                setPairingInProgress(false); // Stop pairing message
+                setPairingInProgress(false);
                 return;
             }
 
@@ -73,7 +72,7 @@ const AddDevice = () => {
                     user_id: userId,
                 }),
             });
-            setPairingInProgress(false); // Stop pairing message
+            setPairingInProgress(false);
             if (response.ok) {
                 const newDevice = await response.json();
                 setMessage(`Device "${newDevice.name}" added successfully!`);
@@ -81,7 +80,6 @@ const AddDevice = () => {
                 setDeviceName('');
             } else {
                 const errorData = await response.json();
-                setPairingInProgress(false); // Stop pairing message
                 setError(errorData.error || 'Failed to add device');
             }
         } catch (err) {
@@ -90,11 +88,16 @@ const AddDevice = () => {
     };
 
     const handleCancel = () => {
-        navigate('/devices'); // Navigate back to the Devices page
+        navigate('/devices');
     };
 
-    if (loading) return <Typography>Loading...</Typography>;
-    if (error) return <Typography color="error">{error}</Typography>;
+    if (loading) {
+        return (
+            <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <Box
@@ -103,13 +106,25 @@ const AddDevice = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                textAlign: 'center',
-                flexDirection: 'column',
+                backgroundColor: '#f4f5f7',
+                padding: 2,
             }}
         >
-            <Container>
-                <Typography variant="h4" gutterBottom>
-                    Add Device
+            <Paper
+                elevation={3}
+                sx={{
+                    padding: 4,
+                    maxWidth: 400,
+                    width: '100%',
+                    borderRadius: 4,
+                    textAlign: 'center',
+                }}
+            >
+                <Typography variant="h5" fontWeight="bold" gutterBottom>
+                    Add a New Device
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 3 }}>
+                    Enter the device name and serial number to pair your device.
                 </Typography>
                 <TextField
                     label="Device Name"
@@ -128,21 +143,29 @@ const AddDevice = () => {
                     sx={{ marginBottom: 2 }}
                 />
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-                    <Button variant="contained" color="primary" onClick={handleAddDevice}>
+                    <Button variant="contained" color="primary" fullWidth onClick={handleAddDevice} sx={{ marginRight: 1 }}>
                         Add Device
                     </Button>
-                    <Button variant="outlined" color="secondary" onClick={handleCancel}>
+                    <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel} sx={{ marginLeft: 1 }}>
                         Cancel
                     </Button>
                 </Box>
                 {pairingInProgress && (
                     <Typography sx={{ marginTop: 2 }} color="primary">
-                        Pairing in progress... Please wait for the device response.
+                        Pairing in progress... Please wait.
                     </Typography>
                 )}
-                {message && <Typography color="success.main" sx={{ marginTop: 2 }}>{message}</Typography>}
-                {error && <Typography color="error" sx={{ marginTop: 2 }}>{error}</Typography>}
-            </Container>
+                {message && (
+                    <Typography color="success.main" sx={{ marginTop: 2 }}>
+                        {message}
+                    </Typography>
+                )}
+                {error && (
+                    <Typography color="error" sx={{ marginTop: 2 }}>
+                        {error}
+                    </Typography>
+                )}
+            </Paper>
         </Box>
     );
 };
