@@ -61,7 +61,7 @@ const App = () => {
     if (window.Telegram && window.Telegram.WebApp) {
       const telegramTheme = window.Telegram.WebApp.colorScheme;
       if (telegramTheme) {
-        setThemeMode(telegramTheme.colorScheme === 'dark' ? 'dark' : 'light');
+        setThemeMode(telegramTheme === 'dark' ? 'dark' : 'light');
       }
     }
   }, []);
@@ -69,7 +69,7 @@ const App = () => {
   // create a darkTheme function to handle dark theme using createTheme
   const theme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: themeMode,
     },
   });
 
