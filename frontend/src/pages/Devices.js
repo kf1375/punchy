@@ -5,8 +5,8 @@ import { styled } from '@mui/system';
 
 // Custom Styled Components
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  marginBottom: theme.spacing(2),
+  padding: theme.spacing(4),
+  marginBottom: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
   boxShadow: theme.shadows[3],
   backgroundColor: theme.palette.background.default,
@@ -110,7 +110,10 @@ const Devices = () => {
         {devices.length > 0 ? (
           devices.map((device) => (
             <ListItem key={device.id} disableGutters>
-              <StyledPaper onClick={() => handleDeviceClick(device.serial_number)}>
+              <StyledPaper 
+              onClick={() => handleDeviceClick(device.serial_number)}
+              sx={{ window: '100%'}}  
+              >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography variant="body1" fontWeight="bold">
                     {device.name}
