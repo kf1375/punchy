@@ -106,7 +106,6 @@ const AddDevice = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: '#f4f5f7',
                 padding: 2,
             }}
         >
@@ -116,7 +115,9 @@ const AddDevice = () => {
                     padding: 4,
                     maxWidth: 400,
                     width: '100%',
-                    borderRadius: 4,
+                    borderRadius: theme.shape.borderRadius,
+                    boxShadow: theme.shadows[3],
+                    backgroundColor: theme.palette.background.default,
                     textAlign: 'center',
                 }}
             >
