@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem } from '@mui/material';
+import { Container, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem, Grid2 } from '@mui/material';
 
 const DeviceControlPanel = () => {
     const { serialNumber } = useParams();
@@ -20,7 +20,7 @@ const DeviceControlPanel = () => {
             try {
                 const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
                 const telegramId = user?.id;
-                
+
                 if (telegramId) {
                     const userResponse = await fetch(`/api/users/${telegramId}`);
                     if (userResponse.ok) {
@@ -146,20 +146,15 @@ const DeviceControlPanel = () => {
 
     return (
         <Container sx={{ marginTop: 4 }}>
-            <Typography variant="h4" gutterBottom>
-                Device Control Panel
-            </Typography>
             <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
-                <Tab label="Command" />
+                <Tab label="Manual" />
+                <Tab label="Automatic" />
                 <Tab label="Setting" />
             </Tabs>
             {activeTab === 0 && (
-                <Box>
-                    <Typography variant="h6" gutterBottom>
-                        Command Controls
-                    </Typography>
-                    <Box sx={{ marginBottom: 2 }}>
-                        <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={startSingleTurn}>
+                <Grid2 container spacing={2}>
+                    <Grid2 item xs={12} sm={6}>
+                        <Button variant="contained" color="primary" fullWidth onClick={startSingleTurn}>
                             Start Single Turn
                         </Button>
                         <Slider
@@ -168,10 +163,11 @@ const DeviceControlPanel = () => {
                             aria-label="Single Speed"
                             valueLabelDisplay="auto"
                             max={maxHalfSpeed}
+                            sx={{ marginTop: 2 }}
                         />
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                        <Button variant="contained" color="primary" sx={{ marginRight: 2 }} onClick={startInfiniteTurn}>
+                    </Grid2>
+                    <Grid2 item xs={12} sm={6}>
+                        <Button variant="contained" color="primary" fullWidth onClick={startInfiniteTurn}>
                             Start Infinite Turn
                         </Button>
                         <Slider
@@ -180,68 +176,86 @@ const DeviceControlPanel = () => {
                             aria-label="Infinite Speed"
                             valueLabelDisplay="auto"
                             max={maxFullSpeed}
+                            sx={{ marginTop: 2 }}
                         />
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
-                        <Button variant="contained" color="secondary" sx={{ marginRight: 2 }} onClick={stop}>
+                    </Grid2>
+                    <Grid2 item xs={12}>
+                        <Button variant="contained" color="secondary" fullWidth onClick={stop}>
                             Stop
                         </Button>
-                    </Box>
-                </Box>
+                    </Grid2>
+                </Grid2>
             )}
             {activeTab === 1 && (
                 <Box>
-                    <Typography variant="h6" gutterBottom>
-                        Device Info
-                    </Typography>
-                    <Typography variant="body1">Device Name: {device.name}</Typography>
-                    <Typography variant="body1">Device ID: {device.device_id}</Typography>
-                    <Typography variant="body1">Device Serial Number: {device.serial_number}</Typography>
-                    <Typography variant="h6" gutterBottom sx={{ marginTop: 2 }}>
-                        Settings
-                    </Typography>
-                    <Box sx={{ marginBottom: 2 }}>
+                    <Typography variant="body1">Automatic Mode {device.name}</Typography>
+                </Box>
+            )}
+            {activeTab === 2 && (
+                <Grid2 container spacing={2}>
+                    <Grid2 item xs={12}>
+                        <Typography variant="body1">Device Name: {device.name}</Typography>
+                        <Typography variant="body1">Device ID: {device.device_id}</Typography>
+                        <Typography variant="body1">Device Serial Number: {device.serial_number}</Typography>
+                    </Grid2>
+                    <Grid2 item xs={12}>
+                        <Typography variant="h6" gutterBottom>
+                            Parameters
+                        </Typography>
+                    </Grid2>
+                    <Grid2 item xs={12} sm={6}>
                         <Select
                             value={turnType}
                             onChange={(e) => {
                                 setTurnType(e.target.value);
-                                handleSettingChange('turn_type', e.target.value)
-                            }}    
-                            displayEmpty
+                                handleSettingChange('turn_type', e.target.value);
+                            }}
                             fullWidth
                         >
                             <MenuItem value="Half Turn">Half Turn</MenuItem>
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 2, marginBottom: 2 }}>
-                        <Button variant="contained" color="primary" onClick={() => handleCommandChange('up', 1)}>
-                            Up
-                        </Button>
-                        <Button variant="contained" color="primary" onClick={() => handleCommandChange('down', 1)}>
-                            Down
-                        </Button>
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 2, marginBottom: 2 }}>
-                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('set_front', 1)}>
-                            Set Front
-                        </Button>
-                        <Button variant="contained" color="secondary" onClick={() => handleSettingChange('set_rear', 1)}>
-                            Set Rear
-                        </Button>
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
+                    </Grid2>
+                    <Grid2 item xs={12}>
+                        <Grid2 container spacing={2}>
+                            <Grid2 item xs={6}>
+                                <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
+                                    Up
+                                </Button>
+                            </Grid2>
+                            <Grid2 item xs={6}>
+                                <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('down', 1)}>
+                                    Down
+                                </Button>
+                            </Grid2>
+                        </Grid2>
+                    </Grid2>
+                    <Grid2 item xs={12}>
+                        <Grid2 container spacing={2}>
+                            <Grid2 item xs={6}>
+                                <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
+                                    Set Front
+                                </Button>
+                            </Grid2>
+                            <Grid2 item xs={6}>
+                                <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_rear', 1)}>
+                                    Set Rear
+                                </Button>
+                            </Grid2>
+                        </Grid2>
+                    </Grid2>
+                    <Grid2 item xs={12}>
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
                             onChange={(e, newValue) => setMaxHalfSpeed(newValue)}
-                            onChangeCommitted={(e, newValue) =>handleSettingChange('max_half_speed', newValue)}
+                            onChangeCommitted={(e, newValue) => handleSettingChange('max_half_speed', newValue)}
                             aria-label="Max Half Turn Speed"
                             valueLabelDisplay="auto"
                             max={1000}
                         />
-                    </Box>
-                    <Box sx={{ marginBottom: 2 }}>
+                    </Grid2>
+                    <Grid2 item xs={12}>
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
@@ -251,10 +265,10 @@ const DeviceControlPanel = () => {
                             valueLabelDisplay="auto"
                             max={1000}
                         />
-                    </Box>
-                </Box>
+                    </Grid2>
+                </Grid2>
             )}
-            <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ marginTop: 2 }}>
+            <Button variant="outlined" color="secondary" fullWidth onClick={handleClose} sx={{ marginTop: 2 }}>
                 Close
             </Button>
         </Container>
