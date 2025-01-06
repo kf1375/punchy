@@ -16,6 +16,7 @@ const DevicesHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+  marginTop: theme.spacing(3),
   marginBottom: theme.spacing(3),
 }));
 
@@ -106,13 +107,17 @@ const Devices = () => {
           Add New Device
         </StyledButton>
       </DevicesHeader>
-      <List>
+      <List sx={{ width: '100%' }}>
         {devices.length > 0 ? (
           devices.map((device) => (
-            <ListItem key={device.id} disableGutters>
+            <ListItem 
+              key={device.id} 
+              disableGutters
+              sx={{ width: '100%' }}
+            >
               <StyledPaper 
-              onClick={() => handleDeviceClick(device.serial_number)}
-              sx={{ window: '100%'}}  
+                onClick={() => handleDeviceClick(device.serial_number)}
+                sx={{ width: '100%' }}  
               >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Typography variant="body1" fontWeight="bold">
