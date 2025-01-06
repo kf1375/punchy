@@ -1,6 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Typography, List, ListItem, ListItemText, Button } from '@mui/material';
+import { Container, Typography, List, ListItem, Button, Box, CircularProgress, Paper } from '@mui/material';
+import { styled } from '@mui/system';
+
+// Custom Styled Components
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(3),
+  marginBottom: theme.spacing(2),
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[3],
+  backgroundColor: theme.palette.background.default,
+}));
+
+const DevicesHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: theme.spacing(3),
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  textTransform: 'capitalize',
+  fontWeight: 'bold',
+}));
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
@@ -48,8 +70,23 @@ const Devices = () => {
     fetchDevices();
   }, []);
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading) {
+    return (
+      <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container sx={{ marginTop: 4 }}>
+        <Typography variant="h6" color="error" align="center">
+          {error}
+        </Typography>
+      </Container>
+    );
+  }
 
   const handleDeviceClick = (serialNumber) => {
     navigate(`/device-control/${serialNumber}`);
@@ -60,27 +97,37 @@ const Devices = () => {
   };
 
   return (
-    <Container sx={{ marginTop: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Devices Page
-      </Typography>
+    <Container maxWidth="md">
+      <DevicesHeader>
+        <Typography variant="h5" fontWeight="bold">
+          Your Devices
+        </Typography>
+        <StyledButton variant="contained" color="primary" onClick={handleAddDevice}>
+          Add New Device
+        </StyledButton>
+      </DevicesHeader>
       <List>
-        {devices.map((device) => (
-          <ListItem button key={device.id} onClick={() => handleDeviceClick(device.serial_number)}>
-            <Button fullWidth variant="outlined">
-              {device.name}
-            </Button>
-          </ListItem>
-        ))}
+        {devices.length > 0 ? (
+          devices.map((device) => (
+            <ListItem key={device.id} disableGutters>
+              <StyledPaper onClick={() => handleDeviceClick(device.serial_number)}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="body1" fontWeight="bold">
+                    {device.name}
+                  </Typography>
+                  <StyledButton variant="text" color="primary">
+                    View
+                  </StyledButton>
+                </Box>
+              </StyledPaper>
+            </ListItem>
+          ))
+        ) : (
+          <Typography align="center" color="text.secondary">
+            No devices found. Add a new device to get started!
+          </Typography>
+        )}
       </List>
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ marginTop: 2 }}
-        onClick={handleAddDevice}
-      >
-        Add Device
-      </Button>
     </Container>
   );
 };
