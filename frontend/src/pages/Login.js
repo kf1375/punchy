@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Typography, Button, CircularProgress, Alert, Box, Card, CardContent } from '@mui/material';
 
 const Login = () => {
   const [telegramUser, setTelegramUser] = useState(null);
@@ -21,7 +22,7 @@ const Login = () => {
           
           if (data && data.user_id) {
             setIsUserExists(true);
-            window.location.href = '/'
+            window.location.href = '/';
             // navigate('/'); // Redirect to the home page for existing users
           }
         } catch (err) {
@@ -37,7 +38,7 @@ const Login = () => {
     };
 
     checkUserExistence();
-  }, [navigate]); // Only run when the component mounts
+  }, [navigate]);
 
   const handleSignUp = () => {
     if (!telegramUser) return;
@@ -61,7 +62,7 @@ const Login = () => {
       })
       .then(() => {
         alert('User registered successfully!');
-        window.location.href = '/'
+        window.location.href = '/';
         // navigate('/'); // Redirect new users to the home page
       })
       .catch((err) => {
@@ -71,28 +72,56 @@ const Login = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container maxWidth="xs">
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <CircularProgress />
+        </Box>
+      </Container>
+    );
   }
 
   if (isUserExists) {
-    return <div>You are already registered. Redirecting...</div>;
+    return (
+      <Container maxWidth="xs">
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <Typography variant="h6" color="textSecondary">
+            You are already registered. Redirecting...
+          </Typography>
+        </Box>
+      </Container>
+    );
   }
 
   return (
-    <div>
-      <h1>Sign Up</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {telegramUser ? (
-        <div>
-          <p>
-            Welcome, {telegramUser.first_name} {telegramUser.last_name || ''}!
-          </p>
-          <button onClick={handleSignUp}>Sign Up</button>
-        </div>
-      ) : (
-        <p>Telegram user information is not available.</p>
-      )}
-    </div>
+    <Container maxWidth="xs" sx={{ mt: 4 }}>
+      <Card sx={{ p: 3 }}>
+        <CardContent>
+          <Typography variant="h4" align="center" gutterBottom>
+            Sign Up
+          </Typography>
+
+          {error && <Alert severity="error">{error}</Alert>}
+
+          {telegramUser ? (
+            <Box>
+              <Typography variant="h6" align="center" gutterBottom>
+                Welcome, {telegramUser.first_name} {telegramUser.last_name || ''}!
+              </Typography>
+              <Box display="flex" justifyContent="center" gap={2}>
+                <Button variant="contained" color="primary" fullWidth onClick={handleSignUp}>
+                  Sign Up
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            <Typography variant="body1" color="textSecondary" align="center">
+              Telegram user information is not available.
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+    </Container>
   );
 };
 
