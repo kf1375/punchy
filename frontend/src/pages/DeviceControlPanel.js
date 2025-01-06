@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem, Grid2 } from '@mui/material';
+import { Container, CircularProgress, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem, Grid2 } from '@mui/material';
 
 const DeviceControlPanel = () => {
     const { serialNumber } = useParams();
@@ -141,18 +141,33 @@ const DeviceControlPanel = () => {
         }
     };
 
-    if (error) return <Typography color="error">{error}</Typography>;
-    if (!device) return <Typography>Loading...</Typography>;
+    if (error) {
+        return (
+            <Container sx={{ marginTop: 4 }}>
+                <Typography variant="h6" color="error" align="center">
+                    {error}
+                </Typography>
+            </Container>
+        );
+    }
+
+    if (!device) {
+        return (
+            <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+            </Container>
+        );
+    }
 
     return (
         <Container sx={{ marginTop: 4 }}>
-            <Tabs value={activeTab} onChange={handleTabChange} sx={{ marginBottom: 2 }}>
+            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%' }}>
                 <Tab label="Manual" />
                 <Tab label="Automatic" />
                 <Tab label="Setting" />
             </Tabs>
             {activeTab === 0 && (
-                <Grid2 container spacing={2}>
+                <Grid2 container spacing={2} marginTop={2}>
                     <Grid2 item xs={12} sm={6}>
                         <Button variant="contained" color="primary" fullWidth onClick={startSingleTurn}>
                             Start Single Turn
@@ -192,7 +207,7 @@ const DeviceControlPanel = () => {
                 </Box>
             )}
             {activeTab === 2 && (
-                <Grid2 container spacing={2}>
+                <Grid2 container spacing={2} marginTop={2}>
                     <Grid2 item xs={12}>
                         <Typography variant="body1">Device Name: {device.name}</Typography>
                         <Typography variant="body1">Device ID: {device.device_id}</Typography>
