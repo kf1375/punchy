@@ -69,7 +69,7 @@ const App = () => {
   // create a darkTheme function to handle dark theme using createTheme
   const theme = createTheme({
     palette: {
-      mode: themeMode,
+      mode: 'dark',
     },
   });
 
