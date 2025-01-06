@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 import Login from './pages/Login';
 import Devices from './pages/Devices';
@@ -58,14 +59,14 @@ const App = () => {
 
   useEffect(() => {
     if (window.Telegram && window.Telegram.WebApp) {
-      const telegramTheme = window.Telegram.WebApp.themeParams;
+      const telegramTheme = window.Telegram.WebApp.colorScheme;
       if (telegramTheme) {
-        const isDarkMode = telegramTheme.bg_color === '#000000';
-        setThemeMode(isDarkMode ? 'dark' : 'light');
+        setThemeMode(telegramTheme.colorScheme === 'dark' ? 'dark' : 'light');
       }
     }
   }, []);
 
+  // create a darkTheme function to handle dark theme using createTheme
   const theme = createTheme({
     palette: {
       mode: themeMode,
@@ -78,47 +79,50 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/add-device"
-          element={
-            <ProtectedRoute userExists={userExists}>
-              <AddDevice />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path={`/device-control/:serialNumber`}
-          element={
-            <ProtectedRoute userExists={userExists}>
-              <DeviceControlPanel />
-            </ProtectedRoute>
-          }
-        />
-        {routes.map((path, index) => (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
           <Route
-            key={path}
-            path={path}
+            path="/add-device"
             element={
               <ProtectedRoute userExists={userExists}>
-                <SwipeablePage
-                  leftTarget={routes[(index + 1) % routes.length]}
-                  rightTarget={routes[(index - 1 + routes.length) % routes.length]}
-                  onSwipe={(direction) => handleSwipe(direction)}
-                >
-                  {index === 0 && <Devices />}
-                  {index === 1 && <Profile />}
-                  {index === 2 && <Help />}
-                  <BottomNavBar activeTab={activeTab} onChange={setActiveTab} />
-                </SwipeablePage>
+                <AddDevice />
               </ProtectedRoute>
             }
           />
-        ))}
-      </Routes>
-    </Router>
+          <Route
+            path={`/device-control/:serialNumber`}
+            element={
+              <ProtectedRoute userExists={userExists}>
+                <DeviceControlPanel />
+              </ProtectedRoute>
+            }
+          />
+          {routes.map((path, index) => (
+            <Route
+              key={path}
+              path={path}
+              element={
+                <ProtectedRoute userExists={userExists}>
+                  <SwipeablePage
+                    leftTarget={routes[(index + 1) % routes.length]}
+                    rightTarget={routes[(index - 1 + routes.length) % routes.length]}
+                    onSwipe={(direction) => handleSwipe(direction)}
+                  >
+                    {index === 0 && <Devices />}
+                    {index === 1 && <Profile />}
+                    {index === 2 && <Help />}
+                    <BottomNavBar activeTab={activeTab} onChange={setActiveTab} />
+                  </SwipeablePage>
+                </ProtectedRoute>
+              }
+            />
+          ))}
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 };
 
