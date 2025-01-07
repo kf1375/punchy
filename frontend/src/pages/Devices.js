@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Typography, List, ListItem, Button, Box, CircularProgress, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 
-import SwipeableDevice from '../Components/SwipeableDevice/SwipeableDevice';
-
 // Custom Styled Components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -121,12 +119,37 @@ const Devices = () => {
       <List sx={{ width: '100%' }}>
         {devices.length > 0 ? (
           devices.map((device) => (
-            <SwipeableDevice
+            <ListItem
               key={device.id}
-              device={device}
-              onDelete={handleDeleteDevice}
-              onView={handleDeviceClick}
-            />
+              disableGutters
+              sx={{ width: '100%' }}
+            >
+              <StyledPaper
+                sx={{ width: '100%', padding: 2 }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="body1" fontWeight="bold">
+                    {device.name}
+                  </Typography>
+                  <Box>
+                    <StyledButton
+                      variant="text"
+                      color="primary"
+                      onClick={() => handleDeviceClick(device.serial_number)}
+                    >
+                      View
+                    </StyledButton>
+                    <StyledButton
+                      variant="text"
+                      color="error"
+                      onClick={() => handleDeleteDevice(device.serial_number)}
+                    >
+                      Remove
+                    </StyledButton>
+                  </Box>
+                </Box>
+              </StyledPaper>
+            </ListItem>
           ))
         ) : (
           <Typography align="center" color="text.secondary">
