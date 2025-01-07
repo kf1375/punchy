@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Typography, List, ListItem, Button, Box, CircularProgress, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 
-import SwipeableDevice from '../Components/SwipeableDevice';
+import SwipeableDevice from '../Components/SwipeableDevice/SwipeableDevice';
 
 // Custom Styled Components
 const StyledPaper = styled(Paper)(({ theme }) => ({
