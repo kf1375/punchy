@@ -98,11 +98,20 @@ const Devices = () => {
   };
 
   const handleDeleteDevice = async (serial_number) => {
-    const response = await fetch(`api/devices/${serial_number}`, { method: 'DELETE' });
-    if (response.ok) {
-      setDevices((prev) => prev.filter((device) => device.serial_number !== serial_number));
-    } else {
-      setError('Can not remove the device');
+    const confirmDelete = window.confirm("Are you sure you want to remove this device?");
+    if (!confirmDelete) {
+      return; // Exit if the user cancels the action
+    }
+
+    try {
+      const response = await fetch(`api/devices/${serial_number}`, { method: 'DELETE' });
+      if (response.ok) {
+        setDevices((prev) => prev.filter((device) => device.serial_number !== serial_number));
+      } else {
+        setError('Can not remove the device');
+      }
+    } catch (error) {
+      setError(`Error: ${error.message}`);
     }
   };
 
