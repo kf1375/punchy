@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Typography, List, ListItem, Button, Box, CircularProgress, Paper } from '@mui/material';
 import { styled } from '@mui/system';
 
+import SwipeableDevice from '../Components/SwipeableDevice';
+
 // Custom Styled Components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -97,6 +99,15 @@ const Devices = () => {
     navigate('/add-device'); // Navigate to AddDevice page
   };
 
+  const handleDeleteDevice = async (serial_number) => {
+    const response = await fetch(`api/devices/${serial_number}`, { method: 'DELETE' });
+    if (response.ok) {
+      setDevices((prev) => prev.filter((device) => device.serial_number !== serial_number));
+    } else {
+      setError('Can not remove the device');
+    }
+  };
+
   return (
     <Container maxWidth="md">
       <DevicesHeader>
@@ -110,25 +121,12 @@ const Devices = () => {
       <List sx={{ width: '100%' }}>
         {devices.length > 0 ? (
           devices.map((device) => (
-            <ListItem 
-              key={device.id} 
-              disableGutters
-              sx={{ width: '100%' }}
-            >
-              <StyledPaper 
-                onClick={() => handleDeviceClick(device.serial_number)}
-                sx={{ width: '100%' }}  
-              >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Typography variant="body1" fontWeight="bold">
-                    {device.name}
-                  </Typography>
-                  <StyledButton variant="text" color="primary">
-                    View
-                  </StyledButton>
-                </Box>
-              </StyledPaper>
-            </ListItem>
+            <SwipeableDevice
+              key={device.id}
+              device={device}
+              onDelete={handleDeleteDevice}
+              onView={handleDeviceClick}
+            />
           ))
         ) : (
           <Typography align="center" color="text.secondary">

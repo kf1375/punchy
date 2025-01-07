@@ -67,6 +67,26 @@ app.get('/users/:user_id/devices', async (req, res) => {
     }
 });
 
+// Remove a device
+app.delete('/devices/:serial_number', async (req, res) => {
+    const { serial_number } = req.params;
+    try {
+        const success = await db.removeDevice(serial_number);
+        if (success) {
+            res.status(200).send('Device removed');
+        } else {
+            res.status(404).send('Device not found');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error removing device');
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
 // Start a device
 app.post('/devices/:device_id/start/:type', async (req, res) => {
     const { device_id, type } = req.params;
@@ -244,24 +264,4 @@ mqttClient.on('message', (topic, message) => {
 // Subscribe to all pairing topics
 mqttClient.on('connect', () => {
     mqttClient.subscribe('#'); // Listen to all pairing topics
-});
-
-// Remove a device
-app.delete('/devices/:serial_number', async (req, res) => {
-    const { serial_number } = req.params;
-    try {
-        const success = await db.removeDevice(serial_number);
-        if (success) {
-            res.status(200).send('Device removed');
-        } else {
-            res.status(404).send('Device not found');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error removing device');
-    }
-});
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
 });
