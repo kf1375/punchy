@@ -217,18 +217,18 @@ const DeviceControlPanel = () => {
                 </Box>
             )}
             {activeTab === 2 && (
-                <Grid container spacing={2} marginTop={2}>
-                    <Grid item xs={12}>
+                <Grid container direction={"column"} spacing={2} marginTop={3}>
+                    <Grid item>
                         <Typography variant="body1">Device Name: {device.name}</Typography>
                         <Typography variant="body1">Device ID: {device.device_id}</Typography>
                         <Typography variant="body1">Device Serial Number: {device.serial_number}</Typography>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item sx={{ width: '100%' }}>
                         <Typography variant="h6" gutterBottom>
                             Parameters
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item sx={{ width: '100%' }}>
                         <Select
                             value={turnType}
                             onChange={(e) => {
@@ -241,7 +241,7 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item sx={{ width: '100%' }}>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
@@ -255,7 +255,7 @@ const DeviceControlPanel = () => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item sx={{ width: '100%' }}>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
@@ -269,7 +269,7 @@ const DeviceControlPanel = () => {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item sx={{ width: '100%' }}>
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
@@ -280,7 +280,7 @@ const DeviceControlPanel = () => {
                             max={1000}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid sx={{ width: '100%' }}>
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
