@@ -223,7 +223,7 @@ const DeviceControlPanel = () => {
                         <Typography variant="body1">Device ID: {device.device_id}</Typography>
                         <Typography variant="body1">Device Serial Number: {device.serial_number}</Typography>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }}>
+                    <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
                         <Typography variant="h6" gutterBottom>
                             Parameters
                         </Typography>
@@ -241,7 +241,7 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item direction={"row"} sx={{ width: '100%' }} alignItems={"center"} justifyContent="space-between" >
+                    <Grid item direction="row" sx={{ width: '100%' }} alignItems="center" justifyContent="space-between" >
                         <Grid item sx={{ flexGrow: 1 }}>
                             <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
                                 Up
@@ -253,7 +253,7 @@ const DeviceControlPanel = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }} alignItems={"center"} justifyContent="space-between" >
+                    <Grid item direction="row" sx={{ width: '100%' }} alignItems="center" justifyContent="space-between" >
                         <Grid item sx={{ flexGrow: 1 }}>
                             <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
                                 Set Front
@@ -265,7 +265,7 @@ const DeviceControlPanel = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }} alignItems={"center"}>
+                    <Grid item sx={{ width: '100%' }} alignItems="center">
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
@@ -276,7 +276,7 @@ const DeviceControlPanel = () => {
                             max={1000}
                         />
                     </Grid>
-                    <Grid sx={{ width: '100%' }} alignItems={"center"}>
+                    <Grid sx={{ width: '100%' }} alignItems="center">
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
