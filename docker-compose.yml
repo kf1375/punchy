@@ -44,6 +44,8 @@ services:
       BITBUCKET_WEBHOOK_SECRET: "5t##aUK63oO6uR#i"
     networks:
       - app_network
+    volumes:
+      - firmware_data:/app/services/firmware
 
   frontend:
     container_name: frontend
@@ -75,6 +77,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  firmware_data:
     driver: local
 
 networks:
