@@ -21,7 +21,7 @@ const fetchLatestFirmware = async () => {
 
             // Extract the version from the file name
             const fileName = latest.name; // Example: "v0.0.1.bin"
-            const versionMatch = fileName.match(/^v[\d.]+/); // Match pattern like "v0.0.1"
+            const versionMatch = fileName.match(/^v[\d]+(\.[\d]+)*(?=\.bin)/); // Match pattern like "v0.0.1"
             const version = versionMatch ? versionMatch[0] : 'unknown'; // Default to 'unknown' if no match
 
             latestFirmware = {
