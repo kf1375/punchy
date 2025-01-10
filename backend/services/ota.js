@@ -14,7 +14,7 @@ const fetchLatestFirmware = async () => {
             auth: { username: BITBUCKET_USERNAME, password: BITBUCKET_APP_PASSWORD }
         });
 
-        const downloads = response.data.values;
+        let downloads = response.data.values;
         if (downloads && downloads.length > 0) {
             downloads = downloads.sort((a, b) => new Date(b.created_on) - new Date(a.created_on));
             const latest = downloads[0];
