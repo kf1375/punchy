@@ -28,8 +28,14 @@ const fetchLatestFirmware = async () => {
             const versionMatch = fileName.match(/^v[\d]+(\.[\d]+)*(?=\.bin)/); // Match pattern like "v0.0.1"
             const version = versionMatch ? versionMatch[0] : 'unknown'; // Default to 'unknown' if no match
             
+            // Ensure the 'firmware' directory exists
+            const firmwareDir = path.join(__dirname, 'firmware');
+            if (!fs.existsSync(firmwareDir)) {
+                fs.mkdirSync(firmwareDir, { recursive: true }); // Create directory if it doesn't exist
+            }
+
             // Download the firmware to a local file
-            const filePath = path.join(__dirname, 'firmware', fileName);
+            const filePath = path.join(firmwareDir, fileName);
             const writer = fs.createWriteStream(filePath);
 
             const downloadResponse = await axios({
