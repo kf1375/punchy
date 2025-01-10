@@ -164,9 +164,9 @@ const DeviceControlPanel = () => {
     return (
         <Container>
             <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly'}} fullWidth>
-                <Tab label="Manual" />
-                <Tab label="Automatic" />
-                <Tab label="Setting" />
+                <Tab label="Manual" sx={{ width: '33.33%', textAlign: 'center' }}/>
+                <Tab label="Automatic" sx={{ width: '33.33%', textAlign: 'center' }}/>
+                <Tab label="Setting" sx={{ width: '33.33%', textAlign: 'center' }}/>
             </Tabs>
             {activeTab === 0 && (
                 <Grid 
