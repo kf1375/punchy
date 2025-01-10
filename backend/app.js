@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const db = require('./services/database');  // Import the db.js file
 const mqtt = require('mqtt');
+const ota = require('./services/ota');
 const { MQTT_URL } = process.env;
 const mqttClient = mqtt.connect(MQTT_URL);
 const port = 8000;
@@ -265,3 +266,6 @@ mqttClient.on('message', (topic, message) => {
 mqttClient.on('connect', () => {
     mqttClient.subscribe('#'); // Listen to all pairing topics
 });
+
+// OTA 
+app.post('/ota-webhook', ota.handleOTAWebhook);

@@ -39,6 +39,9 @@ services:
       DATABASE_USER: "testiwhisk"
       DATABASE_PASSWORD: "eT1wDCKu"
       BOT_TOKEN: "6599928755:AAEVXPIrKmp3qOvmoT5x5eKXeifYZN01Ce4"
+      BITBUCKET_USERNAME: "kf1375"
+      BITBUCKET_APP_PASSWORD: "ATBBPcge6ZWG2gYYuvSaQguVm9qv720FC492"
+      BITBUCKET_WEBHOOK_SECRET: "5t##aUK63oO6uR#i"
     networks:
       - app_network
 
