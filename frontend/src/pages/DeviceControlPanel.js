@@ -163,19 +163,19 @@ const DeviceControlPanel = () => {
 
     return (
         <Container>
-            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly'}} fullWidth>
-                <Tab label="Manual" sx={{ width: '33.33%', textAlign: 'center' }}/>
-                <Tab label="Automatic" sx={{ width: '33.33%', textAlign: 'center' }}/>
-                <Tab label="Setting" sx={{ width: '33.33%', textAlign: 'center' }}/>
+            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly' }} fullWidth>
+                <Tab label="Manual" sx={{ width: '33.33%', textAlign: 'center' }} />
+                <Tab label="Automatic" sx={{ width: '33.33%', textAlign: 'center' }} />
+                <Tab label="Setting" sx={{ width: '33.33%', textAlign: 'center' }} />
             </Tabs>
             {activeTab === 0 && (
-                <Grid 
-                    container 
+                <Grid
+                    container
                     spacing={2}
                     marginTop={3}
-                    direction={"column" }
+                    direction={"column"}
                     sx={{
-                        alignItems:"center",
+                        alignItems: "center",
                     }}
                 >
                     <Grid item sx={{ width: '100%' }}>
@@ -220,7 +220,6 @@ const DeviceControlPanel = () => {
                 <Grid container direction={"column"} spacing={2} marginTop={3}>
                     <Grid item>
                         <Typography variant="body1">Device Name: {device.name}</Typography>
-                        <Typography variant="body1">Device ID: {device.device_id}</Typography>
                         <Typography variant="body1">Device Serial Number: {device.serial_number}</Typography>
                     </Grid>
                     <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
@@ -241,26 +240,60 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item direction="row" sx={{ width: '100%' }} alignItems="center" justifyContent="space-between" >
-                        <Grid item sx={{ flexGrow: 1 }}>
-                            <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
+                    <Grid
+                        container
+                        spacing={2}
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ width: '100%' }}
+                    >
+                        <Grid item xs={6}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={() => handleCommandChange('up', 1)}
+                            >
                                 Up
                             </Button>
                         </Grid>
-                        <Grid item sx={{ flexGrow: 1 }}>
-                            <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('down', 1)}>
+                        <Grid item xs={6}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={() => handleCommandChange('down', 1)}
+                            >
                                 Down
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item direction="row" sx={{ width: '100%' }} alignItems="center" justifyContent="space-between" >
-                        <Grid item sx={{ flexGrow: 1 }}>
-                            <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
+                    <Grid
+                        container
+                        spacing={2}
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ width: '100%' }}
+                    >
+                        <Grid item xs={6}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                fullWidth
+                                onClick={() => handleSettingChange('set_front', 1)}
+                            >
                                 Set Front
                             </Button>
                         </Grid>
-                        <Grid item sx={{ flexGrow: 1 }}>
-                            <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_rear', 1)}>
+                        <Grid item xs={6}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                fullWidth
+                                onClick={() => handleSettingChange('set_rear', 1)}
+                            >
                                 Set Rear
                             </Button>
                         </Grid>
