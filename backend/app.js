@@ -225,7 +225,7 @@ app.post('/devices', async (req, res) => {
 });
 
 // Listen for device responses
-mqttClient.on('message', (topic, message) => {
+mqttClient.on('message', async (topic, message) => {
     const [serial_number, action] = topic.split('/');
 
     if (action === 'pair') {
@@ -237,6 +237,23 @@ mqttClient.on('message', (topic, message) => {
             if (callback) {
                 callback(response);
                 pendingPairings.delete(serial_number);
+            }
+        }
+    } else if (action === 'status') {
+        const response = JSON.parse(message.toString());
+        
+        if (response.type === 'request') {
+            const device = await db.getDeviceBySerialNumber(serial_number);
+            if (device) {
+                mqttClient.publish(topic, JSON.stringify({ 
+                    type: "response", 
+                    status: "existed" 
+                }));
+            } else {
+                mqttClient.publish(topic, JSON.stringify({
+                    type: "response", 
+                    status: "not_existed"
+                }));
             }
         }
     }
