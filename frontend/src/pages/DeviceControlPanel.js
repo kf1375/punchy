@@ -155,15 +155,15 @@ const DeviceControlPanel = () => {
 
     if (!device) {
         return (
-            <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'center' }}>
+            <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-evenly' }}>
                 <CircularProgress />
             </Container>
         );
     }
 
     return (
-        <Container sx={{ marginTop: 4 }}>
-            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%' }}>
+        <Container>
+            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', justifyContent: 'center' }}>
                 <Tab label="Manual" />
                 <Tab label="Automatic" />
                 <Tab label="Setting" />
@@ -241,35 +241,35 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }}>
+                    <Grid item direction={"row"} sx={{ width: '100%' }} alignItems={"center"}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item>
                                 <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
                                     Up
                                 </Button>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item>
                                 <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('down', 1)}>
                                     Down
                                 </Button>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                    <Grid item sx={{ width: '100%' }} alignItems={"center"}>
+                        <Grid container direction={"row"} spacing={2}>
+                            <Grid item>
                                 <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
                                     Set Front
                                 </Button>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item>
                                 <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_rear', 1)}>
                                     Set Rear
                                 </Button>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }}>
+                    <Grid item sx={{ width: '100%' }} alignItems={"center"}>
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
@@ -280,7 +280,7 @@ const DeviceControlPanel = () => {
                             max={1000}
                         />
                     </Grid>
-                    <Grid sx={{ width: '100%' }}>
+                    <Grid sx={{ width: '100%' }} alignItems={"center"}>
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
