@@ -244,11 +244,11 @@ const DeviceControlPanel = () => {
                         container
                         spacing={2}
                         direction="row"
-                        justifyContent="space-between"
+                        justifyContent="center"
                         alignItems="center"
                         sx={{ width: '100%' }}
                     >
-                        <Grid item xs={6}>
+                        <Grid item size={6}>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -258,7 +258,7 @@ const DeviceControlPanel = () => {
                                 Up
                             </Button>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item size={6}>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -273,11 +273,11 @@ const DeviceControlPanel = () => {
                         container
                         spacing={2}
                         direction="row"
-                        justifyContent="space-between"
+                        justifyContent="center"
                         alignItems="center"
                         sx={{ width: '100%' }}
                     >
-                        <Grid item xs={6}>
+                        <Grid item size={6}>
                             <Button
                                 variant="contained"
                                 color="secondary"
@@ -287,7 +287,7 @@ const DeviceControlPanel = () => {
                                 Set Front
                             </Button>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item size={6}>
                             <Button
                                 variant="contained"
                                 color="secondary"
