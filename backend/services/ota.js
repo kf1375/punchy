@@ -1,5 +1,7 @@
 const crypto = require('crypto')
 const axios = require('axios')
+const fs = require('fs');
+const path = require('path');
 
 const { BITBUCKET_USERNAME, BITBUCKET_APP_PASSWORD, BITBUCKET_WEBHOOK_SECRET } = process.env;
 
@@ -21,14 +23,38 @@ const fetchLatestFirmware = async () => {
 
             // Extract the version from the file name
             const fileName = latest.name; // Example: "v0.0.1.bin"
+            const fileUrl = latest.links.self.href;
+            const releaseDate = latest.created_on;
             const versionMatch = fileName.match(/^v[\d]+(\.[\d]+)*(?=\.bin)/); // Match pattern like "v0.0.1"
             const version = versionMatch ? versionMatch[0] : 'unknown'; // Default to 'unknown' if no match
+            
+            // Download the firmware to a local file
+            const filePath = path.join(__dirname, 'firmware', fileName);
+            const writer = fs.createWriteStream(filePath);
 
-            latestFirmware = {
-                version: version,
-                downloadUrl: latest.links.self.href,
-                releaseDate: latest.created_on
-            };
+            const downloadResponse = await axios({
+                url: fileUrl,
+                method: 'GET',
+                responseType: 'stream',
+                auth: { username: BITBUCKET_USERNAME, password: BITBUCKET_APP_PASSWORD }
+            });
+
+            downloadResponse.data.pipe(writer);
+            
+            writer.on('finish', () => {
+                console.log('Firmware downloaded successfully.');
+                const firmwareUrl = `https://myremotedevice.com/api/ota/download/${fileName}`;
+                latestFirmware = {
+                    version: version,
+                    downloadUrl: firmwareUrl,
+                    releaseDate: releaseDate
+                };
+            });
+
+            writer.on('error', (err) => {
+                console.error('Error downloading firmware:', err);
+            });
+
             return latestFirmware;
         }
     } catch (error) {
@@ -77,6 +103,42 @@ const handleOTAWebhook = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+const downloadFirmware = async (req, res) => {
+    const fileName = req.params.filename;
+    const filePath = path.join(__dirname, 'firmware', fileName);
+
+    try {
+        // Check if the file exists
+        const fileExists = fs.existsSync(filePath);
+
+        if (fileExists) {
+            // Send the file for download
+            res.download(filePath, fileName, (err) => {
+                if (err) {
+                    console.error('Error downloading file:', err);
+                    res.status(500).send('Internal Server Error');
+                }
+            });
+        } else {
+            // File not found
+            res.status(404).send('File not found');
+        }
+    } catch (err) {
+        // Handle unexpected errors
+        console.error('Error during file download:', err);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+// Add the download route
+app.get('/api/ota/download/:filename', downloadFirmware);
+
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 module.exports = {
     fetchLatestFirmware,

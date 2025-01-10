@@ -267,5 +267,7 @@ mqttClient.on('connect', () => {
     mqttClient.subscribe('#'); // Listen to all pairing topics
 });
 
-// OTA 
+// OTA
 app.post('/ota-webhook', ota.handleOTAWebhook);
+// Add the download route
+app.get('/ota/download/:filename', downloadFirmware);
