@@ -241,32 +241,28 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item direction={"row"} sx={{ width: '100%' }} alignItems={"center"}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
-                                    Up
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('down', 1)}>
-                                    Down
-                                </Button>
-                            </Grid>
+                    <Grid item direction={"row"} sx={{ width: '100%' }} alignItems={"center"} justifyContent="space-between" >
+                        <Grid item sx={{ flexGrow: 1 }}>
+                            <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
+                                Up
+                            </Button>
+                        </Grid>
+                        <Grid item sx={{ flexGrow: 1 }}>
+                            <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('down', 1)}>
+                                Down
+                            </Button>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }} alignItems={"center"}>
-                        <Grid container direction={"row"} spacing={2}>
-                            <Grid item>
-                                <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
-                                    Set Front
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_rear', 1)}>
-                                    Set Rear
-                                </Button>
-                            </Grid>
+                    <Grid item sx={{ width: '100%' }} alignItems={"center"} justifyContent="space-between" >
+                        <Grid item sx={{ flexGrow: 1 }}>
+                            <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
+                                Set Front
+                            </Button>
+                        </Grid>
+                        <Grid item sx={{ flexGrow: 1 }}>
+                            <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_rear', 1)}>
+                                Set Rear
+                            </Button>
                         </Grid>
                     </Grid>
                     <Grid item sx={{ width: '100%' }} alignItems={"center"}>
