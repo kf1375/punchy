@@ -298,7 +298,7 @@ const DeviceControlPanel = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%' }} alignItems="center">
+                    <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
@@ -309,7 +309,7 @@ const DeviceControlPanel = () => {
                             max={1000}
                         />
                     </Grid>
-                    <Grid sx={{ width: '100%' }} alignItems="center">
+                    <Grid sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
