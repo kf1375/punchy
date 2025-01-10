@@ -59,8 +59,7 @@ const handleOTAWebhook = async (req, res) => {
             return res.status(401).send('Invalid signature');
         }
 
-        const commitStatus = req.body.comit_status;
-        console.log(req.body)
+        const commitStatus = req.body.commit_status;
         if (commitStatus && commitStatus.state === 'SUCCESSFUL') {
             console.log('Pipeline succeeded! Fetching download files...');
             const firmware = await fetchLatestFirmware();
