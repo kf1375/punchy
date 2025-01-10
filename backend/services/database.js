@@ -108,7 +108,6 @@ module.exports = {
     removeUser,
     getUserByTelegramId,
     getUserDevices,
-    deviceExists,
     addDevice,
     removeDevice,
     getDeviceById,
