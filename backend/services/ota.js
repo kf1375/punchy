@@ -60,6 +60,7 @@ const handleOTAWebhook = async (req, res) => {
         }
 
         const commitStatus = req.body.comit_status;
+        console.log(req.body)
         if (commitStatus && commitStatus.state === 'SUCCESSFUL') {
             console.log('Pipeline succeeded! Fetching download files...');
             const firmware = await fetchLatestFirmware();
