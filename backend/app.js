@@ -270,4 +270,4 @@ mqttClient.on('connect', () => {
 // OTA
 app.post('/ota-webhook', ota.handleOTAWebhook);
 // Add the download route
-app.get('/ota/download/:filename', downloadFirmware);
+app.get('/ota/download/:filename', ota.downloadFirmware);

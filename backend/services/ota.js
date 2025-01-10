@@ -130,18 +130,9 @@ const downloadFirmware = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
-// Add the download route
-app.get('/api/ota/download/:filename', downloadFirmware);
-
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
 module.exports = {
     fetchLatestFirmware,
     getLatestFirmware,
     handleOTAWebhook,
+    downloadFirmware,
 }
