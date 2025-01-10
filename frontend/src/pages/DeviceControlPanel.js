@@ -155,7 +155,7 @@ const DeviceControlPanel = () => {
 
     if (!device) {
         return (
-            <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-evenly' }}>
+            <Container sx={{ marginTop: 4, display: 'flex', justifyContent: 'center' }}>
                 <CircularProgress />
             </Container>
         );
@@ -163,7 +163,7 @@ const DeviceControlPanel = () => {
 
     return (
         <Container>
-            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', justifyContent: 'center' }}>
+            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', justifyContent: 'space-evenly'}}>
                 <Tab label="Manual" />
                 <Tab label="Automatic" />
                 <Tab label="Setting" />
