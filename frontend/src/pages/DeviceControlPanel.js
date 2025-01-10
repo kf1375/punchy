@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, CircularProgress, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem, Grid2 } from '@mui/material';
+import { Container, CircularProgress, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem } from '@mui/material';
+
+import Grid from '@mui/material/Grid2';
 
 const DeviceControlPanel = () => {
     const { serialNumber } = useParams();
@@ -167,8 +169,16 @@ const DeviceControlPanel = () => {
                 <Tab label="Setting" />
             </Tabs>
             {activeTab === 0 && (
-                <Grid2 container spacing={2} marginTop={2}>
-                    <Grid2 item xs={12} sm={6}>
+                <Grid 
+                    container 
+                    spacing={2}
+                    marginTop={3}
+                    direction={"column" }
+                    sx={{
+                        alignItems:"center",
+                    }}
+                >
+                    <Grid item sx={{ width: '100%' }}>
                         <Button variant="contained" color="primary" fullWidth onClick={startSingleTurn}>
                             Start Single Turn
                         </Button>
@@ -180,8 +190,8 @@ const DeviceControlPanel = () => {
                             max={maxHalfSpeed}
                             sx={{ marginTop: 2 }}
                         />
-                    </Grid2>
-                    <Grid2 item xs={12} sm={6}>
+                    </Grid>
+                    <Grid item sx={{ width: '100%' }}>
                         <Button variant="contained" color="primary" fullWidth onClick={startInfiniteTurn}>
                             Start Infinite Turn
                         </Button>
@@ -193,13 +203,13 @@ const DeviceControlPanel = () => {
                             max={maxFullSpeed}
                             sx={{ marginTop: 2 }}
                         />
-                    </Grid2>
-                    <Grid2 item xs={12}>
+                    </Grid>
+                    <Grid sx={{ width: '100%' }}>
                         <Button variant="contained" color="secondary" fullWidth onClick={stop}>
                             Stop
                         </Button>
-                    </Grid2>
-                </Grid2>
+                    </Grid>
+                </Grid>
             )}
             {activeTab === 1 && (
                 <Box>
@@ -207,18 +217,18 @@ const DeviceControlPanel = () => {
                 </Box>
             )}
             {activeTab === 2 && (
-                <Grid2 container spacing={2} marginTop={2}>
-                    <Grid2 item xs={12}>
+                <Grid container spacing={2} marginTop={2}>
+                    <Grid item xs={12}>
                         <Typography variant="body1">Device Name: {device.name}</Typography>
                         <Typography variant="body1">Device ID: {device.device_id}</Typography>
                         <Typography variant="body1">Device Serial Number: {device.serial_number}</Typography>
-                    </Grid2>
-                    <Grid2 item xs={12}>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Typography variant="h6" gutterBottom>
                             Parameters
                         </Typography>
-                    </Grid2>
-                    <Grid2 item xs={12} sm={6}>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
                         <Select
                             value={turnType}
                             onChange={(e) => {
@@ -230,36 +240,36 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Half Turn">Half Turn</MenuItem>
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
-                    </Grid2>
-                    <Grid2 item xs={12}>
-                        <Grid2 container spacing={2}>
-                            <Grid2 item xs={6}>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
                                 <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('up', 1)}>
                                     Up
                                 </Button>
-                            </Grid2>
-                            <Grid2 item xs={6}>
+                            </Grid>
+                            <Grid item xs={6}>
                                 <Button variant="contained" color="primary" fullWidth onClick={() => handleCommandChange('down', 1)}>
                                     Down
                                 </Button>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 item xs={12}>
-                        <Grid2 container spacing={2}>
-                            <Grid2 item xs={6}>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
                                 <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_front', 1)}>
                                     Set Front
                                 </Button>
-                            </Grid2>
-                            <Grid2 item xs={6}>
+                            </Grid>
+                            <Grid item xs={6}>
                                 <Button variant="contained" color="secondary" fullWidth onClick={() => handleSettingChange('set_rear', 1)}>
                                     Set Rear
                                 </Button>
-                            </Grid2>
-                        </Grid2>
-                    </Grid2>
-                    <Grid2 item xs={12}>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
@@ -269,8 +279,8 @@ const DeviceControlPanel = () => {
                             valueLabelDisplay="auto"
                             max={1000}
                         />
-                    </Grid2>
-                    <Grid2 item xs={12}>
+                    </Grid>
+                    <Grid item xs={12}>
                         <Typography variant="body1">Max Full Turn Speed</Typography>
                         <Slider
                             value={maxFullSpeed}
@@ -280,11 +290,11 @@ const DeviceControlPanel = () => {
                             valueLabelDisplay="auto"
                             max={1000}
                         />
-                    </Grid2>
-                </Grid2>
+                    </Grid>
+                </Grid>
             )}
             <Button variant="outlined" color="secondary" fullWidth onClick={handleClose} sx={{ marginTop: 2 }}>
-                Close
+                Back to Devices
             </Button>
         </Container>
     );
