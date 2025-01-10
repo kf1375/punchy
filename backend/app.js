@@ -68,26 +68,6 @@ app.get('/users/:user_id/devices', async (req, res) => {
     }
 });
 
-// Remove a device
-app.delete('/devices/:serial_number', async (req, res) => {
-    const { serial_number } = req.params;
-    try {
-        const success = await db.removeDevice(serial_number);
-        if (success) {
-            res.status(200).send('Device removed');
-        } else {
-            res.status(404).send('Device not found');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error removing device');
-    }
-});
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
-
 // Start a device
 app.post('/devices/:device_id/start/:type', async (req, res) => {
     const { device_id, type } = req.params;
@@ -262,12 +242,50 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-// Subscribe to all pairing topics
-mqttClient.on('connect', () => {
-    mqttClient.subscribe('#'); // Listen to all pairing topics
+// Remove a device
+app.delete('/devices/:serial_number', async (req, res) => {
+    const { serial_number } = req.params;
+
+    // Define the unpair topic and payload
+    const topic = `${serial_number}/unpair`;
+    const payload = JSON.stringify({
+        type: 'unpair',
+    });
+
+    try {
+        // Publish the unpair message with QoS 2
+        await new Promise((resolve, reject) => {
+            mqttClient.publish(topic, payload, { qos: 2 }, (err) => {
+                if (err) {
+                    reject(new Error(`Failed to publish unpair message: ${err.message}`));
+                } else {
+                    resolve();
+                }
+            });
+        });
+
+        const success = await db.removeDevice(serial_number);
+        if (success) {
+            res.status(200).send('Device removed');
+        } else {
+            res.status(404).send('Device not found');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error removing device');
+    }
 });
 
 // OTA
 app.post('/ota-webhook', ota.handleOTAWebhook);
 // Add the download route
 app.get('/ota/download/:filename', ota.downloadFirmware);
+
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
+
+// Subscribe to all pairing topics
+mqttClient.on('connect', () => {
+    mqttClient.subscribe('#'); // Listen to all pairing topics
+});
