@@ -163,7 +163,7 @@ const DeviceControlPanel = () => {
 
     return (
         <Container>
-            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', justifyContent: 'space-evenly'}}>
+            <Tabs value={activeTab} onChange={handleTabChange} sx={{ width: '100%', justifyContent: 'space-evenly'}} fullWidth>
                 <Tab label="Manual" />
                 <Tab label="Automatic" />
                 <Tab label="Setting" />
