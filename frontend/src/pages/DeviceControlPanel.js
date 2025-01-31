@@ -11,8 +11,8 @@ const DeviceControlPanel = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [singleSpeed, setSingleSpeed] = useState(50);
     const [infiniteSpeed, setInfiniteSpeed] = useState(50);
-    const [maxHalfSpeed, setMaxHalfSpeed] = useState(100);
-    const [maxFullSpeed, setMaxFullSpeed] = useState(100);
+    const [maxHalfSpeed, setMaxHalfSpeed] = useState(500);
+    const [maxFullSpeed, setMaxFullSpeed] = useState(500);
     const [turnType, setTurnType] = useState('Half Turn');
 
     const navigate = useNavigate();
@@ -298,7 +298,7 @@ const DeviceControlPanel = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
+                    {/* <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
                         <Typography variant="body1">Max Half Turn Speed</Typography>
                         <Slider
                             value={maxHalfSpeed}
@@ -319,7 +319,7 @@ const DeviceControlPanel = () => {
                             valueLabelDisplay="auto"
                             max={1000}
                         />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             )}
             <Button variant="outlined" color="secondary" fullWidth onClick={handleClose} sx={{ marginTop: 2 }}>
