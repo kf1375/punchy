@@ -89,9 +89,9 @@ const AddDevice = () => {
         }
     };
 
-    const handleScan = (data) => {
-        if (data) {
-            setSerialNumber(data);
+    const handleScan = (value) => {
+        if (value) {
+            setSerialNumber(value);
             setShowScanner(false);
         }
     };
@@ -169,9 +169,13 @@ const AddDevice = () => {
                 {showScanner && (
                     <Box sx={{ marginBottom: 2 }}>
                         <Scanner
-                            scanDelay={300}
-                            onError={handleError}
-                            onScan={handleScan}
+                            scanDelay={500}
+                            onScan={(detectedCodes) => {
+                                handleScan(detectedCodes[0].rawValue);
+                            }}
+                            onError={(error) => {
+                                console.log(`onError: ${error}'`);
+                            }}
                             style={{ width: '100%' }}
                         />
                         <Button variant="outlined" color="secondary" fullWidth onClick={() => setShowScanner(false)} sx={{ marginTop: 1 }}>
