@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Scanner, } from '@yudiel/react-qr-scanner'
 
 const AddDevice = () => {
     const [serialNumber, setSerialNumber] = useState('');
@@ -10,6 +11,7 @@ const AddDevice = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [pairingInProgress, setPairingInProgress] = useState(false);
+    cosnt [showScanner, setShowScanner] = useState(false);
 
     const navigate = useNavigate();
 
@@ -87,6 +89,18 @@ const AddDevice = () => {
         }
     };
 
+    const handleScan = (data) => {
+        if (data) {
+            setSerialNumber(data);
+            setShowScanner(false);
+        }
+    };
+
+    const handleError = (err) => {
+        console.error(err);
+        setError('Error scanning QR code');
+    };
+
     const handleCancel = () => {
         navigate('/devices');
     };
@@ -142,6 +156,30 @@ const AddDevice = () => {
                     onChange={(e) => setSerialNumber(e.target.value)}
                     sx={{ marginBottom: 2 }}
                 />
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => setShowScanner(true)}
+                    sx={{ marginBottom: 2 }}
+                >
+                    Scan QR Code
+                </Button>
+                {showScanner && (
+                    <Box sx={{ marginBottom: 2 }}>
+                        <Scanner
+                            scanDelay={300}
+                            onError={handleError}
+                            onScan={handleScan}
+                            style={{ width: '100%' }}
+                        />
+                        <Button variant="outlined" color="secondary" fullWidth onClick={() => setShowScanner(false)} sx={{ marginTop: 1 }}>
+                            Close Scanner
+                        </Button>
+                    </Box>
+                )}
+
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
                     <Button variant="contained" color="primary" fullWidth onClick={handleAddDevice} sx={{ marginRight: 1 }}>
                         Add Device
