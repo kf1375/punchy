@@ -11,7 +11,7 @@ const AddDevice = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
     const [pairingInProgress, setPairingInProgress] = useState(false);
-    cosnt [showScanner, setShowScanner] = useState(false);
+    const [showScanner, setShowScanner] = useState(false);
 
     const navigate = useNavigate();
 
