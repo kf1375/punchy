@@ -53,10 +53,10 @@ const fetchLatestFirmware = async () => {
         manifest = {
             type: "testiwhisk-device",
             version: version,
-            host: "https://myremotedevice.com/",
+            host: "myremotedevice.com",
             port: 443,
-            bin: `api/update/${firmwareFile.name}`,
-            littlefs: `api/update/${littlefsFile.name}`
+            bin: `/api/update/${firmwareFile.name}`,
+            littlefs: `/api/update/${littlefsFile.name}`
         };
 
         // Write the JSON file
