@@ -36,7 +36,7 @@ const fetchLatestFirmware = async () => {
         const firmwareUrl = firmwareFile.links.self.href;
         const littlefsUrl = littlefsFile.links.self.href;
         const releaseDate = firmwareFile.created_on;
-        const versionMatch = firmwareFile.name.match(/^v[\d]+(\.[\d]+)*(?=_firmware\.bin)/);
+        const versionMatch = firmwareFile.name.match(/^v([\d]+(?:\.[\d]+)*)(?=_firmware\.bin)/);
         const version = versionMatch ? versionMatch[1] : 'unknown';
         
         // Ensure the 'firmware' directory exists
