@@ -60,6 +60,7 @@ const fetchLatestFirmware = async () => {
         };
 
         // Write the JSON file
+        const manifestPath = path.join(firmwareDir, 'manifest.json');
         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 4));
         console.log("manifest.json file created successfully:", manifestPath);
         return manifest;
