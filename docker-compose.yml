@@ -42,7 +42,7 @@ services:
       BITBUCKET_USERNAME: "kf1375"
       BITBUCKET_APP_PASSWORD: "ATBBPcge6ZWG2gYYuvSaQguVm9qv720FC492"
       BITBUCKET_WEBHOOK_SECRET: "5t##aUK63oO6uR#i"
-      BITBUCKET_DOWNLOADS_API_URL: "'https://api.bitbucket.org/2.0/repositories/michaelsprojects/testiwhisk_firmware/downloads"
+      BITBUCKET_DOWNLOADS_API_URL: "https://api.bitbucket.org/2.0/repositories/michaelsprojects/testiwhisk_firmware/downloads"
     networks:
       - app_network
     volumes:
