@@ -304,7 +304,7 @@ app.delete('/devices/:serial_number', async (req, res) => {
 // OTA
 app.post('/ota-webhook', ota.handleOTAWebhook);
 // Add the download route
-app.get('/ota/download/:filename', ota.downloadFirmware);
+app.get('/update/:filename', ota.downloadFirmware);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
