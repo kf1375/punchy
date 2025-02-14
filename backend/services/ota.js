@@ -35,7 +35,7 @@ const fetchLatestFirmware = async () => {
         // Extract the version from the file name
         const firmwareUrl = firmwareFile.links.self.href;
         const littlefsUrl = littlefsFile.links.self.href;
-        const releaseDate = latest.created_on;
+        const releaseDate = firmwareFile.created_on;
         const versionMatch = firmwareFile.name.match(/^v[\d]+(\.[\d]+)*(?=_firmware\.bin)/);
         const version = versionMatch ? versionMatch[1] : 'unknown';
         
@@ -48,17 +48,6 @@ const fetchLatestFirmware = async () => {
         // Download both firmware and filesystem binaries
         await downloadFile(firmwareUrl, path.join(firmwareDir, firmwareFile.name));
         await downloadFile(littlefsUrl, path.join(firmwareDir, littlefsFile.name));
-
-        // Download the firmware to a local file
-        const filePath = path.join(firmwareDir, fileName);
-        const writer = fs.createWriteStream(filePath);
-
-        const downloadResponse = await axios({
-            url: fileUrl,
-            method: 'GET',
-            responseType: 'stream',
-            auth: { username: BITBUCKET_USERNAME, password: BITBUCKET_APP_PASSWORD }
-        });
 
         // Set the latest firmware metadata
         manifest = {
