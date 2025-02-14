@@ -143,12 +143,16 @@ const downloadFirmware = async (req, res) => {
 
         if (fileExists) {
             // Send the file for download
-            res.download(filePath, fileName, (err) => {
-                if (err) {
-                    console.error('Error downloading file:', err);
-                    res.status(500).send('Internal Server Error');
-                }
-            });
+            if (fileName === 'manifest.json') {
+                res.json(manifest);
+            } else {
+                res.download(filePath, fileName, (err) => {
+                    if (err) {
+                        console.error('Error downloading file:', err);
+                        res.status(500).send('Internal Server Error');
+                    }
+                });
+            }
         } else {
             // File not found
             res.status(404).send('File not found');
