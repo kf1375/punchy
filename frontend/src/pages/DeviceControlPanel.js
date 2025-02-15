@@ -62,13 +62,7 @@ const DeviceControlPanel = () => {
 
             try {
                 const { device_id } = device
-                const response = await fetch(`/api/devices/${device_id}/status`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ type: 'request' }),
-                });
+                const response = await fetch(`/api/devices/${device_id}/status`);
 
                 if (response.ok) {
                     const deviceStatusData = await response.json();
