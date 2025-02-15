@@ -309,7 +309,7 @@ router.get('/:device_id/status', async (req, res) => {
             });
         });
 
-        if (response) {
+        if (response.status === 'Ok') {
             return res.status(201).json(response);
         } else {
             return res.status(400).json({ error: response.message });
