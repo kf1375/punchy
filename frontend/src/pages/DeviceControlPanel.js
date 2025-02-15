@@ -71,8 +71,9 @@ const DeviceControlPanel = () => {
                 });
 
                 if (response.ok) {
-                    const statusData = await response.json();
-                    setStatus(statusData);
+                    const deviceStatusData = await response.json();
+                    setDeviceStatus(deviceStatusData);
+                    console.log(deviceStatus);
                 } else {
                     setError('Failed to request device status');
                 }
