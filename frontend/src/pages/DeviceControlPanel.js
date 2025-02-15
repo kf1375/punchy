@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid2';
 const DeviceControlPanel = () => {
     const { serialNumber } = useParams();
     const [device, setDevice] = useState(null);
+    const [deviceStatus, setDeviceStatus] = useState(null);
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState(0);
     const [singleSpeed, setSingleSpeed] = useState(50);
@@ -54,6 +55,37 @@ const DeviceControlPanel = () => {
         fetchDevice();
     }, [serialNumber]);
 
+    useEffect(() => {
+        const requestDeviceStatus = async () => {
+            if (!device) 
+                return;
+
+            try {
+                const { device_id } = device
+                const response = await fetch(`/api/devices/${device_id}/status`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ type: 'request' }),
+                });
+
+                if (response.ok) {
+                    const statusData = await response.json();
+                    setStatus(statusData);
+                } else {
+                    setError('Failed to request device status');
+                }
+            } catch (err) {
+                setError(`Error requesting status: ${err.message}`);
+            }
+        };
+
+        if (device) {
+            requestDeviceStatus();
+        }
+    }, [device]);
+
     const handleTabChange = (event, newValue) => {
         setActiveTab(newValue);
     };
@@ -81,7 +113,7 @@ const DeviceControlPanel = () => {
 
     const startInfiniteTurn = async () => {
         const { device_id } = device
-        const response = await fetch(`/api/devices/${device_id}/start/infinite`, {
+        const response = await fetch(`/api/devices/${device_id}/start/inf`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -113,7 +145,7 @@ const DeviceControlPanel = () => {
 
     const handleSettingChange = async (settingName, value) => {
         const { device_id } = device
-        const response = await fetch(`/api/devices/${device_id}/settings/${settingName}`, {
+        const response = await fetch(`/api/devices/${device_id}/set/${settingName}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -129,7 +161,7 @@ const DeviceControlPanel = () => {
 
     const handleCommandChange = async (commandName, value) => {
         const { device_id } = device
-        const response = await fetch(`/api/devices/${device_id}/commands/${commandName}`, {
+        const response = await fetch(`/api/devices/${device_id}/cmd/${commandName}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -298,28 +330,6 @@ const DeviceControlPanel = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    {/* <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="body1">Max Half Turn Speed</Typography>
-                        <Slider
-                            value={maxHalfSpeed}
-                            onChange={(e, newValue) => setMaxHalfSpeed(newValue)}
-                            onChangeCommitted={(e, newValue) => handleSettingChange('max_half_speed', newValue)}
-                            aria-label="Max Half Turn Speed"
-                            valueLabelDisplay="auto"
-                            max={1000}
-                        />
-                    </Grid>
-                    <Grid sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="body1">Max Full Turn Speed</Typography>
-                        <Slider
-                            value={maxFullSpeed}
-                            onChange={(e, newValue) => setMaxFullSpeed(newValue)}
-                            onChangeCommitted={(e, newValue) => handleSettingChange('max_full_speed', newValue)}
-                            aria-label="Max Full Turn Speed"
-                            valueLabelDisplay="auto"
-                            max={1000}
-                        />
-                    </Grid> */}
                 </Grid>
             )}
             <Button variant="outlined" color="secondary" fullWidth onClick={handleClose} sx={{ marginTop: 2 }}>
