@@ -1,118 +1,56 @@
 const mqtt = require('mqtt');
-const { MQTT_BROKER, MQTT_PORT } = process.env; // Ensure these are set in your environment variables
+const { MQTT_URL } = process.env;
+const mqttClient = mqtt.connect(MQTT_URL);
 
-class MqttClient {
-    #mqttClientId = 'telegram-bot';
-    #host = MQTT_BROKER;
-    #port = MQTT_PORT;
-    #reconnectIntervalSecond = 5;
+// Store temporary state for pairing responses
+const pendingPairings = new Map();
 
-    #mqttClient = null;
-    #callbacks = {};
+// Subscribe to all topics
+mqttClient.on('connect', () => {
+    mqttClient.subscribe('#');
+});
 
-    constructor() {
-        // Constructor logic
-    }
+// Listen for device responses
+mqttClient.on('message', async (topic, message) => {
+    const [serial_number, action] = topic.split('/');
 
-    async publish(topic, payload) {
-        if (!this.#mqttClient) {
-            await this.#createMqttClient();
-        }
+    if (action === 'pair') {
+        try {
+            const response = JSON.parse(message.toString());
 
-        if (typeof payload === 'object') {
-            payload = JSON.stringify(payload);
-        }
-
-        this.#mqttClient.publish(topic, payload, (err) => {
-            if (err) {
-                console.error('Error publishing message:', err);
-            }
-        });
-    }
-
-    async subscribe(topic, callback) {
-        if (!this.#callbacks[topic]) {
-            this.#callbacks[topic] = [];
-        }
-
-        if (!this.#callbacks[topic].includes(callback)) {
-            this.#callbacks[topic].push(callback);
-        }
-
-        if (!this.#mqttClient) {
-            await this.#createMqttClient();
-        }
-
-        this.#mqttClient.subscribe(topic, (err) => {
-            if (err) {
-                console.error('Error subscribing to topic:', err);
-            }
-        });
-    }
-
-    async cancelCallback(topic = null, callback = null) {
-        if (!topic && !callback) {
-            throw new Error('Must specify either topic, callback, or both');
-        }
-
-        if (topic && callback) {
-            this.#callbacks[topic] = this.#callbacks[topic].filter(cb => cb !== callback);
-        } else if (topic) {
-            delete this.#callbacks[topic];
-        } else {
-            Object.keys(this.#callbacks).forEach(t => {
-                this.#callbacks[t] = this.#callbacks[t].filter(cb => cb !== callback);
-            });
-        }
-
-        if (Object.keys(this.#callbacks).length === 0 && this.#mqttClient) {
-            await this.#stopMqttClient();
-        }
-    }
-
-    async #createMqttClient() {
-        this.#mqttClient = mqtt.connect(`mqtt://${this.#host}:${this.#port}`, {
-            clientId: this.#mqttClientId,
-            reconnectPeriod: this.#reconnectIntervalSecond * 1000,
-        });
-
-        this.#mqttClient.on('connect', () => {
-            console.log('Connected to MQTT broker');
-        });
-
-        this.#mqttClient.on('error', (err) => {
-            console.error('MQTT Client Error:', err);
-        });
-
-        this.#mqttClient.on('message', async (topic, payload) => {
-            await this.#handleMessage(topic, payload);
-        });
-    }
-
-    async #stopMqttClient() {
-        if (this.#mqttClient) {
-            this.#mqttClient.end();
-            this.#mqttClient = null;
-            console.log('MQTT client stopped');
-        }
-    }
-
-    async #handleMessage(topic, payload) {
-        for (let [subscribedTopic, callbacks] of Object.entries(this.#callbacks)) {
-            if (this.#matchTopic(topic, subscribedTopic)) {
-                for (let callback of callbacks) {
-                    await callback(topic, payload.toString());
+            if (response.type === 'response') {
+                // Call the stored callback with the response data
+                const callback = pendingPairings.get(serial_number);
+                if (callback) {
+                    callback(response);
+                    pendingPairings.delete(serial_number);
                 }
             }
+        } catch (error) {
+            console.error(`Error parsing device response: ${error.message}`);
+        }
+    } else if (action === 'status') {
+        try {
+            const response = JSON.parse(message.toString());
+        
+            if (response.type === 'request') {
+                const device = await db.getDeviceBySerialNumber(serial_number);
+                if (device) {
+                    mqttClient.publish(topic, JSON.stringify({ 
+                        type: "response", 
+                        status: "existed" 
+                    }));
+                } else {
+                    mqttClient.publish(topic, JSON.stringify({
+                        type: "response", 
+                        status: "not_existed"
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error(`Error parsing device status: ${error.message}`);
         }
     }
+});
 
-    #matchTopic(topic, subscribedTopic) {
-        const regex = new RegExp(subscribedTopic.replace('#', '.*').replace('+', '[^/]+'));
-        return regex.test(topic);
-    }
-}
-
-const mqttClient = new MqttClient();
-
-module.exports = mqttClient;
+module.exports = { mqttClient, pendingPairings };
