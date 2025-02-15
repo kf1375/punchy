@@ -12,11 +12,25 @@ router.post('', async (req, res) => {
     }
 
     const topic = `${serial_number}/pair/req`;
+    const responseTopic = `${serial_number}/pair/res`;
     const payload = JSON.stringify({
         name,
     });
 
     try {
+        // Ensure client is connected
+        if (!mqttClient.connected) {
+            return res.status(500).json({ error: 'MQTT client not connected' });
+        }
+
+        // Subscribe to the response topic before publishing the request
+        mqttClient.subscribe(responseTopic, (err) => {
+            if (err) {
+                console.error(`Subscription error: ${err.message}`);
+                return res.status(500).json({ error: 'Failed to subscribe to response topic' });
+            }
+        });
+
         // Publish pairing request
         mqttClient.publish(topic, payload);
 
@@ -26,10 +40,26 @@ router.post('', async (req, res) => {
                 reject(new Error('Device response timed out'));
             }, 30000);
 
-            mqttClient.once(`${serial_number}/pair/res`, (message) => {
-                clearTimeout(timeout);
-                const data = JSON.parse(message.toString());
-                resolve(data);
+            // Use once for the 'message' event and filter by topic
+            mqttClient.once('message', (receivedTopic, message) => {
+                if (receivedTopic === responseTopic) {
+                    clearTimeout(timeout);
+                    try {
+                        const data = JSON.parse(message.toString());
+                        console.log('Received response:', data);
+
+                        // Unsubscribe after the response is processed
+                        mqttClient.unsubscribe(responseTopic, (err) => {
+                            if (err) {
+                                console.error(`Unsubscribe error: ${err.message}`);
+                            }
+                        });
+
+                        resolve(data);
+                    } catch (error) {
+                        reject(new Error('Invalid message format'));
+                    }
+                }
             });
         });
 
