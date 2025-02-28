@@ -109,6 +109,60 @@ router.delete('/:serial_number', async (req, res) => {
     }
 });
 
+// Share a device with specified user
+router.post('/:device_id/share', async(req, res) => {
+    const { device_id } = req.params;
+    const { owner_id, telegram_id, access_level } = req.body;
+
+    if (!owner_id || !telegram_id || !access_level) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const device = await db.getDeviceById(device_id);
+    if (!device) {
+        return res.status(404).json({ error: 'Device not found' });
+    }
+
+    const user = await db.getUserByTelegramId(telegram_id);
+    if (!user) {
+        return res.status(404).json({ error: 'User not fount'})
+    }
+
+    if (owner_id != device.owner_id) {
+        return res.status(403).json({ error: 'Only the owner can manage access'});
+    }
+    
+    try {
+        const shared_device = await db.addSharedDevice(owner_id, user.user_id, device_id, access_level);
+        if (shared_device) {
+            res.status(201).json(shared_device);
+        } else {
+            res.status(400).json({ error: 'Error sharing device'});
+        }
+    } catch (error) {
+        confirm.error(error);
+        res.status(500).json({ error: 'Error sharing device'});
+    }
+});
+
+// Stop sharing a device
+router.delete(':device_id/share', async(req, res) => {
+    const { device_id } = req.params;
+    const { user_id } = req.body;
+
+    try {
+        const success = await db.removeSharedDevice(user_id, device_id);
+        if (success) {
+            res.status(200).send('Device is not shared anymore');
+        } else {
+            res.status(404).send('Error removing shared device');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error removing shared device');
+    }
+});
+
 // Start a device
 router.post('/:device_id/start/:type', async (req, res) => {
     const { device_id, type } = req.params;

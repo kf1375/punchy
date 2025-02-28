@@ -115,6 +115,10 @@ const Devices = () => {
     }
   };
 
+  const handleShare = async (serial_number) => {
+    navigate(`/share-device/${serial_number}`);
+  };
+
   return (
     <Container maxWidth="md">
       <DevicesHeader>
@@ -141,6 +145,13 @@ const Devices = () => {
                     {device.name}
                   </Typography>
                   <Box>
+                    <StyledButton
+                      variant="text"
+                      color="primary"
+                      onClick={() => handleShare(device.serial_number)}
+                    >
+                      Share
+                    </StyledButton>
                     <StyledButton
                       variant="text"
                       color="primary"

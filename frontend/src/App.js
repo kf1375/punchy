@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import Help from './pages/Help';
 import AddDevice from './pages/AddDevice';
 import DeviceControlPanel from './pages/DeviceControlPanel';
+import ShareDevice from './pages/ShareDevice';
 
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 import SwipeablePage from './Components/SwipeablePage/SwipeablePage';
@@ -97,6 +98,14 @@ const App = () => {
             element={
               <ProtectedRoute userExists={userExists}>
                 <DeviceControlPanel />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={`/share-device/:serialNumber`}
+            element={
+              <ProtectedRoute userExists={userExists}>
+                <ShareDevice />
               </ProtectedRoute>
             }
           />

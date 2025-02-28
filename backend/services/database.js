@@ -11,16 +11,6 @@ const db = pgp({
     password: DATABASE_PASSWORD  // Replace with your PostgreSQL password
 });
 
-// Check if user exists by Telegram ID
-const userExists = async (telegram_id) => {
-    try {
-        const user = await db.oneOrNone('SELECT 1 FROM users WHERE telegram_id = $1', telegram_id);
-        return user !== null;
-    } catch (error) {
-        throw new Error('Error checking if user exists: ' + error.message);
-    }
-};
-
 // Add a new user
 const addUser = async (telegram_id, name, subscription_type) => {
     try {
@@ -102,8 +92,29 @@ const removeDevice = async (serial_number) => {
     }
 };
 
+// add new shared device 
+const addSharedDevice = async (owner_id, user_id, device_id, access_level) => {
+    try {
+        return await db.one(
+            'INSERT INTO shared_devices (owner_id, user_id, device_id, access_level) VALUES ($1, $2, $3, $4) RETURNING *',
+            [owner_id, user_id, device_id, access_level]
+        );
+    } catch (error) {
+        throw new Error('Error sharing device: ' + error.message);
+    } 
+}
+
+// remove a shared device
+const removeSharedDevice = async (user_id, device_id) => {
+    try {
+        const result = await db.result('DELETE FROM shared_devices WHERE user_id = $1 AND device_id = $2', [user_id, device_id]);
+        return result.rowCount > 0;
+    } catch (error) {
+        throw new Error('Error removing shared device: ' + error.message);
+    }
+};
+
 module.exports = {
-    userExists,
     addUser,
     removeUser,
     getUserByTelegramId,
@@ -112,4 +123,6 @@ module.exports = {
     removeDevice,
     getDeviceById,
     getDeviceBySerialNumber,
+    addSharedDevice,
+    removeSharedDevice,
 };
