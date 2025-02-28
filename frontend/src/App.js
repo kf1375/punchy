@@ -94,7 +94,7 @@ const App = () => {
             }
           />
           <Route
-            path={`/device-control/:serialNumber`}
+            path={`/device-control/:deviceId`}
             element={
               <ProtectedRoute userExists={userExists}>
                 <DeviceControlPanel />
@@ -102,7 +102,7 @@ const App = () => {
             }
           />
           <Route
-            path={`/share-device/:serialNumber`}
+            path={`/share-device/:deviceId`}
             element={
               <ProtectedRoute userExists={userExists}>
                 <ShareDevice />

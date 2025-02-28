@@ -118,9 +118,9 @@ router.delete('/:device_id', async (req, res) => {
 // Share a device with specified user
 router.post('/:device_id/share', async(req, res) => {
     const { device_id } = req.params;
-    const { owner_id, telegram_id, access_level } = req.body;
+    const { owner_id, user_id, access_level } = req.body;
 
-    if (!owner_id || !telegram_id || !access_level) {
+    if (!owner_id || !user_id || !access_level) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -129,17 +129,12 @@ router.post('/:device_id/share', async(req, res) => {
         return res.status(404).json({ error: 'Device not found' });
     }
 
-    const user = await db.getUserByTelegramId(telegram_id);
-    if (!user) {
-        return res.status(404).json({ error: 'User not fount'})
-    }
-
     if (owner_id != device.owner_id) {
         return res.status(403).json({ error: 'Only the owner can manage access'});
     }
     
     try {
-        const shared_device = await db.addSharedDevice(owner_id, user.user_id, device_id, access_level);
+        const shared_device = await db.addSharedDevice(owner_id, user_id, device_id, access_level);
         if (shared_device) {
             res.status(201).json(shared_device);
         } else {

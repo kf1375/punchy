@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Container, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Scanner, } from '@yudiel/react-qr-scanner'
 
 const ShareDevice = () => {
-    const [serialNumber, setSerialNumber] = useState('');
-    const [deviceName, setDeviceName] = useState('');
+    const { deviceId } = useParams();
     const [userId, setUserId] = useState(null);
+    const [userTelegramId, setUserTelegramId] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
-    const [pairingInProgress, setPairingInProgress] = useState(false);
-    const [showScanner, setShowScanner] = useState(false);
 
     const navigate = useNavigate();
 
@@ -46,59 +44,50 @@ const ShareDevice = () => {
         fetchUserId();
     }, []);
 
-    const handleAddDevice = async () => {
+    const handleShareDevice = async () => {
         try {
             setError('');
             setMessage('');
-            setPairingInProgress(true);
 
-            if (!serialNumber.trim() || !deviceName.trim()) {
-                setError('Both serial number and device name are required');
-                setPairingInProgress(false);
+            if (!userTelegramId.trim()) {
+                setError('Telegram ID is required');
                 return;
             }
-
+            
             if (!userId) {
-                setError('User ID not available');
+                setError('User ID is not available');
                 return;
             }
 
-            const response = await fetch('/api/devices', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    serial_number: serialNumber,
-                    name: deviceName,
-                    user_id: userId,
-                }),
-            });
-            setPairingInProgress(false);
+            const response = await fetch(`/api/users/${userTelegramId}`);
             if (response.ok) {
-                const newDevice = await response.json();
-                setMessage(`Device "${newDevice.name}" added successfully!`);
-                setSerialNumber('');
-                setDeviceName('');
+                const user = await response.json();
+                const { user_id } = user;
+                const response = await fetch(`/api/devices/${deviceId}/share`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        owner_id: userId,
+                        user_id: user_id,
+                        access_level: 'control',
+                    }),
+                });
+                if (response.ok) {
+                    const sharedDevice = await response.json();
+                    setMessage('Device shared successfully!');
+                    setUserTelegramId('');
+                } else {
+                    const errorData = await response.json();
+                    setError(errorData.error || 'Failed to add device');
+                }
             } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Failed to add device');
+                setError('Can not the user');
             }
         } catch (err) {
             setError(`Error: ${err.message}`);
         }
-    };
-
-    const handleScan = (value) => {
-        if (value) {
-            setSerialNumber(value);
-            setShowScanner(false);
-        }
-    };
-
-    const handleError = (err) => {
-        console.error(err);
-        setError('Error scanning QR code');
     };
 
     const handleCancel = () => {
@@ -144,13 +133,13 @@ const ShareDevice = () => {
                     label="Telegram ID"
                     variant="outlined"
                     fullWidth
-                    value={deviceName}
-                    onChange={(e) => setDeviceName(e.target.value)}
+                    value={userTelegramId}
+                    onChange={(e) => setUserTelegramId(e.target.value)}
                     sx={{ marginBottom: 2 }}
                 />
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
-                    <Button variant="contained" color="primary" fullWidth onClick={handleAddDevice} sx={{ marginRight: 1 }}>
+                    <Button variant="contained" color="primary" fullWidth onClick={handleShareDevice} sx={{ marginRight: 1 }}>
                         Share Device
                     </Button>
                     <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel} sx={{ marginLeft: 1 }}>
@@ -158,11 +147,6 @@ const ShareDevice = () => {
                     </Button>
                 </Box>
 
-                {pairingInProgress && (
-                    <Typography sx={{ marginTop: 2 }} color="primary">
-                        Pairing in progress... Please wait.
-                    </Typography>
-                )}
                 {message && (
                     <Typography color="success.main" sx={{ marginTop: 2 }}>
                         {message}
