@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS shared_devices (
     owner_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     device_id INTEGER NOT NULL,
-    access_level TEXT NOT NULL DEFAULT 'control' -- e.g., 'view', 'control', 'full'
+    access_level TEXT NOT NULL DEFAULT 'control', -- e.g., 'view', 'control', 'full'
     shared_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_owner
         FOREIGN KEY (owner_id)
