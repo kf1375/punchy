@@ -58,4 +58,16 @@ router.get('/:user_id/devices', async (req, res) => {
     }
 });
 
+// Get shared devices of a user 
+router.get('/:user_id/shared_devices', async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const sharedDevices = await db.getUserSharedDevices(user_id);
+        res.json(sharedDevices);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching user shared devices');
+    }
+});
+
 module.exports = router;

@@ -51,6 +51,15 @@ const getUserDevices = async (owner_id) => {
     }
 };
 
+// Get all shared devices for a user by user_id
+const getUserSharedDevices = async (user_id) => {
+    try {
+        return await db.any('SELECT * FROM shared_devices WHERE user_id = $1', user_id);
+    } catch (error) {
+        throw new Error('Error fething user shared devices: ' + error.message);
+    }
+}
+
 // Add a new device
 const addDevice = async (serial_number, name, owner_id) => {
     try {
@@ -109,6 +118,7 @@ module.exports = {
     removeUser,
     getUserByTelegramId,
     getUserDevices,
+    getUserSharedDevices,
     addDevice,
     removeDevice,
     getDeviceById,
