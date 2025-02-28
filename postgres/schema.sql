@@ -13,12 +13,35 @@ CREATE TABLE IF NOT EXISTS devices (
     serial_number TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
     status TEXT DEFAULT 'Ready',
-    user_id INTEGER NOT NULL,
+    owner_id INTEGER NOT NULL,
     added_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user
+        FOREIGN KEY (owner_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
+);
+
+-- Shared Devices Table
+CREATE TABLE IF NOT EXISTS shared_devices (
+    share_id SERIAL PRIMARY KEY,
+    owner_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    device_id INTEGER NOT NULL,
+    access_level TEXT NOT NULL DEFAULT 'control' -- e.g., 'view', 'control', 'full'
+    shared_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_owner
+        FOREIGN KEY (owner_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
     CONSTRAINT fk_user
         FOREIGN KEY (user_id)
         REFERENCES users(user_id)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_device 
+        FOREIGN KEY (device_id)
+        REFERENCES devices(device_id)
+        ON DELETE CASCADE,
+    UNIQUE (user_id, device_id) -- Prevent duplicate sharing
 );
 
 -- DeviceData Table
