@@ -59,31 +59,32 @@ const ShareDevice = () => {
                 return;
             }
 
-            const response = await fetch(`/api/users/${userTelegramId}`);
-            if (response.ok) {
-                const user = await response.json();
-                const { user_id } = user;
-                const response = await fetch(`/api/devices/${deviceId}/share`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        owner_id: userId,
-                        user_id: user_id,
-                        access_level: 'control',
-                    }),
-                });
-                if (response.ok) {
-                    const sharedDevice = await response.json();
-                    setMessage('Device shared successfully!');
-                    setUserTelegramId('');
-                } else {
-                    const errorData = await response.json();
-                    setError(errorData.error || 'Failed to add device');
-                }
+            const userResponse = await fetch(`/api/users/${userTelegramId}`);
+            if (!userResponse.ok) {
+                setError('Cannot find the user');
+                return;
+            }
+
+            const user = await response.json();
+            const { user_id } = user;
+            const shareResponse = await fetch(`/api/devices/${deviceId}/share`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    owner_id: userId,
+                    user_id: user_id,
+                    access_level: 'control',
+                }),
+            });
+            if (shareResponse.ok) {
+                const sharedDevice = await response.json();
+                setMessage('Device shared successfully!');
+                setUserTelegramId('');
             } else {
-                setError('Can not the user');
+                const errorData = await response.json();
+                setError(errorData.error || 'Failed to add device');
             }
         } catch (err) {
             setError(`Error: ${err.message}`);
