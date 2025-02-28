@@ -76,9 +76,15 @@ router.post('', async (req, res) => {
 });
 
 // Remove a device
-router.delete('/:serial_number', async (req, res) => {
-    const { serial_number } = req.params;
+router.delete('/:device_id', async (req, res) => {
+    const { device_id } = req.params;
 
+    const device = await db.getDeviceById(device_id);
+    if (!device) {
+        return res.status(404).json({ error: 'Device not found' });
+    }
+
+    const { serial_number } = device;
     // Define the unpair topic and payload
     const topic = `${serial_number}/unpair/req`;
     const payload = JSON.stringify({
@@ -97,7 +103,7 @@ router.delete('/:serial_number', async (req, res) => {
             });
         });
 
-        const success = await db.removeDevice(serial_number);
+        const success = await db.removeDevice(device_id);
         if (success) {
             res.status(200).send('Device removed');
         } else {

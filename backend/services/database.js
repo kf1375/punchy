@@ -24,9 +24,9 @@ const addUser = async (telegram_id, name, subscription_type) => {
 };
 
 // Remove a user by Telegram ID
-const removeUser = async (telegram_id) => {
+const removeUser = async (user_id) => {
     try {
-        const result = await db.result('DELETE FROM users WHERE telegram_id = $1', telegram_id);
+        const result = await db.result('DELETE FROM users WHERE user_id = $1', user_id);
         return result.rowCount > 0;
     } catch (error) {
         throw new Error('Error removing user: ' + error.message);
@@ -72,20 +72,10 @@ const getDeviceById = async (device_id) => {
     }
 }
 
-// Get a device by by serial_number
-const getDeviceBySerialNumber = async (serial_number) => {
+// Remove a device by device_id
+const removeDevice = async (device_id) => {
     try {
-        const device = await db.oneOrNone('SELECT 1 FROM devices WHERE serial_number = $1', serial_number);
-        return device !== null;
-    } catch (error) {
-        throw new Error('Error checking if device exists: ' + error.message);
-    }
-};
-
-// Remove a device by serial_number
-const removeDevice = async (serial_number) => {
-    try {
-        const result = await db.result('DELETE FROM devices WHERE serial_number = $1', serial_number);
+        const result = await db.result('DELETE FROM devices WHERE device_id = $1', device_id);
         return result.rowCount > 0;
     } catch (error) {
         throw new Error('Error removing device: ' + error.message);
@@ -122,7 +112,6 @@ module.exports = {
     addDevice,
     removeDevice,
     getDeviceById,
-    getDeviceBySerialNumber,
     addSharedDevice,
     removeSharedDevice,
 };

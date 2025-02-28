@@ -15,10 +15,10 @@ router.post('', async (req, res) => {
 });
 
 // Remove a user
-router.delete('/:telegram_id', async (req, res) => {
-    const { telegram_id } = req.params;
+router.delete('/:user_id', async (req, res) => {
+    const { user_id } = req.params;
     try {
-        const success = await db.removeUser(telegram_id);
+        const success = await db.removeUser(user_id);
         if (success) {
             res.status(200).send('User removed');
         } else {

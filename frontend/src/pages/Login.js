@@ -15,9 +15,9 @@ const Login = () => {
       const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
       setTelegramUser(user);
 
-      if (user && user.id) {
+      if (user && user.username) {
         try {
-          const response = await fetch(`/api/users/${user.id}`);
+          const response = await fetch(`/api/users/${user.username}`);
           const data = await response.json();
           
           if (data && data.user_id) {
@@ -44,7 +44,7 @@ const Login = () => {
     if (!telegramUser) return;
 
     const userData = {
-      telegram_id: telegramUser.id,
+      telegram_id: telegramUser.username,
       name: `${telegramUser.first_name} ${telegramUser.last_name || ''}`.trim(),
       subscription_type: 0, // Default subscription type
     };

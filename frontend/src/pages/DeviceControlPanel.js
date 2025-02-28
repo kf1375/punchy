@@ -5,7 +5,7 @@ import { Container, CircularProgress, Typography, Button, Tab, Tabs, Box, Slider
 import Grid from '@mui/material/Grid2';
 
 const DeviceControlPanel = () => {
-    const { serialNumber } = useParams();
+    const { deviceId } = useParams();
     const [device, setDevice] = useState(null);
     const [deviceStatus, setDeviceStatus] = useState(null);
     const [error, setError] = useState('');
@@ -22,7 +22,7 @@ const DeviceControlPanel = () => {
         const fetchDevice = async () => {
             try {
                 const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-                const telegramId = user?.id;
+                const telegramId = user?.username;
 
                 if (telegramId) {
                     const userResponse = await fetch(`/api/users/${telegramId}`);
@@ -33,7 +33,7 @@ const DeviceControlPanel = () => {
                             const devicesResponse = await fetch(`/api/users/${userId}/devices/`);
                             if (devicesResponse.ok) {
                                 const devicesData = await devicesResponse.json();
-                                const device = devicesData.find((d) => d.serial_number === serialNumber);
+                                const device = devicesData.find((d) => d.device_id === deviceId);
                                 setDevice(device);
                             } else {
                                 setError('Failed to fetch devices');
@@ -53,7 +53,7 @@ const DeviceControlPanel = () => {
         };
 
         fetchDevice();
-    }, [serialNumber]);
+    }, [deviceId]);
 
     useEffect(() => {
         const requestDeviceStatus = async () => {
