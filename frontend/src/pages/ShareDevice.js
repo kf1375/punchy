@@ -135,28 +135,19 @@ const ShareDevice = () => {
                 }}
             >
                 <Typography variant="h5" fontWeight="bold" gutterBottom>
-                    Add a New Device
+                    Sharing the device with others
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 3 }}>
-                    Enter the device name and serial number to pair your device.
+                    Enter your partner's Telegram ID.
                 </Typography>
                 <TextField
-                    label="Device Name"
+                    label="Telegram ID"
                     variant="outlined"
                     fullWidth
                     value={deviceName}
                     onChange={(e) => setDeviceName(e.target.value)}
                     sx={{ marginBottom: 2 }}
                 />
-                <TextField
-                    label="Serial Number"
-                    variant="outlined"
-                    fullWidth
-                    value={serialNumber}
-                    onChange={(e) => setSerialNumber(e.target.value)}
-                    sx={{ marginBottom: 2 }}
-                />
-
                 <Button
                     variant="contained"
                     color="primary"
@@ -166,32 +157,16 @@ const ShareDevice = () => {
                 >
                     Scan QR Code
                 </Button>
-                {showScanner && (
-                    <Box sx={{ marginBottom: 2 }}>
-                        <Scanner
-                            scanDelay={500}
-                            onScan={(detectedCodes) => {
-                                handleScan(detectedCodes[0].rawValue);
-                            }}
-                            onError={(error) => {
-                                console.log(`onError: ${error}'`);
-                            }}
-                            style={{ width: '100%' }}
-                        />
-                        <Button variant="outlined" color="secondary" fullWidth onClick={() => setShowScanner(false)} sx={{ marginTop: 1 }}>
-                            Close Scanner
-                        </Button>
-                    </Box>
-                )}
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
                     <Button variant="contained" color="primary" fullWidth onClick={handleAddDevice} sx={{ marginRight: 1 }}>
-                        Add Device
+                        Share Device
                     </Button>
                     <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel} sx={{ marginLeft: 1 }}>
                         Cancel
                     </Button>
                 </Box>
+                
                 {pairingInProgress && (
                     <Typography sx={{ marginTop: 2 }} color="primary">
                         Pairing in progress... Please wait.
