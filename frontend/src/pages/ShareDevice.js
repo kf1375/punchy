@@ -65,7 +65,7 @@ const ShareDevice = () => {
                 return;
             }
 
-            const user = await response.json();
+            const user = await userResponse.json();
             const { user_id } = user;
             const shareResponse = await fetch(`/api/devices/${deviceId}/share`, {
                 method: 'POST',
@@ -79,11 +79,11 @@ const ShareDevice = () => {
                 }),
             });
             if (shareResponse.ok) {
-                const sharedDevice = await response.json();
+                const sharedDevice = await shareResponse.json();
                 setMessage('Device shared successfully!');
                 setUserTelegramId('');
             } else {
-                const errorData = await response.json();
+                const errorData = await shareResponse.json();
                 setError(errorData.error || 'Failed to add device');
             }
         } catch (err) {
