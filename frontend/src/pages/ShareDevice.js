@@ -135,7 +135,7 @@ const ShareDevice = () => {
                 }}
             >
                 <Typography variant="h5" fontWeight="bold" gutterBottom>
-                    Sharing the device with others
+                    Sharing the device
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 3 }}>
                     Enter your partner's Telegram ID.
@@ -148,15 +148,6 @@ const ShareDevice = () => {
                     onChange={(e) => setDeviceName(e.target.value)}
                     sx={{ marginBottom: 2 }}
                 />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => setShowScanner(true)}
-                    sx={{ marginBottom: 2 }}
-                >
-                    Scan QR Code
-                </Button>
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
                     <Button variant="contained" color="primary" fullWidth onClick={handleAddDevice} sx={{ marginRight: 1 }}>
@@ -166,7 +157,7 @@ const ShareDevice = () => {
                         Cancel
                     </Button>
                 </Box>
-                
+
                 {pairingInProgress && (
                     <Typography sx={{ marginTop: 2 }} color="primary">
                         Pairing in progress... Please wait.
