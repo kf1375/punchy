@@ -52,21 +52,21 @@ const getUserByTelegramId = async (telegram_id) => {
     }
 };
 
-// Get all devices for a user by user_id
-const getUserDevices = async (user_id) => {
+// Get all devices for a user by owner_id
+const getUserDevices = async (owner_id) => {
     try {
-        return await db.any('SELECT * FROM devices WHERE user_id = $1', user_id);
+        return await db.any('SELECT * FROM devices WHERE owner_id = $1', owner_id);
     } catch (error) {
         throw new Error('Error fetching user devices: ' + error.message);
     }
 };
 
 // Add a new device
-const addDevice = async (serial_number, name, user_id) => {
+const addDevice = async (serial_number, name, owner_id) => {
     try {
         return await db.one(
-            'INSERT INTO devices (serial_number, name, user_id) VALUES ($1, $2, $3) RETURNING *',
-            [serial_number, name, user_id]
+            'INSERT INTO devices (serial_number, name, owner_id) VALUES ($1, $2, $3) RETURNING *',
+            [serial_number, name, owner_id]
         );
     } catch (error) {
         throw new Error('Error adding device: ' + error.message);
