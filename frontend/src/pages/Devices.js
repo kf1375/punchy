@@ -147,7 +147,7 @@ const Devices = () => {
                   <Box>
                     <StyledButton
                       variant="text"
-                      color="primary"
+                      color="success"
                       onClick={() => handleShare(device.serial_number)}
                     >
                       Share
