@@ -67,9 +67,7 @@ const getUserSharedDevices = async (user_id) => {
         JOIN devices d ON sd.device_id = d.device_id
         WHERE sd.user_id = $1;
         `;
-        const { rows } = await db.query(query, [ user_id ]);
-        console.log(rows);
-        return rows;
+        return await db.any(query, [user_id]);
     } catch (error) {
         throw new Error('Error fething user shared devices: ' + error.message);
     }
