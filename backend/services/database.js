@@ -53,8 +53,22 @@ const getUserDevices = async (owner_id) => {
 
 // Get all shared devices for a user by user_id
 const getUserSharedDevices = async (user_id) => {
+    const query = `
+        SELECT 
+            sd.share_id,
+            sd.owner_id,
+            sd.user_id,
+            sd.device_id,
+            d.name AS name,
+            sd.access_level,
+            sd.shared_at
+        FROM shared_devices sd
+        JOIN devices d ON sd.device_id = d.device_id
+        WHERE sd.user_id = $1;
+    `;
     try {
-        return await db.any('SELECT * FROM shared_devices WHERE user_id = $1', user_id);
+        const { rows } = await db.query(query, [user_id]);
+        return rows;
     } catch (error) {
         throw new Error('Error fething user shared devices: ' + error.message);
     }
