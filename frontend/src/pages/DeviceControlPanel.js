@@ -33,7 +33,7 @@ const DeviceControlPanel = () => {
                             const devicesResponse = await fetch(`/api/users/${userId}/devices/`);
                             if (devicesResponse.ok) {
                                 const devicesData = await devicesResponse.json();
-                                const device = devicesData.find((d) => d.device_id === deviceId);
+                                const device = devicesData.find((d) => d.device_id == deviceId);
                                 setDevice(device);
                             } else {
                                 setError('Failed to fetch devices');
