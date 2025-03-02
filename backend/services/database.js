@@ -120,7 +120,7 @@ const addSharedDevice = async (owner_id, user_id, device_id, access_level) => {
 
 const removeSharedDeviceWithShareId = async (share_id) => {
     try {
-        const result = await db.result('DELETE FROM shared_devices WHERE share_id = $1 AND device_id = $2', share_id);
+        const result = await db.result('DELETE FROM shared_devices WHERE share_id = $1', share_id);
         return result.rowCount > 0;
     } catch (error) {
         throw new Error('Error removing shared device: ' + error.message);
