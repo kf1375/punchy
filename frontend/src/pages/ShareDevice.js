@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, List, ListItem, TextField, Button, Box, Typography, Paper, CircularProgress } from '@mui/material';
+import { Box, Container, List, ListItem, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
 import { styled } from '@mui/system';
 import { useNavigate, useParams } from 'react-router-dom';
 
