@@ -75,16 +75,17 @@ router.post('', async (req, res) => {
     }
 });
 
-// Get a device by device id
-router.get('/:device_id', async (req, res) => {
-    const { device_id } = req.params;
+// Get devices
+router.get('', async (req, res) => {
+    const { device_id, owner_id } = req.query;
+    let devices;
     try {
-        const device = await db.getDeviceById(device_id);
-        if (device) {
-            res.json(device);
-        } else {
-            res.status(404).send('Device not found');
+        if (device_id) {
+            devices = await db.getDeviceById(device_id);
+        } else if (owner_id) {
+            devices = await db.getDevicesByOwnerId(owner_id);
         }
+        res.status(200).json(devices);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error getting device');
@@ -163,7 +164,7 @@ router.post('/:device_id/share', async(req, res) => {
 });
 
 // Stop sharing a device
-router.delete(':device_id/share', async(req, res) => {
+router.delete('/:device_id/share', async(req, res) => {
     const { device_id } = req.params;
     const { user_id } = req.body;
 
@@ -180,20 +181,22 @@ router.delete(':device_id/share', async(req, res) => {
     }
 });
 
-// Get device sharing info
-router.get(':device_id/share', async(req, res) => {
-    const { device_id } = req.params
-
+// Get shared devices
+router.get('/shared/', async(req, res) => {
+    const { owner_id, user_id, device_id } = req.query;
+    let shared_devices;
     try {
-        const sharing_info = await db.getSharingInfoByDeviceId(device_id);
-        if (sharing_info) {
-            res.status(200).json(sharing_info);
-        } else {
-            res.status(400).json({ error: `Error getting sharing info for device ${device_id}` });
+        if (owner_id) {
+            shared_devices = await db.getSharedDevicesByOwnerId(owner_id);
+        } else if (user_id) {
+            shared_devices = await db.getSharedDevicesByUserId(user_id);
+        } else if (device_id) {
+            shared_devices = await db.getSharedDevicesByDeviceId(device_id);
         } 
+        res.status(200).json(shared_devices);
     } catch (error) {
         console.error(error);
-        res.status(500).send(`Error getting sharing info for device ${device_id}`);
+        res.status(500).send('Error getting sharing info');
     }
 });
 

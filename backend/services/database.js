@@ -11,7 +11,6 @@ const db = pgp({
     password: DATABASE_PASSWORD  // Replace with your PostgreSQL password
 });
 
-// Add a new user
 const addUser = async (telegram_id, name, subscription_type) => {
     try {
         return await db.one(
@@ -23,7 +22,6 @@ const addUser = async (telegram_id, name, subscription_type) => {
     }
 };
 
-// Remove a user by Telegram ID
 const removeUser = async (user_id) => {
     try {
         const result = await db.result('DELETE FROM users WHERE user_id = $1', user_id);
@@ -33,7 +31,6 @@ const removeUser = async (user_id) => {
     }
 };
 
-// Get a user by User ID
 const getUserByUserId = async (user_id) => {
     try {
         return await db.oneOrNone('SELECT * FROM users WHERE user_id = $1', user_id);
@@ -42,7 +39,6 @@ const getUserByUserId = async (user_id) => {
     }
 };
 
-// Get a user by Telegram ID
 const getUserByTelegramId = async (telegram_id) => {
     try {
         return await db.oneOrNone('SELECT * FROM users WHERE telegram_id = $1', telegram_id);
@@ -51,8 +47,7 @@ const getUserByTelegramId = async (telegram_id) => {
     }
 };
 
-// Get all devices for a user by owner_id
-const getUserDevices = async (owner_id) => {
+const getDevicesByOwnerId = async (owner_id) => {
     try {
         return await db.any('SELECT * FROM devices WHERE owner_id = $1', owner_id);
     } catch (error) {
@@ -60,8 +55,23 @@ const getUserDevices = async (owner_id) => {
     }
 };
 
-// Get all shared devices for a user by user_id
-const getUserSharedDevices = async (user_id) => {
+const getDevicesById = async (device_id) => {
+    try {
+        return await db.oneOrNone('SELECT * FROM devices WHERE device_id = $1', device_id);
+    } catch (error) {
+        throw new Error('Error fetching user: ' + error.message);
+    }
+}
+
+const getSharedDevicesByOwnerId = async (owner_id) => {
+    try {
+        return await db.any('SELECT * FROM shared_devices WHERE owner_id = $1', owner_id);
+    } catch (error) {
+        throw new Error('Error fething user shared devices: ' + error.message);
+    }
+}
+
+const getSharedDevicesByUserId = async (user_id) => {
     try {
         return await db.any('SELECT * FROM shared_devices WHERE user_id = $1', user_id);
     } catch (error) {
@@ -69,8 +79,7 @@ const getUserSharedDevices = async (user_id) => {
     }
 }
 
-// Get sharing info for a device by device_id
-const getSharingInfoByDeviceId = async (device_id) => {
+const getSharedDevicesByDeviceId = async (device_id) => {
     try {
         return await db.any('SELECT * FROM shared_devices WHERE device_id = $1', device_id);
     } catch (error) {
@@ -78,7 +87,6 @@ const getSharingInfoByDeviceId = async (device_id) => {
     }
 }
 
-// Add a new device
 const addDevice = async (serial_number, name, owner_id) => {
     try {
         return await db.one(
@@ -90,16 +98,6 @@ const addDevice = async (serial_number, name, owner_id) => {
     }
 };
 
-// Get a device by device_id
-const getDeviceById = async (device_id) => {
-    try {
-        return await db.oneOrNone('SELECT * FROM devices WHERE device_id = $1', device_id);
-    } catch (error) {
-        throw new Error('Error fetching user: ' + error.message);
-    }
-}
-
-// Remove a device by device_id
 const removeDevice = async (device_id) => {
     try {
         const result = await db.result('DELETE FROM devices WHERE device_id = $1', device_id);
@@ -109,7 +107,6 @@ const removeDevice = async (device_id) => {
     }
 };
 
-// add new shared device 
 const addSharedDevice = async (owner_id, user_id, device_id, access_level) => {
     try {
         return await db.one(
@@ -121,7 +118,6 @@ const addSharedDevice = async (owner_id, user_id, device_id, access_level) => {
     } 
 }
 
-// remove a shared device
 const removeSharedDevice = async (user_id, device_id) => {
     try {
         const result = await db.result('DELETE FROM shared_devices WHERE user_id = $1 AND device_id = $2', [user_id, device_id]);
@@ -136,12 +132,13 @@ module.exports = {
     removeUser,
     getUserByUserId,
     getUserByTelegramId,
-    getUserDevices,
-    getUserSharedDevices,
-    getSharingInfoByDeviceId,
+    getDevicesByOwnerId,
+    getDevicesById,
+    getSharedDevicesByOwnerId,
+    getSharedDevicesByUserId,
+    getSharedDevicesByDeviceId,
     addDevice,
     removeDevice,
-    getDeviceById,
     addSharedDevice,
     removeSharedDevice,
 };

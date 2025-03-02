@@ -30,7 +30,7 @@ const DeviceControlPanel = () => {
                         const userData = await userResponse.json();
                         const userId = userData?.user_id;
                         if (userId) {
-                            const devicesResponse = await fetch(`/api/users/${userId}/devices/`);
+                            const devicesResponse = await fetch(`/api/devices?owner_id=${userId}`);
                             if (devicesResponse.ok) {
                                 const devicesData = await devicesResponse.json();
                                 const device = devicesData.find((d) => d.device_id == deviceId);

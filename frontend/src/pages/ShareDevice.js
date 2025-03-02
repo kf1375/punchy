@@ -58,7 +58,7 @@ const ShareDevice = () => {
 
         const fetchSharingInfo = async () => {
             try {
-                const response = await fetch(`/api/devices/${deviceId}/share`);
+                const response = await fetch(`/api/devices/shared?device_id=${deviceId}`);
                 if (response.ok) {
                     const sharingInfoData = await response.json();
                     setSharingInfo(sharingInfoData);
@@ -184,7 +184,7 @@ const ShareDevice = () => {
                     </Button>
                 </Box>
 
-                <Typography variant="body1" fontWeight="bold" sx={{ marginBottom: 1 }}>
+                <Typography variant="body1" fontWeight="bold" sx={{ marginBottom: 1, marginTop: 5 }}>
                     This Device is currently shared with:
                 </Typography>
                 <List sx={{ width: '100%' }}>

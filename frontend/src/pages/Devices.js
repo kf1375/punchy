@@ -46,7 +46,7 @@ const Devices = () => {
             const userId = userData?.user_id;
 
             if (userId) {
-              const devicesResponse = await fetch(`/api/users/${userId}/devices/`);
+              const devicesResponse = await fetch(`/api/devices?owner_id=${userId}`);
               if (devicesResponse.ok) {
                 const devicesData = await devicesResponse.json();
                 setDevices(devicesData);
@@ -81,7 +81,7 @@ const Devices = () => {
             const userId = userData?.user_id;
 
             if (userId) {
-              const sharedDevicesResponse = await fetch(`/api/users/${userId}/shared_devices/`);
+              const sharedDevicesResponse = await fetch(`/api/devices/shared?user_id=${userId}`);
               if (sharedDevicesResponse.ok) {
                 const sharedDevicesData = await sharedDevicesResponse.json();
                 // Fetch device names

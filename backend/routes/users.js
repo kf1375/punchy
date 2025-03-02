@@ -51,28 +51,4 @@ router.get('', async (req, res) => {
     }
 });
 
-// Get devices of a user
-router.get('/:user_id/devices', async (req, res) => {
-    const { user_id } = req.params;
-    try {
-        const devices = await db.getUserDevices(user_id);
-        res.json(devices);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching user devices');
-    }
-});
-
-// Get shared devices of a user 
-router.get('/:user_id/shared_devices', async (req, res) => {
-    const { user_id } = req.params;
-    try {
-        const sharedDevices = await db.getUserSharedDevices(user_id);
-        res.json(sharedDevices);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error fetching user shared devices');
-    }
-});
-
 module.exports = router;
