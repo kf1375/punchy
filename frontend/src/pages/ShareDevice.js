@@ -139,12 +139,12 @@ const ShareDevice = () => {
         navigate('/devices');
     };
 
-    const handleRevokeAccess = async (share_id) => {
+    const handleRevokeAccess = async (shareId) => {
         const confirmDelete = window.confirm("Are you sure you want to remove this device?");
         if (!confirmDelete) {
           return; // Exit if the user cancels the action
         }
-
+        console.log('Revoke access for share ID:', shareId);
         try {
             const response = await fetch('/api/devices/sharing/revoke', { 
                 method: 'DELETE',
@@ -152,11 +152,11 @@ const ShareDevice = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    share_id: share_id,
+                    share_id: shareId,
                 }),
             });
             if (response.ok) {
-                setSharingInfo((prev) => prev.filter((info) => info.share_id !== share_id));
+                setSharingInfo((prev) => prev.filter((info) => info.share_id !== shareId));
             } else {
                 setError('Can not revoke the device.');
             }
