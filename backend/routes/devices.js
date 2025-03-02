@@ -96,7 +96,7 @@ router.get('', async (req, res) => {
 router.delete('/:device_id', async (req, res) => {
     const { device_id } = req.params;
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).json({ error: 'Device not found' });
     }
@@ -133,11 +133,10 @@ router.delete('/:device_id', async (req, res) => {
 });
 
 // Share a device with specified user
-router.post('/:device_id/share', async(req, res) => {
-    const { device_id } = req.params;
-    const { owner_id, user_id, access_level } = req.body;
+router.post('/share', async(req, res) => {
+    const { device_id, owner_id, user_id, access_level } = req.body;
 
-    if (!owner_id || !user_id || !access_level) {
+    if (!device_id || !owner_id || !user_id || !access_level) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -164,8 +163,8 @@ router.post('/:device_id/share', async(req, res) => {
 });
 
 // Stop sharing a device
-router.delete('/:share_id/revoke', async(req, res) => {
-    const { share_id } = req.params;
+router.delete('/revoke', async(req, res) => {
+    const { share_id } = req.body;
 
     if (!share_id) {
         return res.status(400).json({ error: 'Missing required fields' });

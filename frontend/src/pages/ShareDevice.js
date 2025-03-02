@@ -110,12 +110,13 @@ const ShareDevice = () => {
 
             const user = await userResponse.json();
             const { user_id } = user;
-            const shareResponse = await fetch(`/api/devices/${deviceId}/share`, {
+            const shareResponse = await fetch(`/api/devices/share`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    device_id: deviceId,
                     owner_id: ownerId,
                     user_id: user_id,
                     access_level: 'control',
@@ -145,7 +146,15 @@ const ShareDevice = () => {
         }
 
         try {
-            const response = await fetch(`api/devices/${share_id}/revoke`, { method: 'DELETE' });
+            const response = await fetch(`api/devices/revoke`, { 
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    share_id: share_id,
+                }),
+            });
             if (response.ok) {
                 setSharingInfo((prev) => prev.filter((info) => info.share_id !== share_id));
             } else {
