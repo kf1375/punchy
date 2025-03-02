@@ -44,7 +44,7 @@ const Login = () => {
     if (!telegramUser) return;
 
     const userData = {
-      telegram_id: telegramUser.username,
+      telegram_id: telegramUser.id,
       name: `${telegramUser.first_name} ${telegramUser.last_name || ''}`.trim(),
       subscription_type: 0, // Default subscription type
     };
