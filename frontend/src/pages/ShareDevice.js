@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
+import { Box, Container, List, ListItem, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Scanner, } from '@yudiel/react-qr-scanner'
+
+// Custom Styled Components
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    padding: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[3],
+    backgroundColor: theme.palette.background.default,
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+    textTransform: 'capitalize',
+    fontWeight: 'bold',
+}));
 
 const ShareDevice = () => {
     const { deviceId } = useParams();
@@ -114,7 +128,7 @@ const ShareDevice = () => {
     };
 
     const handleRevokeAccess = async (user_id) => {
-    
+
     };
 
     if (loading) {
@@ -173,38 +187,40 @@ const ShareDevice = () => {
                 <Typography variant="body1" fontWeight="bold" sx={{ marginBottom: 1 }}>
                     This Device is currently shared with:
                 </Typography>
-                {sharingInfo.length > 0 ? (
-                    sharingInfo.map((info) => (
-                        <ListItem
-                            key={info.share_id}
-                            disableGutters
-                            sx={{ width: '100%' }}
-                        >
-                            <StyledPaper
-                                sx={{ width: '100%', padding: 2 }}
+                <List sx={{ width: '100%' }}>
+                    {sharingInfo.length > 0 ? (
+                        sharingInfo.map((info) => (
+                            <ListItem
+                                key={info.share_id}
+                                disableGutters
+                                sx={{ width: '100%' }}
                             >
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant="body1" fontWeight="bold">
-                                        {info.user_id}
-                                    </Typography>
-                                    <Box>
-                                        <StyledButton
-                                            variant="text"
-                                            color="error"
-                                            onClick={() => handleRevokeAccess(info.user_id)}
-                                        >
-                                            Revoke Access
-                                        </StyledButton>
+                                <StyledPaper
+                                    sx={{ width: '100%', padding: 2 }}
+                                >
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <Typography variant="body1" fontWeight="bold">
+                                            {info.user_id}
+                                        </Typography>
+                                        <Box>
+                                            <StyledButton
+                                                variant="text"
+                                                color="error"
+                                                onClick={() => handleRevokeAccess(info.user_id)}
+                                            >
+                                                Revoke Access
+                                            </StyledButton>
+                                        </Box>
                                     </Box>
-                                </Box>
-                            </StyledPaper>
-                        </ListItem>
-                    ))
-                ) : (
-                    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
-                        No users have access yet.
-                    </Typography>
-                )}
+                                </StyledPaper>
+                            </ListItem>
+                        ))
+                    ) : (
+                        <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                            No users have access yet.
+                        </Typography>
+                    )}
+                </List>
 
                 {message && (
                     <Typography color="success.main" sx={{ marginTop: 2 }}>
