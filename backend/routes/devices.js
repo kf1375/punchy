@@ -75,6 +75,22 @@ router.post('', async (req, res) => {
     }
 });
 
+// Get a device by device id
+router.get('/:device_id', async (req, res) => {
+    const { device_id } = req.params;
+    try {
+        const device = await db.getDeviceById(device_id);
+        if (device) {
+            res.json(device);
+        } else {
+            res.status(404).send('Device not found');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error getting device');
+    }
+});
+
 // Remove a device
 router.delete('/:device_id', async (req, res) => {
     const { device_id } = req.params;
