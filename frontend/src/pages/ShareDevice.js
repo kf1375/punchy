@@ -110,7 +110,7 @@ const ShareDevice = () => {
 
             const user = await userResponse.json();
             const { user_id } = user;
-            const shareResponse = await fetch(`/api/devices/${deviceId}/share`, {
+            const shareResponse = await fetch(`/api/devices/shared?device_id=${deviceId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -138,8 +138,22 @@ const ShareDevice = () => {
         navigate('/devices');
     };
 
-    const handleRevokeAccess = async (user_id) => {
+    const handleRevokeAccess = async (share_id) => {
+        const confirmDelete = window.confirm("Are you sure you want to remove this device?");
+        if (!confirmDelete) {
+          return; // Exit if the user cancels the action
+        }
 
+        try {
+            const response = await fetch(`api/devices/shared?share_id=${share_id}`, { method: 'DELETE' });
+            if (response.ok) {
+                setSharingInfo((prev) => prev.filter((info) => info.share_id !== share_id));
+            } else {
+                setError('Can not revoke the device.');
+            }
+        } catch (error) {
+            setError(`Error: ${error.message}`);
+        }
     };
 
     if (loading) {
@@ -217,7 +231,7 @@ const ShareDevice = () => {
                                             <StyledButton
                                                 variant="text"
                                                 color="error"
-                                                onClick={() => handleRevokeAccess(info.user_id)}
+                                                onClick={() => handleRevokeAccess(info.share_id)}
                                             >
                                                 Revoke Access
                                             </StyledButton>
