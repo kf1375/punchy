@@ -180,6 +180,23 @@ router.delete(':device_id/share', async(req, res) => {
     }
 });
 
+// Get device sharing info
+router.get(':device_id/share', async(req, res) => {
+    const { device_id } = req.params
+
+    try {
+        const sharing_info = await db.getSharingInfoByDeviceId(device_id);
+        if (sharing_info) {
+            res.status(200).json(sharing_info);
+        } else {
+            res.status(400).json({ error: `Error getting sharing info for device ${device_id}` });
+        } 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(`Error getting sharing info for device ${device_id}`);
+    }
+});
+
 // Start a device
 router.post('/:device_id/start/:type', async (req, res) => {
     const { device_id, type } = req.params;

@@ -6,6 +6,7 @@ import { Scanner, } from '@yudiel/react-qr-scanner'
 const ShareDevice = () => {
     const { deviceId } = useParams();
     const [ownerId, setOwnerId] = useState(null);
+    const [sharingInfo, setSharingInfo] = useState([]);
     const [userId, setUserId] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
@@ -41,8 +42,25 @@ const ShareDevice = () => {
             }
         };
 
+        const fetchSharingInfo = async () => {
+            try {
+                const response = await fetch(`/api/devices/${deviceId}/share`);
+                if (response.ok) {
+                    const sharingInfoData = await response.json();
+                    setSharingInfo(sharingInfoData);
+                } else {
+                    setError('Failed to fetch sharing info');
+                }
+            } catch (err) {
+                setError(`Error: ${err.message}`);
+            } finally {
+                setLoading(false);
+            }
+        }
+
         fetchUserId();
-    }, []);
+        fetchSharingInfo();
+    }, [deviceId]);
 
     const handleShareDevice = async () => {
         try {
@@ -53,7 +71,7 @@ const ShareDevice = () => {
                 setError('Telegram ID is required');
                 return;
             }
-            
+
             if (!ownerId) {
                 setError('User ID is not available');
                 return;
@@ -93,6 +111,10 @@ const ShareDevice = () => {
 
     const handleCancel = () => {
         navigate('/devices');
+    };
+
+    const handleRevokeAccess = async (user_id) => {
+    
     };
 
     if (loading) {
@@ -141,12 +163,48 @@ const ShareDevice = () => {
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
                     <Button variant="contained" color="primary" fullWidth onClick={handleShareDevice} sx={{ marginRight: 1 }}>
-                        Share Device
+                        Share
                     </Button>
                     <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel} sx={{ marginLeft: 1 }}>
                         Cancel
                     </Button>
                 </Box>
+
+                <Typography variant="body1" fontWeight="bold" sx={{ marginBottom: 1 }}>
+                    This Device is currently shared with:
+                </Typography>
+                {sharingInfo.length > 0 ? (
+                    sharingInfo.map((info) => (
+                        <ListItem
+                            key={info.share_id}
+                            disableGutters
+                            sx={{ width: '100%' }}
+                        >
+                            <StyledPaper
+                                sx={{ width: '100%', padding: 2 }}
+                            >
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Typography variant="body1" fontWeight="bold">
+                                        {info.user_id}
+                                    </Typography>
+                                    <Box>
+                                        <StyledButton
+                                            variant="text"
+                                            color="error"
+                                            onClick={() => handleRevokeAccess(info.user_id)}
+                                        >
+                                            Revoke Access
+                                        </StyledButton>
+                                    </Box>
+                                </Box>
+                            </StyledPaper>
+                        </ListItem>
+                    ))
+                ) : (
+                    <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 2 }}>
+                        No users have access yet.
+                    </Typography>
+                )}
 
                 {message && (
                     <Typography color="success.main" sx={{ marginTop: 2 }}>
