@@ -133,7 +133,7 @@ router.delete('/:device_id', async (req, res) => {
 });
 
 // Share a device with specified user
-router.post('/share', async(req, res) => {
+router.post('/sharing/share', async(req, res) => {
     const { device_id, owner_id, user_id, access_level } = req.body;
 
     if (!device_id || !owner_id || !user_id || !access_level) {
@@ -163,7 +163,7 @@ router.post('/share', async(req, res) => {
 });
 
 // Stop sharing a device
-router.delete('/revoke', async(req, res) => {
+router.delete('/sharing/revoke', async(req, res) => {
     const { share_id } = req.body;
 
     if (!share_id) {
