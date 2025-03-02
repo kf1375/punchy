@@ -28,6 +28,33 @@ const ShareDevice = () => {
 
     const navigate = useNavigate();
 
+    const fetchDeviceSharingStatus = async () => {
+        try {
+            const response = await fetch(`/api/devices/shared?device_id=${deviceId}`);
+            if (response.ok) {
+                const sharingInfoData = await response.json();
+                // Fetch device names
+                const sharingInfoWithUserName = await Promise.all(
+                    sharingInfoData.map(async (sharingInfo) => {
+                        const userResponse = await fetch(`/api/users?user_id=${sharingInfo.user_id}`);
+                        if (!userResponse.ok) {
+                            throw new Error(`Failed to fetch user with ID: ${sharingInfo.user_id}`);
+                        }
+                        const userData = await userResponse.json();
+                        return { ...sharingInfo, user_name: userData.name };
+                    })
+                );
+                setSharingInfo(sharingInfoWithUserName);
+            } else {
+                setError('Failed to fetch sharing info');
+            }
+        } catch (err) {
+            setError(`Error: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         const fetchUserId = async () => {
             try {
@@ -56,36 +83,9 @@ const ShareDevice = () => {
             }
         };
 
-        const fetchDeviceSharingStatus = async () => {
-            try {
-                const response = await fetch(`/api/devices/shared?device_id=${deviceId}`);
-                if (response.ok) {
-                    const sharingInfoData = await response.json();
-                    // Fetch device names
-                    const sharingInfoWithUserName = await Promise.all(
-                        sharingInfoData.map(async (sharingInfo) => {
-                            const userResponse = await fetch(`/api/users?user_id=${sharingInfo.user_id}`);
-                            if (!userResponse.ok) {
-                                throw new Error(`Failed to fetch user with ID: ${sharingInfo.user_id}`);
-                            }
-                            const userData = await userResponse.json();
-                            return { ...sharingInfo, user_name: userData.name };
-                        })
-                    );
-                    setSharingInfo(sharingInfoWithUserName);
-                } else {
-                    setError('Failed to fetch sharing info');
-                }
-            } catch (err) {
-                setError(`Error: ${err.message}`);
-            } finally {
-                setLoading(false);
-            }
-        }
-
         fetchUserId();
         fetchDeviceSharingStatus();
-    }, [deviceId]);
+    }, []);
 
     const handleShareDevice = async () => {
         try {
@@ -126,6 +126,7 @@ const ShareDevice = () => {
                 const sharedDevice = await shareResponse.json();
                 setMessage('Device shared successfully!');
                 setUserId('');
+                await fetchDeviceSharingStatus();
             } else {
                 const errorData = await shareResponse.json();
                 setError(errorData.error || 'Failed to add device');
