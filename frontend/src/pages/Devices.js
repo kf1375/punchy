@@ -87,7 +87,7 @@ const Devices = () => {
                 // Fetch device names
                 const devicesWithNames = await Promise.all(
                   sharedDevicesData.map(async (sharedDevice) => {
-                    const deviceResponse = await fetch(`/api/devices?device_id=${sharedDevice.device_id}/`);
+                    const deviceResponse = await fetch(`/api/devices?device_id=${sharedDevice.device_id}`);
                     if (!deviceResponse.ok) {
                       throw new Error(`Failed to fetch device with ID: ${sharedDevice.device_id}`);
                     }
