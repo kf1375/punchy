@@ -65,7 +65,7 @@ const ShareDevice = () => {
                     const sharingInfoWithUserName = await Promise.all(
                         sharingInfoData.map(async (sharingInfo) => {
                             const userResponse = await fetch(`/api/users?user_id=${sharingInfo.user_id}`);
-                            if (userResponse.ok) {
+                            if (!userResponse.ok) {
                                 throw new Error(`Failed to fetch user with ID: ${sharingInfo.user_id}`);
                             }
                             const userData = await userResponse.json();
