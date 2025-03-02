@@ -69,7 +69,7 @@ const ShareDevice = () => {
                                 throw new Error(`Failed to fetch user with ID: ${sharingInfo.user_id}`);
                             }
                             const userData = await userResponse.json();
-                            return { ...sharingInfoData, user_name: userData.name };
+                            return { ...sharingInfo, user_name: userData.name };
                         })
                     );
                     setSharingInfo(sharingInfoWithUserName);
