@@ -81,7 +81,7 @@ router.get('', async (req, res) => {
     let devices;
     try {
         if (device_id) {
-            devices = await db.getDeviceById(device_id);
+            devices = await db.getDevicesById(device_id);
         } else if (owner_id) {
             devices = await db.getDevicesByOwnerId(owner_id);
         }
@@ -141,7 +141,7 @@ router.post('/:device_id/share', async(req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).json({ error: 'Device not found' });
     }
@@ -209,7 +209,7 @@ router.post('/:device_id/start/:type', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
@@ -236,7 +236,7 @@ router.post('/:device_id/stop', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id)
+    const device = await db.getDevicesById(device_id)
     if (!device) {
         return res.status(404).send("Device not found");
     }
@@ -264,7 +264,7 @@ router.post('/:device_id/set/:setting_name', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
@@ -292,7 +292,7 @@ router.post('/:device_id/cmd/:direction', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
@@ -319,7 +319,7 @@ router.post('/:device_id/cmd/update', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
@@ -344,7 +344,7 @@ router.get('/:device_id/status', async (req, res) => {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const device = await db.getDeviceById(device_id);
+    const device = await db.getDevicesById(device_id);
     if (!device) {
         return res.status(404).send("Device not found");
     }
