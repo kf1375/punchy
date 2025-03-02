@@ -33,11 +33,14 @@ router.delete('/:user_id', async (req, res) => {
 // Get a user by Telegram ID
 router.get('', async (req, res) => {
     const { telegram_id, user_id } = req.query;
+    console.log(telegram_id);
     let user;
     try {
         if (telegram_id) {
+            console.log("TID: " + user_id);
             user = await db.getUserByTelegramId(telegram_id);
-        } else {
+        } else if (user_id) {
+            console.log("UID: " + user_id);
             user = await db.getUserByUserId(user_id)
         }
         
