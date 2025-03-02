@@ -72,7 +72,7 @@ const Devices = () => {
     const fetchSharedDevices = async () => {
       try {
         const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-        const telegramId = user?.initDataUnsafe;
+        const telegramId = user?.id;
 
         if (telegramId) {
           const userResponse = await fetch(`/api/users/${telegramId}`);
