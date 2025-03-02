@@ -56,12 +56,23 @@ const ShareDevice = () => {
             }
         };
 
-        const fetchSharingInfo = async () => {
+        const fetchDeviceSharingStatus = async () => {
             try {
                 const response = await fetch(`/api/devices/shared?device_id=${deviceId}`);
                 if (response.ok) {
                     const sharingInfoData = await response.json();
-                    setSharingInfo(sharingInfoData);
+                    // Fetch device names
+                    const sharingInfoWithUserName = await Promise.all(
+                        sharingInfoData.map(async (sharingInfo) => {
+                            const userResponse = await fetch(`/api/users?user_id=${sharingInfo.user_id}`);
+                            if (userResponse.ok) {
+                                throw new Error(`Failed to fetch user with ID: ${sharingInfo.user_id}`);
+                            }
+                            const userData = await userResponse.json();
+                            return { ...sharingInfoData, user_name: userData.user_name };
+                        })
+                    );
+                    setSharingInfo(sharingInfoWithUserName);
                 } else {
                     setError('Failed to fetch sharing info');
                 }
@@ -73,7 +84,7 @@ const ShareDevice = () => {
         }
 
         fetchUserId();
-        fetchSharingInfo();
+        fetchDeviceSharingStatus();
     }, [deviceId]);
 
     const handleShareDevice = async () => {
@@ -200,7 +211,7 @@ const ShareDevice = () => {
                                 >
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Typography variant="body1" fontWeight="bold">
-                                            {info.user_id}
+                                            {info.user_name}
                                         </Typography>
                                         <Box>
                                             <StyledButton
