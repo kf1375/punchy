@@ -95,7 +95,7 @@ const Profile = () => {
               Welcome, {userData.name}!
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Telegram ID: {userData.telegram_id}
+              ID: {userData.user_id}
             </Typography>
           </Box>
         </ProfileHeader>

@@ -5,8 +5,8 @@ import { Scanner, } from '@yudiel/react-qr-scanner'
 
 const ShareDevice = () => {
     const { deviceId } = useParams();
-    const [userId, setUserId] = useState(null);
-    const [userTelegramId, setUserTelegramId] = useState('');
+    const [ownerId, setOwnerId] = useState(null);
+    const [userId, setUserId] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ const ShareDevice = () => {
                         const response = await fetch(`/api/users/${telegramId}`);
                         if (response.ok) {
                             const userData = await response.json();
-                            setUserId(userData.user_id);
+                            setOwnerId(userData.user_id);
                         } else {
                             setError('Failed to fetch user data');
                         }
@@ -49,17 +49,17 @@ const ShareDevice = () => {
             setError('');
             setMessage('');
 
-            if (!userTelegramId.trim()) {
+            if (!userId.trim()) {
                 setError('Telegram ID is required');
                 return;
             }
             
-            if (!userId) {
+            if (!ownerId) {
                 setError('User ID is not available');
                 return;
             }
 
-            const userResponse = await fetch(`/api/users/${userTelegramId}`);
+            const userResponse = await fetch(`/api/users/${userId}`);
             if (!userResponse.ok) {
                 setError('Cannot find the user');
                 return;
@@ -73,7 +73,7 @@ const ShareDevice = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    owner_id: userId,
+                    owner_id: ownerId,
                     user_id: user_id,
                     access_level: 'control',
                 }),
@@ -81,7 +81,7 @@ const ShareDevice = () => {
             if (shareResponse.ok) {
                 const sharedDevice = await shareResponse.json();
                 setMessage('Device shared successfully!');
-                setUserTelegramId('');
+                setUserId('');
             } else {
                 const errorData = await shareResponse.json();
                 setError(errorData.error || 'Failed to add device');
@@ -128,14 +128,14 @@ const ShareDevice = () => {
                     Sharing the device
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ marginBottom: 3 }}>
-                    Enter your partner's Telegram ID.
+                    Enter your partner's user ID. They can find it in the profile page.
                 </Typography>
                 <TextField
-                    label="Telegram ID"
+                    label="User ID"
                     variant="outlined"
                     fullWidth
-                    value={userTelegramId}
-                    onChange={(e) => setUserTelegramId(e.target.value)}
+                    value={userId}
+                    onChange={(e) => setUserId(e.target.value)}
                     sx={{ marginBottom: 2 }}
                 />
 
