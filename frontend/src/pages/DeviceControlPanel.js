@@ -22,7 +22,7 @@ const DeviceControlPanel = () => {
         const fetchDevice = async () => {
             try {
                 const user = window.Telegram?.WebApp?.initDataUnsafe?.user;
-                const telegramId = user?.username;
+                const telegramId = user?.id;
 
                 if (telegramId) {
                     const userResponse = await fetch(`/api/users/${telegramId}`);

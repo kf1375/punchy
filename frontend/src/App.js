@@ -36,7 +36,7 @@ const App = () => {
     const checkUserExistence = async () => {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
         const user = window.Telegram.WebApp.initDataUnsafe.user;
-        const telegramId = user.username;
+        const telegramId = user.id;
 
         try {
           const response = await fetch(`/api/users/${telegramId}`);

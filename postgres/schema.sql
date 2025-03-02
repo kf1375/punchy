@@ -1,7 +1,7 @@
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
     user_id SERIAL PRIMARY KEY,
-    telegram_id TEXT UNIQUE NOT NULL,
+    telegram_id BIGINT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     subscription_type INTEGER NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP

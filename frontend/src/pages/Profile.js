@@ -32,8 +32,8 @@ const Profile = () => {
 
   useEffect(() => {
     if (window.Telegram && window.Telegram.WebApp) {
-      const user = window.Telegram.WebApp.initDataUnsafe;
-      const telegramId = user?.user?.username;
+      const user = window.Telegram.WebApp.initDataUnsafe?.user;
+      const telegramId = user?.id;
 
       if (telegramId) {
         fetchUserData(telegramId);

@@ -18,7 +18,7 @@ const ShareDevice = () => {
             try {
                 if (window.Telegram && window.Telegram.WebApp) {
                     const user = window.Telegram.WebApp.initDataUnsafe?.user;
-                    const telegramId = user?.username;
+                    const telegramId = user?.id;
 
                     if (telegramId) {
                         const response = await fetch(`/api/users/${telegramId}`);
