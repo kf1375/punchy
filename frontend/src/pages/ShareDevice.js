@@ -21,7 +21,7 @@ const ShareDevice = () => {
                     const telegramId = user?.id;
 
                     if (telegramId) {
-                        const response = await fetch(`/api/users/${telegramId}`);
+                        const response = await fetch(`/api/users?telegram_id=${telegramId}`)
                         if (response.ok) {
                             const userData = await response.json();
                             setOwnerId(userData.user_id);
@@ -59,7 +59,7 @@ const ShareDevice = () => {
                 return;
             }
 
-            const userResponse = await fetch(`/api/users/${userId}`);
+            const userResponse = await fetch(`/api/users?user_id=${userId}`)
             if (!userResponse.ok) {
                 setError('Cannot find the user');
                 return;

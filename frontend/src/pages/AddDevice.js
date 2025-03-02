@@ -23,7 +23,7 @@ const AddDevice = () => {
                     const telegramId = user?.id;
 
                     if (telegramId) {
-                        const response = await fetch(`/api/users/${telegramId}`);
+                        const response = await fetch(`/api/users?telegram_id=${telegramId}`);
                         if (response.ok) {
                             const userData = await response.json();
                             setUserId(userData.user_id);

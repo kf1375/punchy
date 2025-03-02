@@ -31,15 +31,20 @@ router.delete('/:user_id', async (req, res) => {
 });
 
 // Get a user by Telegram ID
-router.get('/:telegram_id', async (req, res) => {
-    const { telegram_id } = req.params;
+router.get('', async (req, res) => {
+    const { telegramId, userId } = req.query;
+    let user;
     try {
-        const user = await db.getUserByTelegramId(telegram_id);
-        if (user) {
-            res.json(user);
+        if (telegramId) {
+            user = await db.getUserByTelegramId(telegramId);
         } else {
-            res.status(404).send('User not found');
+            user = await db.getUserByUserId(userId)
         }
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.json(user);
     } catch (error) {
         console.error(error);
         res.status(500).send('Error fetching user');

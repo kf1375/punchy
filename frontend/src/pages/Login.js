@@ -17,7 +17,7 @@ const Login = () => {
 
       if (user && user.username) {
         try {
-          const response = await fetch(`/api/users/${user.id}`);
+          const response = await fetch(`/api/users?telegram_id=${user.id}`)
           const data = await response.json();
           
           if (data && data.user_id) {

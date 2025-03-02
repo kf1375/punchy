@@ -25,7 +25,7 @@ const DeviceControlPanel = () => {
                 const telegramId = user?.id;
 
                 if (telegramId) {
-                    const userResponse = await fetch(`/api/users/${telegramId}`);
+                    const userResponse = await fetch(`/api/users?telegram_id=${telegramId}`)
                     if (userResponse.ok) {
                         const userData = await userResponse.json();
                         const userId = userData?.user_id;

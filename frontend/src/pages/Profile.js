@@ -49,7 +49,7 @@ const Profile = () => {
 
   const fetchUserData = async (telegramId) => {
     try {
-      const response = await fetch(`/api/users/${telegramId}`);
+      const response = await fetch(`/api/users?telegram_id=${telegramId}`)
       if (response.ok) {
         const data = await response.json();
         setUserData(data);

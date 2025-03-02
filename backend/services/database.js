@@ -33,6 +33,15 @@ const removeUser = async (user_id) => {
     }
 };
 
+// Get a user by User ID
+const getUserByUserId = async (user_id) => {
+    try {
+        return await db.oneOrNone('SELECT * FROM users WHERE user_id = $1', user_id);
+    } catch (error) {
+        throw new Error('Error fetching user: ' + error.message);
+    }
+};
+
 // Get a user by Telegram ID
 const getUserByTelegramId = async (telegram_id) => {
     try {
@@ -116,6 +125,7 @@ const removeSharedDevice = async (user_id, device_id) => {
 module.exports = {
     addUser,
     removeUser,
+    getUserByUserId,
     getUserByTelegramId,
     getUserDevices,
     getUserSharedDevices,
