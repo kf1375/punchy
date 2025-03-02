@@ -146,7 +146,7 @@ const ShareDevice = () => {
         }
 
         try {
-            const response = await fetch('api/devices/revoke', { 
+            const response = await fetch('/api/devices/revoke', { 
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
