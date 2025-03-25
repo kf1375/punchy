@@ -363,7 +363,7 @@ router.get('/:device_id/status', async (req, res) => {
         }
 
         // Subscribe to the response topic before publishing the request
-        mqttClient.subscribe(responseTopic, (err) => {
+        mqttClient.subscribe(responseTopic, { qos: 2 },(err) => {
             if (err) {
                 console.error(`Subscription error: ${err.message}`);
                 return res.status(500).json({ error: 'Failed to subscribe to response topic' });
