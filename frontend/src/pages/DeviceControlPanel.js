@@ -71,8 +71,12 @@ const DeviceControlPanel = () => {
                     setInfiniteSpeed(deviceStatusData.infinite_speed ?? 50);
                     setMaxHalfSpeed(deviceStatusData.max_half_speed ?? 500);
                     setMaxFullSpeed(deviceStatusData.max_full_speed ?? 500);
-                    setTurnType(deviceStatusData.turn_type ?? 'Half Turn');
-                    console.log(deviceStatus);
+
+                    const turnTypeMap = {
+                        HALF_TURN: 'Half Turn',
+                        FULL_TURN: 'Full Turn'
+                    };
+                    setTurnType(turnTypeMap[deviceStatusData.turn_type] ?? 'Half Turn');
                 } else {
                     setError('Failed to request device status');
                 }
