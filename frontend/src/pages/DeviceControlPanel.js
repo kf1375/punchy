@@ -67,6 +67,11 @@ const DeviceControlPanel = () => {
                 if (response.ok) {
                     const deviceStatusData = await response.json();
                     setDeviceStatus(deviceStatusData);
+                    setSingleSpeed(deviceStatusData.single_speed ?? 50);
+                    setInfiniteSpeed(deviceStatusData.infinite_speed ?? 50);
+                    setMaxHalfSpeed(deviceStatusData.max_half_speed ?? 500);
+                    setMaxFullSpeed(deviceStatusData.max_full_speed ?? 500);
+                    setTurnType(deviceStatusData.turn_type ?? 'Half Turn');
                     console.log(deviceStatus);
                 } else {
                     setError('Failed to request device status');
