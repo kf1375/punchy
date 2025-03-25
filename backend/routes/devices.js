@@ -401,7 +401,7 @@ router.get('/:device_id/status', async (req, res) => {
                 }
             });
         });
-        console.log(response);
+
         if (response.status === 'Ok') {
             return res.status(201).json(response);
         } else {
