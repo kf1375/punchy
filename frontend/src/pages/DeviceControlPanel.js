@@ -63,10 +63,10 @@ const DeviceControlPanel = () => {
             try {
                 const { device_id } = device
                 const response = await fetch(`/api/devices/${device_id}/status`);
-
+                console.log(response);
                 if (response.ok) {
                     const deviceStatusData = await response.json();
-                    console.log(deviceStatusData);
+                    
                     setDeviceStatus(deviceStatusData);
                     setSingleSpeed(deviceStatusData.single_speed ?? 50);
                     setInfiniteSpeed(deviceStatusData.infinite_speed ?? 50);
