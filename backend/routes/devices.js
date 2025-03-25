@@ -370,10 +370,10 @@ router.get('/:device_id/status', async (req, res) => {
             }
         });
 
-        // Publish pairing request
+        // Publish status request
         mqttClient.publish(topic, payload);
 
-        // Wait for response with a timeout of 30 seconds
+        // Wait for response with a timeout of 1 second
         const response = await new Promise((resolve, reject) => {
             const timeout = setTimeout(() => {
                 reject(new Error('Device status response timed out'));
@@ -401,7 +401,7 @@ router.get('/:device_id/status', async (req, res) => {
                 }
             });
         });
-
+        console.log(response);
         if (response.status === 'Ok') {
             return res.status(201).json(response);
         } else {
