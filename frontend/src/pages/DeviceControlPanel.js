@@ -66,7 +66,7 @@ const DeviceControlPanel = () => {
                 
                 if (response.ok) {
                     const deviceStatusData = await response.json();
-                    console.log(deviceStatusData);
+
                     setDeviceStatus(deviceStatusData);
                     setSingleSpeed(deviceStatusData.single_speed ?? 50);
                     setInfiniteSpeed(deviceStatusData.infinite_speed ?? 50);
