@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, CircularProgress, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRotateLeft, faRotateRight, faLeftLong, faRightLong } from '@fortawesome/free-solid-svg-icons';
 
 import Grid from '@mui/material/Grid2';
 
@@ -285,6 +287,9 @@ const DeviceControlPanel = () => {
                         alignItems="center"
                         sx={{ width: '100%' }}
                     >
+                        <Typography variant="h7">
+                            Rotate
+                        </Typography>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
@@ -292,7 +297,7 @@ const DeviceControlPanel = () => {
                                 fullWidth
                                 onClick={() => handleCommandChange('up', 1)}
                             >
-                                Up
+                                <FontAwesomeIcon icon={faLeftLong} />
                             </Button>
                         </Grid>
                         <Grid item size={6}>
@@ -302,7 +307,7 @@ const DeviceControlPanel = () => {
                                 fullWidth
                                 onClick={() => handleCommandChange('down', 1)}
                             >
-                                Down
+                                <FontAwesomeIcon icon={faRightLong} />
                             </Button>
                         </Grid>
                     </Grid>
@@ -332,6 +337,38 @@ const DeviceControlPanel = () => {
                                 onClick={() => handleSettingChange('set_rear', 1)}
                             >
                                 Set Rear
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        container
+                        spacing={2}
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="center"
+                        sx={{ width: '100%' }}
+                    >
+                        <Typography variant="h7">
+                            Hit Direction
+                        </Typography>
+                        <Grid item size={6}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={() => handleCommandChange('up', 1)}
+                            >
+                                <FontAwesomeIcon icon={faRotateLeft} />
+                            </Button>
+                        </Grid>
+                        <Grid item size={6}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={() => handleCommandChange('down', 1)}
+                            >
+                                <FontAwesomeIcon icon={faRotateRight} />
                             </Button>
                         </Grid>
                     </Grid>
