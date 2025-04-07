@@ -279,6 +279,11 @@ const DeviceControlPanel = () => {
                             <MenuItem value="Full Turn">Full Turn</MenuItem>
                         </Select>
                     </Grid>
+                    <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
+                        <Typography variant="h7" gutterBottom>
+                            Rotate
+                        </Typography>
+                    </Grid>
                     <Grid
                         container
                         spacing={2}
@@ -287,9 +292,6 @@ const DeviceControlPanel = () => {
                         alignItems="center"
                         sx={{ width: '100%' }}
                     >
-                        <Typography variant="h7">
-                            Rotate
-                        </Typography>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
@@ -340,6 +342,11 @@ const DeviceControlPanel = () => {
                             </Button>
                         </Grid>
                     </Grid>
+                    <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
+                        <Typography variant="h6" gutterBottom>
+                            Hit Direction
+                        </Typography>
+                    </Grid>
                     <Grid
                         container
                         spacing={2}
@@ -348,9 +355,6 @@ const DeviceControlPanel = () => {
                         alignItems="center"
                         sx={{ width: '100%' }}
                     >
-                        <Typography variant="h7">
-                            Hit Direction
-                        </Typography>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
