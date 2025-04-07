@@ -297,7 +297,7 @@ const DeviceControlPanel = () => {
                                 variant="contained"
                                 fullWidth
                                 onClick={() => handleCommandChange('up', 1)}
-                                sx={{ backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
+                                sx={{ backgroundColor: '#ef9a9a', '&:hover': { backgroundColor: '#e57373' } }}  // reddish
                             >
                                 <FontAwesomeIcon icon={faLeftLong} size="lg"/>
                             </Button>
@@ -307,7 +307,7 @@ const DeviceControlPanel = () => {
                                 variant="contained"
                                 fullWidth
                                 onClick={() => handleCommandChange('down', 1)}
-                                sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'darkgreen' } }}
+                                sx={{ backgroundColor: '#a5d6a7', '&:hover': { backgroundColor: '#66bb6a' } }}  // greenish
                             >
                                 <FontAwesomeIcon icon={faRightLong} size="lg"/>
                             </Button>
@@ -343,7 +343,7 @@ const DeviceControlPanel = () => {
                         </Grid>
                     </Grid>
                     <Grid item sx={{ width: '100%', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h7" gutterBottom>
                             Hit Direction
                         </Typography>
                     </Grid>
@@ -360,8 +360,8 @@ const DeviceControlPanel = () => {
                                 variant="contained"
                                 fullWidth
                                 onClick={() => handleCommandChange('up', 1)}
-                                sx={{ backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
-                            >
+                                sx={{ backgroundColor: '#ef9a9a', '&:hover': { backgroundColor: '#e57373' } }}  // reddish
+                                >
                                 <FontAwesomeIcon icon={faRotateLeft} size="lg"/>
                             </Button>
                         </Grid>
@@ -370,8 +370,8 @@ const DeviceControlPanel = () => {
                                 variant="contained"
                                 fullWidth
                                 onClick={() => handleCommandChange('down', 1)}
-                                sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'darkgreen' } }}
-                            >
+                                sx={{ backgroundColor: '#a5d6a7', '&:hover': { backgroundColor: '#66bb6a' } }}  // greenish
+                                >
                                 <FontAwesomeIcon icon={faRotateRight} size="lg"/>
                             </Button>
                         </Grid>
