@@ -295,21 +295,21 @@ const DeviceControlPanel = () => {
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
-                                color="primary"
                                 fullWidth
                                 onClick={() => handleCommandChange('up', 1)}
+                                sx={{ backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
                             >
-                                <FontAwesomeIcon icon={faLeftLong} />
+                                <FontAwesomeIcon icon={faLeftLong} size="lg"/>
                             </Button>
                         </Grid>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
-                                color="primary"
                                 fullWidth
                                 onClick={() => handleCommandChange('down', 1)}
+                                sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'darkgreen' } }}
                             >
-                                <FontAwesomeIcon icon={faRightLong} />
+                                <FontAwesomeIcon icon={faRightLong} size="lg"/>
                             </Button>
                         </Grid>
                     </Grid>
@@ -358,21 +358,21 @@ const DeviceControlPanel = () => {
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
-                                color="primary"
                                 fullWidth
                                 onClick={() => handleCommandChange('up', 1)}
+                                sx={{ backgroundColor: 'red', '&:hover': { backgroundColor: 'darkred' } }}
                             >
-                                <FontAwesomeIcon icon={faRotateLeft} />
+                                <FontAwesomeIcon icon={faRotateLeft} size="lg"/>
                             </Button>
                         </Grid>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
-                                color="primary"
                                 fullWidth
                                 onClick={() => handleCommandChange('down', 1)}
+                                sx={{ backgroundColor: 'green', '&:hover': { backgroundColor: 'darkgreen' } }}
                             >
-                                <FontAwesomeIcon icon={faRotateRight} />
+                                <FontAwesomeIcon icon={faRotateRight} size="lg"/>
                             </Button>
                         </Grid>
                     </Grid>
