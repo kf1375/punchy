@@ -296,20 +296,20 @@ const DeviceControlPanel = () => {
                             <Button
                                 variant="contained"
                                 fullWidth
-                                onClick={() => handleCommandChange('up', 1)}
+                                onClick={() => handleCommandChange('left', 1)}
                                 sx={{ backgroundColor: '#ef9a9a', '&:hover': { backgroundColor: '#e57373' } }}  // reddish
                             >
-                                <FontAwesomeIcon icon={faLeftLong} size="lg"/>
+                                <FontAwesomeIcon icon={faLeftLong} size="xl"/>
                             </Button>
                         </Grid>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
                                 fullWidth
-                                onClick={() => handleCommandChange('down', 1)}
+                                onClick={() => handleCommandChange('right', 1)}
                                 sx={{ backgroundColor: '#a5d6a7', '&:hover': { backgroundColor: '#66bb6a' } }}  // greenish
                             >
-                                <FontAwesomeIcon icon={faRightLong} size="lg"/>
+                                <FontAwesomeIcon icon={faRightLong} size="xl"/>
                             </Button>
                         </Grid>
                     </Grid>
@@ -359,20 +359,20 @@ const DeviceControlPanel = () => {
                             <Button
                                 variant="contained"
                                 fullWidth
-                                onClick={() => handleCommandChange('up', 1)}
+                                onClick={() => handleSettingChange('hit_direction', 'Left')}
                                 sx={{ backgroundColor: '#ef9a9a', '&:hover': { backgroundColor: '#e57373' } }}  // reddish
                                 >
-                                <FontAwesomeIcon icon={faRotateLeft} size="lg"/>
+                                <FontAwesomeIcon icon={faRotateLeft} size="xl"/>
                             </Button>
                         </Grid>
                         <Grid item size={6}>
                             <Button
                                 variant="contained"
                                 fullWidth
-                                onClick={() => handleCommandChange('down', 1)}
+                                onClick={() => handleSettingChange('hit_direction', 'Right')}
                                 sx={{ backgroundColor: '#a5d6a7', '&:hover': { backgroundColor: '#66bb6a' } }}  // greenish
                                 >
-                                <FontAwesomeIcon icon={faRotateRight} size="lg"/>
+                                <FontAwesomeIcon icon={faRotateRight} size="xl"/>
                             </Button>
                         </Grid>
                     </Grid>
