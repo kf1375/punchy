@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Container, CircularProgress, Typography, Button, Tab, Tabs, Box, Slider, Select, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRotateLeft, faRotateRight, faLeftLong, faRightLong } from '@fortawesome/free-solid-svg-icons';
+import { faRotateLeft, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 import Grid from '@mui/material/Grid2';
 
@@ -299,7 +299,7 @@ const DeviceControlPanel = () => {
                                 onClick={() => handleCommandChange('left', 1)}
                                 sx={{ backgroundColor: '#ef9a9a', '&:hover': { backgroundColor: '#e57373' } }}  // reddish
                             >
-                                <FontAwesomeIcon icon={faLeftLong} size="xl"/>
+                                <FontAwesomeIcon icon={faRotateLeft} size="xl"/>
                             </Button>
                         </Grid>
                         <Grid item size={6}>
@@ -309,7 +309,7 @@ const DeviceControlPanel = () => {
                                 onClick={() => handleCommandChange('right', 1)}
                                 sx={{ backgroundColor: '#a5d6a7', '&:hover': { backgroundColor: '#66bb6a' } }}  // greenish
                             >
-                                <FontAwesomeIcon icon={faRightLong} size="xl"/>
+                                <FontAwesomeIcon icon={faRotateRight} size="xl"/>
                             </Button>
                         </Grid>
                     </Grid>
@@ -328,7 +328,7 @@ const DeviceControlPanel = () => {
                                 fullWidth
                                 onClick={() => handleSettingChange('set_front', 1)}
                             >
-                                Set Front
+                                Set Hit
                             </Button>
                         </Grid>
                         <Grid item size={6}>
@@ -338,7 +338,7 @@ const DeviceControlPanel = () => {
                                 fullWidth
                                 onClick={() => handleSettingChange('set_rear', 1)}
                             >
-                                Set Rear
+                                Set Rest
                             </Button>
                         </Grid>
                     </Grid>
