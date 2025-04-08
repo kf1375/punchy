@@ -326,7 +326,7 @@ const DeviceControlPanel = () => {
                                 variant="contained"
                                 color="secondary"
                                 fullWidth
-                                onClick={() => handleSettingChange('set_front', 1)}
+                                onClick={() => handleSettingChange('set_hit', 1)}
                             >
                                 Set Hit
                             </Button>
@@ -336,7 +336,7 @@ const DeviceControlPanel = () => {
                                 variant="contained"
                                 color="secondary"
                                 fullWidth
-                                onClick={() => handleSettingChange('set_rear', 1)}
+                                onClick={() => handleSettingChange('set_rest', 1)}
                             >
                                 Set Rest
                             </Button>
